@@ -1,6 +1,6 @@
-import { DEXProtocol, Token } from '@zenith/types';
+import { DEXProtocol, Token } from '@elis/types';
 import { Interface } from 'ethers';
-import { PANCAKESWAP_V3_ROUTERS, PANCAKESWAP_V3_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getPancakeSwapRouter } from '@zenith/contracts';
+import { PANCAKESWAP_V3_ROUTERS, PANCAKESWAP_V3_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getPancakeSwapRouter } from '@elis/contracts';
 import { DEXProvider, DEXQuote, DEXExecution, DEXQuoteParams } from './types';
 import { calculateDEXLiquidityOutput, isNativeToken, resolvePoolTokenAddress } from './dexMath';
 export class PancakeSwapProvider implements DEXProvider {
@@ -52,7 +52,8 @@ export class PancakeSwapProvider implements DEXProvider {
                 gasCostUSD: 0.05,
                 quoteTimestamp,
                 expiration: quoteTimestamp + 15000,
-                routePath: [params.tokenIn.address, params.tokenOut.address]
+                routePath: [params.tokenIn.address, params.tokenOut.address],
+                liquiditySource: calculated.liquiditySource
             };
         }
         catch {

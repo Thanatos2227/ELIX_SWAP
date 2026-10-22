@@ -1,4 +1,4 @@
-import { NetworkFamily, NetworkEnvironment, AuthoritativeNetworkIdentity, AuthoritativeNativeAsset, AuthoritativeGasModelConfig, AuthoritativeFinalityConfig, AuthoritativeRpcMetadata, AuthoritativeExplorerMetadata, MetadataCompletenessStatus } from '@zenith/types';
+import { NetworkFamily, NetworkEnvironment, AuthoritativeNetworkIdentity, AuthoritativeNativeAsset, AuthoritativeGasModelConfig, AuthoritativeFinalityConfig, AuthoritativeRpcMetadata, AuthoritativeExplorerMetadata, MetadataCompletenessStatus } from '@elis/types';
 export type { NetworkEnvironment, MetadataCompletenessStatus, AuthoritativeNativeAsset, AuthoritativeGasModelConfig, AuthoritativeFinalityConfig, AuthoritativeRpcMetadata, AuthoritativeExplorerMetadata, AuthoritativeNetworkIdentity };
 export function buildNetworkIdentityKey(family: NetworkFamily, namespace: string, chainId: string | number): string {
     const normFamily = family.toUpperCase();

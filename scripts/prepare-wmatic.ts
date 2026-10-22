@@ -1,8 +1,8 @@
 import { JsonRpcProvider, FetchRequest, Contract, formatUnits, formatEther, Wallet, getAddress, parseEther } from 'ethers';
 import { defaultDexCanaryExecutionEngine } from '../packages/execution/src/canary';
-import { defaultAuthoritativeRpcProviderRegistry } from '@zenith/chains';
-import { defaultAuthoritativeDexRegistry } from '@zenith/routing';
-import { defaultAuthoritativeTokenRegistry } from '@zenith/tokens';
+import { defaultAuthoritativeRpcProviderRegistry } from '@elis/chains';
+import { defaultAuthoritativeDexRegistry } from '@elis/routing';
+import { defaultAuthoritativeTokenRegistry } from '@elis/tokens';
 import type { CanaryExecutionConfig } from '../packages/execution/src/canary';
 import { normalizePrivateKey, EXPECTED_OPERATOR_ADDRESS } from './execute-controlled-polygon-crosschain';
 const HARD_PROCESS_TIMEOUT_MS = 300000;
@@ -69,7 +69,7 @@ async function getQuorumProvider(): Promise<JsonRpcProvider> {
 }
 export async function runTask43BPreparation(): Promise<Task43BExecutionReport> {
     console.log('================================================================');
-    console.log('ZENITH — TASK 43B: PREPARATORY WMATIC FUNDING & APPROVAL RUNNER');
+    console.log('ELIS — TASK 43B: PREPARATORY WMATIC FUNDING & APPROVAL RUNNER');
     console.log('================================================================');
     console.log('TARGET_CHAIN:         Polygon Mainnet (137)');
     console.log('TARGET_ROUTER:        ', QUICKSWAP_ROUTER);
@@ -95,9 +95,9 @@ export async function runTask43BPreparation(): Promise<Task43BExecutionReport> {
     console.log(`  - WMATIC Balance:             ${wmaticBalBefore.toString()} wei (${formatUnits(wmaticBalBefore, 18)} WMATIC)`);
     console.log(`  - USDC Balance:               ${usdcBalBefore.toString()} raw (${formatUnits(usdcBalBefore, 6)} USDC)`);
     console.log(`  - Router Allowance:           ${allowanceBefore.toString()} wei (${formatUnits(allowanceBefore, 18)} WMATIC)\n`);
-    const rawKey = process.env.ZENITH_MAINNET_PRIVATE_KEY ||
+    const rawKey = process.env.ELIS_MAINNET_PRIVATE_KEY ||
         process.env.TESTNET_PRIVATE_KEY ||
-        process.env.ZENITH_PRIVATE_KEY ||
+        process.env.ELIS_PRIVATE_KEY ||
         process.env.PRIVATE_KEY;
     const normalizedKey = normalizePrivateKey(rawKey);
     let signerWallet: Wallet | null = null;

@@ -1,10 +1,10 @@
 import { Contract, Interface, Provider, ZeroAddress } from 'ethers';
-import type { DexIdentity, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexPoolState, DexLiquidityState, TokenIdentity, Token } from '@zenith/types';
+import type { DexIdentity, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexPoolState, DexLiquidityState, TokenIdentity, Token } from '@elis/types';
 import { EvmDexAdapter } from './evmDexAdapter.base';
 import type { DexQuoteParams } from './dexAdapter.interface';
 import { getTokenAddress, toLegacyToken } from './dexIdentity.types';
 import { calculateV3ConcentratedOutput } from '../dexMath';
-import { EconomicSafetyBreachError, SlippagePolicyViolationError, QUICKSWAP_V3_ROUTER_ABI } from '@zenith/contracts';
+import { EconomicSafetyBreachError, SlippagePolicyViolationError, QUICKSWAP_V3_ROUTER_ABI } from '@elis/contracts';
 export const ALGEBRA_POOL_ABI = [
     'function token0() external view returns (address)',
     'function token1() external view returns (address)',

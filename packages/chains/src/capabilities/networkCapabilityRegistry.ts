@@ -1,5 +1,5 @@
 import { NetworkCapabilityProfile, NetworkCapabilityLevel, NETWORK_CAPABILITY_HIERARCHY, NetworkOnboardingState, ONBOARDING_PROGRESSION, NetworkOperationalStatus, NetworkFamily, NetworkFinalityModel, NetworkGasModelType, NetworkHealthStatus, NetworkExecutionReadiness } from './networkCapabilityTypes';
-import { ZENITH_NETWORK_PROFILES } from './networkProfiles.data';
+import { ELIS_NETWORK_PROFILES } from './networkProfiles.data';
 import { isValidAddressForFamily } from './networkFamilies';
 import { INetworkExecutionAdapter, EvmExecutionAdapter, UnsupportedExecutionAdapter } from './networkExecutionAdapter';
 import { MultiProviderRpcManager } from '../rpc/multiProviderRpcManager';
@@ -10,7 +10,7 @@ export class NetworkCapabilityRegistry {
     private rpcManager?: MultiProviderRpcManager;
     constructor(customProfiles?: Record<string, NetworkCapabilityProfile>, rpcManager?: MultiProviderRpcManager) {
         this.rpcManager = rpcManager;
-        const initial = customProfiles || ZENITH_NETWORK_PROFILES;
+        const initial = customProfiles || ELIS_NETWORK_PROFILES;
         for (const [key, profile] of Object.entries(initial)) {
             this.registerProfile(key, profile);
         }

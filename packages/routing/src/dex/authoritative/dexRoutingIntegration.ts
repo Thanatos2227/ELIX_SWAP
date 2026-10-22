@@ -1,6 +1,6 @@
 import { sha256, toUtf8Bytes } from 'ethers';
-import type { NormalizedRoute, QuoteRequest, CapabilityLevel, ProviderCapabilityLevel } from '@zenith/types';
-import type { AuthoritativeDexQuote } from '@zenith/types';
+import type { NormalizedRoute, QuoteRequest, CapabilityLevel, ProviderCapabilityLevel } from '@elis/types';
+import type { AuthoritativeDexQuote } from '@elis/types';
 import { AuthoritativeDexRegistry, defaultAuthoritativeDexRegistry } from './authoritativeDexRegistry';
 import { getDexCapabilityRank } from './dexCapability.matrix';
 import { getTokenAddress } from './dexIdentity.types';

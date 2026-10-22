@@ -40,10 +40,11 @@ function parseKeyFromEnvFile(filePath: string, allowedKeys?: string[]): string |
         const content = fs.readFileSync(filePath, 'utf8');
         const lines = content.split(/\r?\n/);
         const targetKeys = allowedKeys || [
-            'ZENITH_MAINNET_PRIVATE_KEY',
+            'ELIS_MAINNET_PRIVATE_KEY',
+            'ELIS_TESTNET_PRIVATE_KEY',
             'TESTNET_PRIVATE_KEY',
-            'ZENITH_PRIVATE_KEY',
-            'ZENITH_SIGNER_PRIVATE_KEY',
+            'ELIS_PRIVATE_KEY',
+            'ELIS_SIGNER_PRIVATE_KEY',
             'PRIVATE_KEY'
         ];
         for (const keyName of targetKeys) {
@@ -80,11 +81,11 @@ export function resolveScopedSignerKey(
     const scopeStr = String(envScope).toUpperCase();
     let targetKeyNames: string[];
     if (scopeStr === 'MAINNET') {
-        targetKeyNames = ['ZENITH_MAINNET_PRIVATE_KEY'];
+        targetKeyNames = ['ELIS_MAINNET_PRIVATE_KEY'];
     } else if (scopeStr === 'TESTNET') {
-        targetKeyNames = ['TESTNET_PRIVATE_KEY', 'ZENITH_TESTNET_PRIVATE_KEY'];
+        targetKeyNames = ['ELIS_TESTNET_PRIVATE_KEY', 'TESTNET_PRIVATE_KEY'];
     } else if (scopeStr === 'LOCAL') {
-        targetKeyNames = ['ZENITH_LOCAL_PRIVATE_KEY', 'ANVIL_PRIVATE_KEY'];
+        targetKeyNames = ['ELIS_LOCAL_PRIVATE_KEY', 'ANVIL_PRIVATE_KEY'];
     } else {
         throw new Error(`[Security] Unknown chain scope: ${envScope}`);
     }
@@ -151,10 +152,11 @@ export function resolveScopedSignerKey(
 }
 
 export function resolveSecureSignerKey(repoRoot: string = process.cwd()): SecureRuntimeSignerResult {
-    const processKey = process.env.ZENITH_MAINNET_PRIVATE_KEY ||
+    const processKey = process.env.ELIS_MAINNET_PRIVATE_KEY ||
+        process.env.ELIS_TESTNET_PRIVATE_KEY ||
         process.env.TESTNET_PRIVATE_KEY ||
-        process.env.ZENITH_PRIVATE_KEY ||
-        process.env.ZENITH_SIGNER_PRIVATE_KEY ||
+        process.env.ELIS_PRIVATE_KEY ||
+        process.env.ELIS_SIGNER_PRIVATE_KEY ||
         process.env.PRIVATE_KEY;
     if (processKey && processKey.trim()) {
         return {
@@ -191,10 +193,10 @@ export function resolveSecureSignerKey(repoRoot: string = process.cwd()): Secure
 function queryWindowsUserRegistry(): string | null {
     if (process.platform !== 'win32') return null;
     const targetKeyNames = [
-        'ZENITH_MAINNET_PRIVATE_KEY',
+        'ELIS_MAINNET_PRIVATE_KEY',
         'TESTNET_PRIVATE_KEY',
-        'ZENITH_PRIVATE_KEY',
-        'ZENITH_SIGNER_PRIVATE_KEY',
+        'ELIS_PRIVATE_KEY',
+        'ELIS_SIGNER_PRIVATE_KEY',
         'PRIVATE_KEY'
     ];
     try {

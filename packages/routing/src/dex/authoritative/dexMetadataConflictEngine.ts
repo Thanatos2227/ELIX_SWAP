@@ -1,4 +1,4 @@
-import type { DexIdentity, DexConflictEvaluation } from '@zenith/types';
+import type { DexIdentity, DexConflictEvaluation } from '@elis/types';
 export class DexMetadataConflictEngine {
     public static evaluate(primary: DexIdentity, candidate: Partial<DexIdentity>): DexConflictEvaluation {
         if (candidate.networkId && candidate.networkId.toLowerCase() !== primary.networkId.toLowerCase()) {

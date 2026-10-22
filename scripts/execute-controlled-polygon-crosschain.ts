@@ -1,10 +1,10 @@
 import { JsonRpcProvider, Wallet, Contract, Interface, formatEther, formatUnits, parseEther, parseUnits, FetchRequest } from 'ethers';
 import { createHash } from 'crypto';
-import { defaultChainRegistry } from '@zenith/chains';
-import { ACROSS_SPOKE_POOLS, ACROSS_SPOKE_POOL_ABI, validateEvmAddress, validateExecutionTarget, validateTokenAddress, validateRecipientAddress, UNISWAP_V3_SWAP_ROUTERS, UNISWAP_V3_SWAP_ROUTER_ABI, BlockedOperatorConfirmationError, ZERO_ADDRESS } from '@zenith/contracts';
-import { defaultAcrossProvider, validateCrossChainQuoteExecutability, normalizeAcrossDepositStatus } from '@zenith/routing';
-import { ExecutionPlanBuilder, ExecutionPlanValidator, SQLiteCrossChainStateRepository, CrossChainRecoveryEngine, defaultEVMAdapter, extractActualSourceSwapOutput } from '@zenith/execution';
-import { QuoteRequest, ExecutionPlan, ZenithExecutionMode, OperatorAuditRecord, GoldenPathExecutionMetrics } from '@zenith/types';
+import { defaultChainRegistry } from '@elis/chains';
+import { ACROSS_SPOKE_POOLS, ACROSS_SPOKE_POOL_ABI, validateEvmAddress, validateExecutionTarget, validateTokenAddress, validateRecipientAddress, UNISWAP_V3_SWAP_ROUTERS, UNISWAP_V3_SWAP_ROUTER_ABI, BlockedOperatorConfirmationError, ZERO_ADDRESS } from '@elis/contracts';
+import { defaultAcrossProvider, validateCrossChainQuoteExecutability, normalizeAcrossDepositStatus } from '@elis/routing';
+import { ExecutionPlanBuilder, ExecutionPlanValidator, SQLiteCrossChainStateRepository, CrossChainRecoveryEngine, defaultEVMAdapter, extractActualSourceSwapOutput } from '@elis/execution';
+import { QuoteRequest, ExecutionPlan, ElisExecutionMode, OperatorAuditRecord, GoldenPathExecutionMetrics } from '@elis/types';
 const spokePoolInterface = new Interface(ACROSS_SPOKE_POOL_ABI);
 const swapRouterInterface = new Interface(UNISWAP_V3_SWAP_ROUTER_ABI);
 const ERC20_ABI = [
@@ -26,7 +26,7 @@ export const POLYGON_CROSSCHAIN_CONFIG = {
     acrossPolygonSpokePool: '0x9295ee1d8C5b022Be115A2AD3c30C72E34e7F096',
     acrossArbitrumSpokePool: '0xe35e9842fceaCA96570B734083f4a58e8F7C5f2A',
     uniswapV3SwapRouter02: '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45',
-    zenithV3Router: UNISWAP_V3_SWAP_ROUTERS[137] || '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45'
+    elisV3Router: UNISWAP_V3_SWAP_ROUTERS[137] || '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45'
 };
 export const MAINNET_CONFIRM_SOURCE_TOKEN = 'CONFIRM_POLYGON_ARBITRUM_MAINNET';
 export const MAINNET_CONFIRM_BRIDGE_TOKEN = 'CONFIRM_ACROSS_MAINNET';
@@ -100,7 +100,7 @@ export interface SafeSignerDiagnostic {
     initError?: string;
 }
 export interface PolygonCrossChainDiagnostics {
-    executionMode: ZenithExecutionMode;
+    executionMode: ElisExecutionMode;
     signerStatus: 'CONFIGURED' | 'MISSING';
     signerAddress?: string;
     expectedOperatorAddress: string;
@@ -119,7 +119,7 @@ export interface PolygonCrossChainDiagnostics {
 }
 export interface PolygonCrossChainExecutionResult {
     status: 'LIVE_MAINNET_EXECUTION_SETTLED' | 'SUCCESS_LIVE_MAINNET' | 'LIVE_E2E_SUCCESS' | 'READY_FOR_CONTROLLED_BRIDGE_BROADCAST' | 'READY_FOR_LIVE_BROADCAST' | 'PRE_BROADCAST_GATE_REACHED' | 'BLOCKED_NO_FUNDED_KEY' | 'BLOCKED_PRE_BROADCAST' | 'BLOCKED_DURING_EXECUTION' | 'BLOCKED_SIGNER_UNAVAILABLE' | 'BLOCKED_SIGNER_ADDRESS_MISMATCH' | 'BLOCKED_RECIPIENT_ADDRESS_MISMATCH' | 'BLOCKED_INSUFFICIENT_FUNDS' | 'BLOCKED_INSUFFICIENT_MAINNET_BALANCE' | 'BLOCKED_LIVE_COMPOSITE_ROUTE_UNAVAILABLE' | 'BLOCKED_LIVE_SOURCE_QUOTE' | 'BLOCKED_LIVE_BRIDGE_QUOTE' | 'BLOCKED_SOURCE_PREFLIGHT' | 'BLOCKED_PREFLIGHT' | 'BLOCKED_ACTUAL_OUTPUT_UNVERIFIED' | 'BLOCKED_POST_SWAP_BRIDGE_QUOTE' | 'BLOCKED_BRIDGE_PREFLIGHT' | 'BLOCKED_OPERATOR_CONFIRMATION' | 'BLOCKED_PRE_BROADCAST_VALIDATION' | 'BLOCKED_NETWORK_SAFETY' | 'BLOCKED_PLAN_MUTATION' | 'BLOCKED_CALLDATA_MUTATION' | 'BLOCKED_ACROSS_MIN_DEPOSIT_AFTER_FRESH_QUOTE' | 'BLOCKED_DESTINATION_VERIFICATION' | 'BROADCAST_UNCERTAIN' | 'DESTINATION_STATUS_UNCERTAIN' | 'FAILED_WITH_VERIFIED_REVERT' | 'SOURCE_TRANSACTION_REVERT' | 'BRIDGE_TRANSACTION_REVERT' | 'BRIDGE_TRACKING_UNAVAILABLE' | 'BRIDGE_EXECUTION_FAILED' | 'DESTINATION_RECEIPT_REVERT' | 'STATUS_CONFLICT' | 'SETTLED' | 'SETTLEMENT_UNVERIFIED' | 'FAILED';
-    executionMode?: ZenithExecutionMode;
+    executionMode?: ElisExecutionMode;
     blockReason?: string;
     sourceTxHash?: string | null;
     sourceBlockNumber?: number;
@@ -179,7 +179,7 @@ export function formatPolygonSourcePreExecutionSummary(params: {
 }): string {
     return [
         '==================================================',
-        'ZENITH POLYGON -> ARBITRUM CROSS-CHAIN EXECUTION',
+        'ELIS POLYGON -> ARBITRUM CROSS-CHAIN EXECUTION',
         '==================================================',
         `NETWORK:                Polygon Mainnet 137 -> Arbitrum One 42161`,
         `INPUT:                  ${params.amountIn} POL`,
@@ -209,7 +209,7 @@ export function formatPolygonBridgePreExecutionSummary(params: {
 }): string {
     return [
         '==================================================',
-        'ZENITH ACROSS V3 BRIDGE DEPOSIT STAGE',
+        'ELIS ACROSS V3 BRIDGE DEPOSIT STAGE',
         '==================================================',
         `ACTUAL POLYGON USDC RECEIVED: ${params.actualUsdcReceived} USDC`,
         `FRESH ACROSS INPUT:           ${params.freshAcrossInput} USDC`,
@@ -222,7 +222,7 @@ export function formatPolygonBridgePreExecutionSummary(params: {
     ].join('\n');
 }
 export async function runControlledPolygonCrossChainExecution(options: {
-    executionMode?: ZenithExecutionMode;
+    executionMode?: ElisExecutionMode;
     suppressLogs?: boolean;
     dbPath?: string;
     injectedProvider?: JsonRpcProvider;
@@ -239,12 +239,12 @@ export async function runControlledPolygonCrossChainExecution(options: {
     mutatePlanBeforeBroadcast?: boolean;
     skipSignerInit?: boolean;
 }): Promise<PolygonCrossChainExecutionResult> {
-    const executionMode: ZenithExecutionMode = options.executionMode || 'READ_ONLY';
+    const executionMode: ElisExecutionMode = options.executionMode || 'READ_ONLY';
     const executionStartTime = Date.now();
     const amountInPol = options.amountInPol || '5.0';
     const amountInWei = parseEther(amountInPol);
     const log = options.suppressLogs ? () => { } : console.log;
-    log(`[ZENITH Polygon Execution] Initializing mode: ${executionMode}`);
+    log(`[ELIS Polygon Execution] Initializing mode: ${executionMode}`);
     const auditLogs: OperatorAuditRecord[] = [];
     const preBroadcastGates: Record<string, boolean | string> = {};
     const evidenceClassification = {
@@ -332,13 +332,14 @@ export async function runControlledPolygonCrossChainExecution(options: {
             executionMode
         };
     }
-    const mainnetKey = process.env.ZENITH_MAINNET_PRIVATE_KEY;
-    const legacyKey = process.env.ZENITH_PRIVATE_KEY ||
+    const mainnetKey = process.env.ELIS_MAINNET_PRIVATE_KEY ;
+    const legacyKey = process.env.ELIS_PRIVATE_KEY ||
+                process.env.ELIS_TESTNET_PRIVATE_KEY ||
         process.env.TESTNET_PRIVATE_KEY ||
-        process.env.ZENITH_SIGNER_PRIVATE_KEY ||
-        process.env.PRIVATE_KEY;
+        process.env.ELIS_SIGNER_PRIVATE_KEY ||
+                process.env.PRIVATE_KEY;
     if (!mainnetKey && legacyKey) {
-        log('[SIGNER NOTICE] Using legacy key environment variable fallback. Please migrate to ZENITH_MAINNET_PRIVATE_KEY.');
+        log('[SIGNER NOTICE] Using legacy key environment variable fallback. Please migrate to ELIS_MAINNET_PRIVATE_KEY.');
     }
     const rawKey = mainnetKey || legacyKey;
     const hasRawEnvKey = Boolean(rawKey && rawKey.trim());
@@ -505,7 +506,7 @@ export async function runControlledPolygonCrossChainExecution(options: {
             log(`[Signer Warning] Environment key present but wallet failed to initialize: ${signerInitError}`);
         }
         else if (!signerEnvConfigured) {
-            log(`[Signer Warning] No private key configured in environment. ZENITH_MAINNET_PRIVATE_KEY is unset.`);
+            log(`[Signer Warning] No private key configured in environment. ELIS_MAINNET_PRIVATE_KEY is unset.`);
         }
     }
     log('\n--- SAFE SIGNER DIAGNOSTIC ---');
@@ -568,7 +569,7 @@ export async function runControlledPolygonCrossChainExecution(options: {
         amountIn: amountInWei.toString(),
         amountOut: expectedSourceUsdcRaw.toString(),
         amountOutMinimum: minSourceUsdcRaw.toString(),
-        router: POLYGON_CROSSCHAIN_CONFIG.zenithV3Router,
+        router: POLYGON_CROSSCHAIN_CONFIG.elisV3Router,
         isExecutable: true
     };
     let initialBridgeQuote: any = null;
@@ -628,7 +629,7 @@ export async function runControlledPolygonCrossChainExecution(options: {
         recipient: recipientAddress,
         steps: [
             { id: 'step-1-validate', type: 'VALIDATE_CONDITIONS', chainId: 137, status: 'COMPLETED' },
-            { id: 'step-2-source-swap', type: 'SOURCE_DEX_SWAP', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.zenithV3Router, status: 'PENDING' },
+            { id: 'step-2-source-swap', type: 'SOURCE_DEX_SWAP', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.elisV3Router, status: 'PENDING' },
             { id: 'step-3-bridge-requote', type: 'BRIDGE_QUOTE_REFRESH', chainId: 137, status: 'PENDING' },
             { id: 'step-4-bridge-approval', type: 'SOURCE_APPROVE', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.polygonUsdcAddress, status: 'PENDING' },
             { id: 'step-5-bridge-deposit', type: 'BRIDGE_DEPOSIT', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.acrossPolygonSpokePool, status: 'PENDING' },
@@ -650,7 +651,7 @@ export async function runControlledPolygonCrossChainExecution(options: {
         minUsdc: formatUnits(minSourceUsdcRaw, 6),
         acrossMinDeposit: formatUnits(acrossMinDepositRequired, 6),
         expectedBridgeOutput: formatUnits(initialBridgeQuote?.expectedOutput || '507000', 6),
-        routerAddress: POLYGON_CROSSCHAIN_CONFIG.zenithV3Router,
+        routerAddress: POLYGON_CROSSCHAIN_CONFIG.elisV3Router,
         recipientAddress,
         estimatedGasPol: formatEther(estimatedGasPol),
         totalCostPol: formatEther(minRequiredPol),
@@ -727,19 +728,19 @@ export async function runControlledPolygonCrossChainExecution(options: {
             preBroadcastGates
         };
     }
-    const liveConfirm = process.env.ZENITH_MAINNET_CONFIRM || process.env.ZENITH_LIVE_CONFIRM;
+    const liveConfirm = process.env.ELIS_MAINNET_CONFIRM || process.env.ELIS_MAINNET_CONFIRM || process.env.ELIS_LIVE_CONFIRM || process.env.ELIS_LIVE_CONFIRM;
     const isSourceConfirmed = liveConfirm === MAINNET_CONFIRM_SOURCE_TOKEN;
     if (!isSourceConfirmed) {
-        log(`[LIVE GATE] Blocked: Missing or invalid operator confirmation token (expected ZENITH_MAINNET_CONFIRM=${MAINNET_CONFIRM_SOURCE_TOKEN})`);
+        log(`[LIVE GATE] Blocked: Missing or invalid operator confirmation token (expected ELIS_MAINNET_CONFIRM=${MAINNET_CONFIRM_SOURCE_TOKEN})`);
         return {
             status: 'BLOCKED_OPERATOR_CONFIRMATION',
-            blockReason: `Missing or invalid source confirmation token: "${liveConfirm}". Expected exact match ZENITH_MAINNET_CONFIRM=${MAINNET_CONFIRM_SOURCE_TOKEN}`,
+            blockReason: `Missing or invalid source confirmation token: "${liveConfirm}". Expected exact match ELIS_MAINNET_CONFIRM=${MAINNET_CONFIRM_SOURCE_TOKEN}`,
             executionMode,
             diagnostics,
             preBroadcastGates
         };
     }
-    if (options.stopAtBroadcastGate || process.env.ZENITH_STOP_AT_BROADCAST_GATE === 'true') {
+    if (options.stopAtBroadcastGate || process.env.ELIS_STOP_AT_BROADCAST_GATE === 'true' || false) {
         log('[LIVE GATE] PRE_BROADCAST_GATE_REACHED: All pre-flight, balance, quote, and signer checks PASSED. Halting before signing/broadcast.');
         preBroadcastGates['FINAL_BROADCAST_GATE'] = 'PRE_BROADCAST_GATE_REACHED';
         return {
@@ -788,7 +789,7 @@ export async function runControlledPolygonCrossChainExecution(options: {
         try {
             if (typeof provider.call === 'function') {
                 await provider.call({
-                    to: POLYGON_CROSSCHAIN_CONFIG.zenithV3Router,
+                    to: POLYGON_CROSSCHAIN_CONFIG.elisV3Router,
                     from: userAddress,
                     data: swapTxData,
                     value: amountInWei
@@ -796,7 +797,7 @@ export async function runControlledPolygonCrossChainExecution(options: {
             }
             if (typeof provider.estimateGas === 'function') {
                 await provider.estimateGas({
-                    to: POLYGON_CROSSCHAIN_CONFIG.zenithV3Router,
+                    to: POLYGON_CROSSCHAIN_CONFIG.elisV3Router,
                     from: userAddress,
                     data: swapTxData,
                     value: amountInWei
@@ -820,7 +821,7 @@ export async function runControlledPolygonCrossChainExecution(options: {
                 throw new Error('ETIMEDOUT: Connection timeout during transaction broadcast');
             }
             sourceTx = await wallet.sendTransaction({
-                to: POLYGON_CROSSCHAIN_CONFIG.zenithV3Router,
+                to: POLYGON_CROSSCHAIN_CONFIG.elisV3Router,
                 data: swapTxData,
                 value: amountInWei,
                 gasLimit: 250000n
@@ -974,13 +975,13 @@ export async function runControlledPolygonCrossChainExecution(options: {
                 log(`[APPROVAL WARNING] ${apprErr.message}`);
             }
         }
-        const bridgeConfirm = process.env.ZENITH_MAINNET_BRIDGE_CONFIRM || process.env.ZENITH_BRIDGE_CONFIRM;
+        const bridgeConfirm = process.env.ELIS_MAINNET_BRIDGE_CONFIRM || process.env.ELIS_MAINNET_BRIDGE_CONFIRM || process.env.ELIS_BRIDGE_CONFIRM || process.env.ELIS_BRIDGE_CONFIRM;
         const isBridgeConfirmed = bridgeConfirm === MAINNET_CONFIRM_BRIDGE_TOKEN;
         if (!isBridgeConfirmed) {
-            log(`[BRIDGE GATE] Blocked: Missing or invalid operator confirmation token (expected ZENITH_MAINNET_BRIDGE_CONFIRM=${MAINNET_CONFIRM_BRIDGE_TOKEN})`);
+            log(`[BRIDGE GATE] Blocked: Missing or invalid operator confirmation token (expected ELIS_MAINNET_BRIDGE_CONFIRM=${MAINNET_CONFIRM_BRIDGE_TOKEN})`);
             return {
                 status: 'BLOCKED_OPERATOR_CONFIRMATION',
-                blockReason: `Missing or invalid bridge confirmation token: "${bridgeConfirm}". Expected exact match ZENITH_MAINNET_BRIDGE_CONFIRM=${MAINNET_CONFIRM_BRIDGE_TOKEN}`,
+                blockReason: `Missing or invalid bridge confirmation token: "${bridgeConfirm}". Expected exact match ELIS_MAINNET_BRIDGE_CONFIRM=${MAINNET_CONFIRM_BRIDGE_TOKEN}`,
                 sourceTxHash,
                 actualSwapOutputRaw: actualMinedUsdcRaw.toString(),
                 executionMode,
@@ -1249,12 +1250,12 @@ export async function runControlledPolygonCrossChainExecution(options: {
 }
 if (require.main === module) {
     runControlledPolygonCrossChainExecution({
-        executionMode: (process.env.ZENITH_EXECUTION_MODE as ZenithExecutionMode) || 'READ_ONLY',
+        executionMode: (process.env.ELIS_EXECUTION_MODE as any) || (process.env.ELIS_EXECUTION_MODE as any) || 'READ_ONLY',
         suppressLogs: false
     })
         .then((res) => {
         console.log('\n==================================================');
-        console.log('ZENITH EXECUTION OUTPUT SUMMARY');
+        console.log('ELIS EXECUTION OUTPUT SUMMARY');
         console.log('==================================================');
         console.log(`Status:               ${res.status}`);
         if (res.safeSignerDiagnostic) {

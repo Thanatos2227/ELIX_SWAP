@@ -1,6 +1,6 @@
-import type { BridgeProtocol, ProviderCapabilityLevel, ProviderCapabilityRecord } from '@zenith/types';
-import { defaultChainRegistry } from '@zenith/chains';
-import { isAcrossSupported, isDeBridgeSupported, isStargateSupported } from '@zenith/contracts';
+import type { BridgeProtocol, ProviderCapabilityLevel, ProviderCapabilityRecord } from '@elis/types';
+import { defaultChainRegistry } from '@elis/chains';
+import { isAcrossSupported, isDeBridgeSupported, isStargateSupported } from '@elis/contracts';
 export const CAPABILITY_HIERARCHY: Record<ProviderCapabilityLevel, number> = {
     UNSUPPORTED: 0,
     UNIT_TESTED: 1,

@@ -1,7 +1,7 @@
 import { Contract, Provider, ZeroAddress } from 'ethers';
-import { ZENITH_V3_POOL_ABI, ZENITH_V3_FACTORY_ABI, getZenithV3Factory } from '@zenith/contracts';
+import { ELIS_V3_POOL_ABI, ELIS_V3_FACTORY_ABI, getElisV3Factory } from '@elis/contracts';
 import { TickInfo } from '../math/v3ExactMath';
-export interface ZenithV3LivePoolState {
+export interface ElisV3LivePoolState {
     poolAddress: string;
     token0: string;
     token1: string;
@@ -16,15 +16,15 @@ export interface ZenithV3LivePoolState {
 }
 export class PoolStateReader {
     public static async getPoolAddress(factoryAddress: string, tokenA: string, tokenB: string, fee: number, provider: Provider): Promise<string> {
-        const factory = new Contract(factoryAddress, ZENITH_V3_FACTORY_ABI, provider);
+        const factory = new Contract(factoryAddress, ELIS_V3_FACTORY_ABI, provider);
         const poolAddress: string = await factory.getPool(tokenA, tokenB, fee);
         return poolAddress;
     }
-    public static async readLivePoolState(poolAddress: string, provider: Provider): Promise<ZenithV3LivePoolState> {
+    public static async readLivePoolState(poolAddress: string, provider: Provider): Promise<ElisV3LivePoolState> {
         if (!poolAddress || poolAddress === ZeroAddress) {
-            throw new Error(`Invalid Zenith V3 pool address: ${poolAddress}`);
+            throw new Error(`Invalid Elis V3 pool address: ${poolAddress}`);
         }
-        const pool = new Contract(poolAddress, ZENITH_V3_POOL_ABI, provider);
+        const pool = new Contract(poolAddress, ELIS_V3_POOL_ABI, provider);
         const [token0, token1, feeBig, tickSpacingBig, slot0, liquidity, blockNumber] = await Promise.all([
             pool.token0(),
             pool.token1(),
@@ -81,8 +81,8 @@ export class PoolStateReader {
             blockNumber
         };
     }
-    public static async getLivePoolStateForPair(chainId: number, tokenA: string, tokenB: string, fee: number, provider: Provider): Promise<ZenithV3LivePoolState | null> {
-        const factoryAddress = getZenithV3Factory(chainId);
+    public static async getLivePoolStateForPair(chainId: number, tokenA: string, tokenB: string, fee: number, provider: Provider): Promise<ElisV3LivePoolState | null> {
+        const factoryAddress = getElisV3Factory(chainId);
         if (!factoryAddress)
             return null;
         const poolAddress = await this.getPoolAddress(factoryAddress, tokenA, tokenB, fee, provider);

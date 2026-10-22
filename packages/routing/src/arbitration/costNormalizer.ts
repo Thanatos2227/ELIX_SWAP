@@ -1,4 +1,4 @@
-import { CostNormalizationResult, Token } from '@zenith/types';
+import { CostNormalizationResult, Token } from '@elis/types';
 export interface TokenPriceEvidence {
     priceUSD?: number;
     priceRaw?: string;

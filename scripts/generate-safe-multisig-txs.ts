@@ -37,20 +37,20 @@ export interface ProtocolDeploymentConfig {
     deployerAddress: string;
     emergencyGuardianAddress: string;
     contracts: {
-        zenithTreasury: string;
-        zenithFeeController: string;
-        zenithV1Factory: string;
-        zenithV2Factory: string;
-        zenithV3Factory: string;
-        zenithUnifiedRouter: string;
-        zenithCircuitBreaker: string;
-        zenithCrossChainRouter: string;
+        elisTreasury: string;
+        elisFeeController: string;
+        elisV1Factory: string;
+        elisV2Factory: string;
+        elisV3Factory: string;
+        elisUnifiedRouter: string;
+        elisCircuitBreaker: string;
+        elisCrossChainRouter: string;
     };
 }
 export function generateDeployerInitiationBatch(config: ProtocolDeploymentConfig): SafeBatchFile {
     const transactions: SafeTransactionItem[] = [
         {
-            to: config.contracts.zenithTreasury,
+            to: config.contracts.elisTreasury,
             value: "0",
             data: null,
             contractMethod: {
@@ -63,7 +63,7 @@ export function generateDeployerInitiationBatch(config: ProtocolDeploymentConfig
             }
         },
         {
-            to: config.contracts.zenithFeeController,
+            to: config.contracts.elisFeeController,
             value: "0",
             data: null,
             contractMethod: {
@@ -76,7 +76,7 @@ export function generateDeployerInitiationBatch(config: ProtocolDeploymentConfig
             }
         },
         {
-            to: config.contracts.zenithV1Factory,
+            to: config.contracts.elisV1Factory,
             value: "0",
             data: null,
             contractMethod: {
@@ -89,7 +89,7 @@ export function generateDeployerInitiationBatch(config: ProtocolDeploymentConfig
             }
         },
         {
-            to: config.contracts.zenithV2Factory,
+            to: config.contracts.elisV2Factory,
             value: "0",
             data: null,
             contractMethod: {
@@ -102,7 +102,7 @@ export function generateDeployerInitiationBatch(config: ProtocolDeploymentConfig
             }
         },
         {
-            to: config.contracts.zenithV3Factory,
+            to: config.contracts.elisV3Factory,
             value: "0",
             data: null,
             contractMethod: {
@@ -115,7 +115,7 @@ export function generateDeployerInitiationBatch(config: ProtocolDeploymentConfig
             }
         },
         {
-            to: config.contracts.zenithUnifiedRouter,
+            to: config.contracts.elisUnifiedRouter,
             value: "0",
             data: null,
             contractMethod: {
@@ -133,7 +133,7 @@ export function generateDeployerInitiationBatch(config: ProtocolDeploymentConfig
         chainId: config.chainId.toString(),
         createdAt: Date.now(),
         meta: {
-            name: "ZENITH — Phase 1: Deployer Governance Handover Initiation",
+            name: "ELIS — Phase 1: Deployer Governance Handover Initiation",
             description: "Batch transactions executed by the deployer to transfer protocol roles to the 4-of-7 Safe Multisig.",
             txBuilderVersion: "1.16.5",
             createdAt: Date.now(),
@@ -147,7 +147,7 @@ export function generateDeployerInitiationBatch(config: ProtocolDeploymentConfig
 export function generateSafeMultisigAcceptanceBatch(config: ProtocolDeploymentConfig): SafeBatchFile {
     const transactions: SafeTransactionItem[] = [
         {
-            to: config.contracts.zenithTreasury,
+            to: config.contracts.elisTreasury,
             value: "0",
             data: null,
             contractMethod: {
@@ -158,7 +158,7 @@ export function generateSafeMultisigAcceptanceBatch(config: ProtocolDeploymentCo
             contractInputsValues: {}
         },
         {
-            to: config.contracts.zenithFeeController,
+            to: config.contracts.elisFeeController,
             value: "0",
             data: null,
             contractMethod: {
@@ -169,7 +169,7 @@ export function generateSafeMultisigAcceptanceBatch(config: ProtocolDeploymentCo
             contractInputsValues: {}
         },
         {
-            to: config.contracts.zenithUnifiedRouter,
+            to: config.contracts.elisUnifiedRouter,
             value: "0",
             data: null,
             contractMethod: {
@@ -180,7 +180,7 @@ export function generateSafeMultisigAcceptanceBatch(config: ProtocolDeploymentCo
             contractInputsValues: {}
         },
         {
-            to: config.contracts.zenithCircuitBreaker,
+            to: config.contracts.elisCircuitBreaker,
             value: "0",
             data: null,
             contractMethod: {
@@ -198,7 +198,7 @@ export function generateSafeMultisigAcceptanceBatch(config: ProtocolDeploymentCo
         chainId: config.chainId.toString(),
         createdAt: Date.now(),
         meta: {
-            name: "ZENITH — Phase 2: 4-of-7 Safe Multisig Governance Acceptance Batch",
+            name: "ELIS — Phase 2: 4-of-7 Safe Multisig Governance Acceptance Batch",
             description: "Batch transaction to be signed and executed by the 4-of-7 Safe Multisig signers to finalize protocol ownership.",
             txBuilderVersion: "1.16.5",
             createdAt: Date.now(),
@@ -211,20 +211,20 @@ export function generateSafeMultisigAcceptanceBatch(config: ProtocolDeploymentCo
 }
 export function generateCastCliVerificationCommands(config: ProtocolDeploymentConfig, rpcUrl: string = "$RPC_URL"): string[] {
     return [
-        `# 1. Verify ZenithTreasury Governance`,
-        `cast call ${config.contracts.zenithTreasury} "governance()(address)" --rpc-url ${rpcUrl}`,
-        `# 2. Verify ZenithFeeController Governance & Treasury Binding`,
-        `cast call ${config.contracts.zenithFeeController} "governance()(address)" --rpc-url ${rpcUrl}`,
-        `cast call ${config.contracts.zenithFeeController} "treasury()(address)" --rpc-url ${rpcUrl}`,
-        `# 3. Verify ZenithV1Factory FeeToSetter`,
-        `cast call ${config.contracts.zenithV1Factory} "feeToSetter()(address)" --rpc-url ${rpcUrl}`,
-        `# 4. Verify ZenithV2Factory FeeToSetter`,
-        `cast call ${config.contracts.zenithV2Factory} "feeToSetter()(address)" --rpc-url ${rpcUrl}`,
-        `# 5. Verify ZenithV3Factory Owner`,
-        `cast call ${config.contracts.zenithV3Factory} "owner()(address)" --rpc-url ${rpcUrl}`,
-        `# 6. Verify ZenithCircuitBreaker Guardian`,
-        `cast call ${config.contracts.zenithCircuitBreaker} "emergencyGuardian()(address)" --rpc-url ${rpcUrl}`,
-        `cast call ${config.contracts.zenithCircuitBreaker} "governance()(address)" --rpc-url ${rpcUrl}`
+        `# 1. Verify ElisTreasury Governance`,
+        `cast call ${config.contracts.elisTreasury} "governance()(address)" --rpc-url ${rpcUrl}`,
+        `# 2. Verify ElisFeeController Governance & Treasury Binding`,
+        `cast call ${config.contracts.elisFeeController} "governance()(address)" --rpc-url ${rpcUrl}`,
+        `cast call ${config.contracts.elisFeeController} "treasury()(address)" --rpc-url ${rpcUrl}`,
+        `# 3. Verify ElisV1Factory FeeToSetter`,
+        `cast call ${config.contracts.elisV1Factory} "feeToSetter()(address)" --rpc-url ${rpcUrl}`,
+        `# 4. Verify ElisV2Factory FeeToSetter`,
+        `cast call ${config.contracts.elisV2Factory} "feeToSetter()(address)" --rpc-url ${rpcUrl}`,
+        `# 5. Verify ElisV3Factory Owner`,
+        `cast call ${config.contracts.elisV3Factory} "owner()(address)" --rpc-url ${rpcUrl}`,
+        `# 6. Verify ElisCircuitBreaker Guardian`,
+        `cast call ${config.contracts.elisCircuitBreaker} "emergencyGuardian()(address)" --rpc-url ${rpcUrl}`,
+        `cast call ${config.contracts.elisCircuitBreaker} "governance()(address)" --rpc-url ${rpcUrl}`
     ];
 }
 if (process.argv[1] && path.basename(process.argv[1]).includes('generate-safe-multisig-txs')) {
@@ -235,14 +235,14 @@ if (process.argv[1] && path.basename(process.argv[1]).includes('generate-safe-mu
         deployerAddress: process.env.DEPLOYER_ADDRESS || "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
         emergencyGuardianAddress: process.env.EMERGENCY_GUARDIAN || "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
         contracts: {
-            zenithTreasury: "0x1111111111111111111111111111111111111111",
-            zenithFeeController: "0x2222222222222222222222222222222222222222",
-            zenithV1Factory: "0x3333333333333333333333333333333333333333",
-            zenithV2Factory: "0x4444444444444444444444444444444444444444",
-            zenithV3Factory: "0x5555555555555555555555555555555555555555",
-            zenithUnifiedRouter: "0x6666666666666666666666666666666666666666",
-            zenithCircuitBreaker: "0x7777777777777777777777777777777777777777",
-            zenithCrossChainRouter: "0x8888888888888888888888888888888888888888"
+            elisTreasury: "0x1111111111111111111111111111111111111111",
+            elisFeeController: "0x2222222222222222222222222222222222222222",
+            elisV1Factory: "0x3333333333333333333333333333333333333333",
+            elisV2Factory: "0x4444444444444444444444444444444444444444",
+            elisV3Factory: "0x5555555555555555555555555555555555555555",
+            elisUnifiedRouter: "0x6666666666666666666666666666666666666666",
+            elisCircuitBreaker: "0x7777777777777777777777777777777777777777",
+            elisCrossChainRouter: "0x8888888888888888888888888888888888888888"
         }
     };
     const phase1Batch = generateDeployerInitiationBatch(sampleConfig);

@@ -1,5 +1,5 @@
-import { SecurityAuthorizationState } from '@zenith/types';
-import { InvalidSecurityStateTransitionError } from '@zenith/contracts';
+import { SecurityAuthorizationState } from '@elis/types';
+import { InvalidSecurityStateTransitionError } from '@elis/contracts';
 export const VALID_SECURITY_STATE_TRANSITIONS: Record<SecurityAuthorizationState, SecurityAuthorizationState[]> = {
     UNAUTHORIZED: ['VALIDATED', 'REJECTED'],
     VALIDATED: ['AUTHORIZED', 'REJECTED'],

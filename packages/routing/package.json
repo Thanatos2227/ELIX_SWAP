@@ -1,5 +1,5 @@
 {
-  "name": "@zenith/routing",
+  "name": "@elis/routing",
   "version": "4.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -7,11 +7,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@zenith/types": "*",
-    "@zenith/chains": "*",
-    "@zenith/tokens": "*",
-    "@zenith/contracts": "*",
-    "@zenith/security": "*",
+    "@elis/types": "*",
+    "@elis/chains": "*",
+    "@elis/tokens": "*",
+    "@elis/contracts": "*",
+    "@elis/security": "*",
     "ethers": "^6.12.0"
   },
   "devDependencies": {

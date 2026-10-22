@@ -1,5 +1,5 @@
-import type { ProviderHealthStatus, RpcCapabilityType, RpcErrorType, RpcProviderProfile, RpcMetricsSnapshot } from '@zenith/types';
-import { ZENITH_AUTHORITATIVE_NETWORKS } from '../authoritative/networkRegistry.data';
+import type { ProviderHealthStatus, RpcCapabilityType, RpcErrorType, RpcProviderProfile, RpcMetricsSnapshot } from '@elis/types';
+import { ELIS_AUTHORITATIVE_NETWORKS } from '../authoritative/networkRegistry.data';
 import { defaultAuthoritativeNetworkRegistry } from '../authoritative/authoritativeNetworkRegistry';
 function deepClone<T>(obj: T): T {
     if (typeof structuredClone === 'function') {
@@ -57,7 +57,7 @@ export class AuthoritativeRpcProviderRegistry {
         }
     }
     public seedFromAuthoritativeNetworks(): void {
-        for (const net of Object.values(ZENITH_AUTHORITATIVE_NETWORKS)) {
+        for (const net of Object.values(ELIS_AUTHORITATIVE_NETWORKS)) {
             if (!net.rpcEndpoints || net.rpcEndpoints.length === 0)
                 continue;
             for (const rpc of net.rpcEndpoints) {

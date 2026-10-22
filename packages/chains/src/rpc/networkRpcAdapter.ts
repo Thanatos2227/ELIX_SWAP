@@ -1,4 +1,4 @@
-import { NetworkFamily, AuthoritativeNetworkIdentity, RpcProviderProfile } from '@zenith/types';
+import { NetworkFamily, AuthoritativeNetworkIdentity, RpcProviderProfile } from '@elis/types';
 export interface RpcHeadInfo {
     blockNumber: number;
     blockHash?: string;

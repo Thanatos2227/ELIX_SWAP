@@ -1,4 +1,4 @@
-import { RouteFreshnessState } from '@zenith/types';
+import { RouteFreshnessState } from '@elis/types';
 export interface FreshnessValidationOptions {
     currentTime?: number;
     maxStalenessMs?: number;

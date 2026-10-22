@@ -1,8 +1,8 @@
 import { JsonRpcProvider, FetchRequest, Contract, formatUnits, formatEther, Wallet, getAddress } from 'ethers';
 import { defaultDexCanaryExecutionEngine } from '../packages/execution/src/canary';
-import { defaultAuthoritativeRpcProviderRegistry } from '@zenith/chains';
-import { defaultAuthoritativeDexRegistry } from '@zenith/routing';
-import { defaultAuthoritativeTokenRegistry } from '@zenith/tokens';
+import { defaultAuthoritativeRpcProviderRegistry } from '@elis/chains';
+import { defaultAuthoritativeDexRegistry } from '@elis/routing';
+import { defaultAuthoritativeTokenRegistry } from '@elis/tokens';
 import type { CanaryExecutionConfig } from '../packages/execution/src/canary';
 import { normalizePrivateKey, EXPECTED_OPERATOR_ADDRESS } from './execute-controlled-polygon-crosschain';
 import { resolveSecureSignerKey } from './secure-runtime-loader';
@@ -80,7 +80,7 @@ async function probeProviders(): Promise<{
 }
 async function main() {
     console.log('================================================================');
-    console.log('ZENITH — TASK 43A: FUNDED-WALLET PREFLIGHT REVALIDATION');
+    console.log('ELIS — TASK 43A: FUNDED-WALLET PREFLIGHT REVALIDATION');
     console.log('================================================================');
     console.log('TARGET_NETWORK:       Polygon Mainnet (Chain ID: 137)');
     console.log('TARGET_DEX:           polygon:quickswap-v3');
@@ -297,7 +297,7 @@ async function main() {
         ethEstimateGasResult = `REVERTED: ${estErr.reason || estErr.message || 'ESTIMATE_GAS_FAILED'}`;
     }
     console.log('================================================================');
-    console.log('ZENITH TASK 43A: MANDATORY PREFLIGHT OUTPUT');
+    console.log('ELIS TASK 43A: MANDATORY PREFLIGHT OUTPUT');
     console.log('================================================================');
     console.log('PREFLIGHT_SUCCESS:         ', res.success);
     console.log('PREFLIGHT_VERIFIED:        ', res.preflightVerified);

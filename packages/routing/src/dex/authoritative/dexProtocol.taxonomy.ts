@@ -1,4 +1,4 @@
-import type { DexProtocolTaxonomy, DEXProtocol } from '@zenith/types';
+import type { DexProtocolTaxonomy, DEXProtocol } from '@elis/types';
 export const ALL_DEX_TAXONOMIES: readonly DexProtocolTaxonomy[] = [
     'UNISWAP_V2_STYLE',
     'UNISWAP_V3_STYLE',
@@ -36,12 +36,12 @@ export function getTaxonomyForLegacyProtocol(protocol: DEXProtocol): DexProtocol
             return 'UNISWAP_V3_STYLE';
         case 'UNISWAP_V2':
             return 'UNISWAP_V2_STYLE';
-        case 'ZENITH_V3':
-        case 'ZENITH_V4_CONCENTRATED':
-            return 'CONCENTRATED_LIQUIDITY_AMM';
-        case 'ZENITH_V1':
-        case 'ZENITH_V2':
-            return 'CONSTANT_PRODUCT_AMM';
+        case 'ELIS_V3':
+                case 'ELIS_V4_CONCENTRATED':
+                    return 'CONCENTRATED_LIQUIDITY_AMM';
+        case 'ELIS_V1':
+                case 'ELIS_V2':
+                    return 'CONSTANT_PRODUCT_AMM';
         case 'QUICKSWAP':
             return 'CONCENTRATED_LIQUIDITY_AMM';
         case 'AERODROME':
@@ -63,10 +63,10 @@ export function getTaxonomyForLegacyProtocol(protocol: DEXProtocol): DexProtocol
             return 'CONCENTRATED_LIQUIDITY_AMM';
         case 'METEORA':
             return 'CONCENTRATED_LIQUIDITY_AMM';
-        case 'ZENITH_DUTCH_INTENT':
-            return 'CUSTOM_AMM';
-        case 'ZENITH_INTERNAL_RFIS':
-            return 'ORDER_BOOK';
+        case 'ELIS_DUTCH_INTENT':
+                    return 'CUSTOM_AMM';
+        case 'ELIS_INTERNAL_RFIS':
+                    return 'ORDER_BOOK';
         default:
             return 'UNKNOWN';
     }

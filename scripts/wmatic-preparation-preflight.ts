@@ -1,8 +1,8 @@
 import { JsonRpcProvider, FetchRequest, Contract, Interface, formatUnits, formatEther, Wallet, getAddress, parseEther, sha256, toUtf8Bytes } from 'ethers';
 import { defaultDexCanaryExecutionEngine } from '../packages/execution/src/canary';
-import { defaultAuthoritativeRpcProviderRegistry } from '@zenith/chains';
-import { defaultAuthoritativeDexRegistry } from '@zenith/routing';
-import { defaultAuthoritativeTokenRegistry } from '@zenith/tokens';
+import { defaultAuthoritativeRpcProviderRegistry } from '@elis/chains';
+import { defaultAuthoritativeDexRegistry } from '@elis/routing';
+import { defaultAuthoritativeTokenRegistry } from '@elis/tokens';
 import type { CanaryExecutionConfig } from '../packages/execution/src/canary';
 import { normalizePrivateKey, EXPECTED_OPERATOR_ADDRESS } from './execute-controlled-polygon-crosschain';
 import { resolveSecureSignerKey } from './secure-runtime-loader';
@@ -53,7 +53,7 @@ async function getQuorumProvider(): Promise<JsonRpcProvider> {
 }
 export async function runTask43IPreparationPreflight() {
     console.log('================================================================');
-    console.log('ZENITH — TASK 43I: CONTROLLED WMATIC PREPARATION PREFLIGHT');
+    console.log('ELIS — TASK 43I: CONTROLLED WMATIC PREPARATION PREFLIGHT');
     console.log('================================================================');
     console.log('TARGET_NETWORK:       Polygon Mainnet (Chain ID: 137)');
     console.log('TARGET_DEX:           polygon:quickswap-v3');

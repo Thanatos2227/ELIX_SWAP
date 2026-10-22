@@ -1,4 +1,4 @@
-import { CanonicalTelemetryEvent, CanonicalTelemetryEventType, TelemetrySeverity } from '@zenith/types';
+import { CanonicalTelemetryEvent, CanonicalTelemetryEventType, TelemetrySeverity } from '@elis/types';
 
 export const VALID_CANONICAL_EVENT_TYPES: ReadonlySet<CanonicalTelemetryEventType> = new Set<CanonicalTelemetryEventType>([
     'SYSTEM_STARTED',
@@ -131,7 +131,7 @@ export function createCanonicalTelemetryEvent(params: {
     const timestamp = params.timestamp ?? Date.now();
     const sequence = params.sequence !== undefined ? params.sequence : ++globalSequenceCounter;
     const eventId = params.eventId ?? `evt-${params.eventType.toLowerCase()}-${timestamp}-${sequence}`;
-    
+
     const event: CanonicalTelemetryEvent = {
         eventId: scrubTelemetrySecrets(eventId),
         eventType: params.eventType,
@@ -158,7 +158,7 @@ export function createCanonicalTelemetryEvent(params: {
 
     const validation = validateCanonicalTelemetryEvent(event);
     if (!validation.valid) {
-        throw new Error(`[ZENITH Telemetry] Invalid CanonicalTelemetryEvent: ${validation.error}`);
+        throw new Error(`[ELIS Telemetry] Invalid CanonicalTelemetryEvent: ${validation.error}`);
     }
 
     return Object.freeze(event);

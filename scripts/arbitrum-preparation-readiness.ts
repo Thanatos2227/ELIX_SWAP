@@ -29,7 +29,7 @@ const QUOTER_V2_ABI = [
 ];
 async function runPreparationAnalysis() {
     console.log('================================================================');
-    console.log('ZENITH — ARBITRUM UNISWAP V3 PREPARATION READINESS & FUNDING GATE');
+    console.log('ELIS — ARBITRUM UNISWAP V3 PREPARATION READINESS & FUNDING GATE');
     console.log('================================================================');
     console.log('NETWORK:              Arbitrum One (Chain ID: 42161)');
     console.log('TARGET_DEX:           Uniswap V3 (SwapRouter02)');

@@ -1,5 +1,5 @@
 import { Interface } from 'ethers';
-import { ZERO_ADDRESS } from '@zenith/contracts';
+import { ZERO_ADDRESS } from '@elis/contracts';
 import { defaultSettlementTelemetry } from './settlementTelemetry';
 
 export type DestinationEvidenceTier =
@@ -594,4 +594,3 @@ export function verifyDestinationSettlement(
         timestamp: now
     });
 }
-

@@ -1,4 +1,4 @@
-import { CanonicalTelemetryEvent, CrossChainIntentOverallState, FinalityState } from '@zenith/types';
+import { CanonicalTelemetryEvent, CrossChainIntentOverallState, FinalityState } from '@elis/types';
 import { validateCanonicalTelemetryEvent } from './canonicalTelemetryEvent';
 
 export interface TelemetryFilterOptions {

@@ -1,4 +1,4 @@
-import type { RpcEndpointClass, RpcTransportType, RpcCapabilityType, RpcVerificationStatus, RpcDisagreementLevel, RpcErrorType, RateLimitPolicy, RetryPolicy, ExpectedChainIdentity, RpcProviderProfile, RpcDisagreementEvaluation, RpcMetricsSnapshot } from '@zenith/types';
+import type { RpcEndpointClass, RpcTransportType, RpcCapabilityType, RpcVerificationStatus, RpcDisagreementLevel, RpcErrorType, RateLimitPolicy, RetryPolicy, ExpectedChainIdentity, RpcProviderProfile, RpcDisagreementEvaluation, RpcMetricsSnapshot } from '@elis/types';
 export type { RpcEndpointClass, RpcTransportType, RpcCapabilityType, RpcVerificationStatus, RpcDisagreementLevel, RpcErrorType, RateLimitPolicy, RetryPolicy, ExpectedChainIdentity, RpcProviderProfile, RpcDisagreementEvaluation, RpcMetricsSnapshot };
 export function validateRpcEndpointUrl(url: string, transport: RpcTransportType): {
     valid: boolean;

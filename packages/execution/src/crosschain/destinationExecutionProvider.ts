@@ -1,4 +1,4 @@
-import { DestinationExecutionCapabilities, DestinationExecutionRequest, DestinationExecutionPlan, DestinationExecutionResult, DestinationExecutionStatus, DestinationVerification } from '@zenith/types';
+import { DestinationExecutionCapabilities, DestinationExecutionRequest, DestinationExecutionPlan, DestinationExecutionResult, DestinationExecutionStatus, DestinationVerification } from '@elis/types';
 export interface DestinationExecutionProvider {
     readonly id: string;
     readonly name: string;

@@ -7,9 +7,9 @@ import type {
   TokenResolutionInput,
   TokenResolutionResult,
   CapabilityLevel
-} from '@zenith/types';
-import { defaultAuthoritativeNetworkRegistry } from '@zenith/chains';
-import { ZENITH_CANONICAL_TOKENS } from './canonicalTokens.data';
+} from '@elis/types';
+import { defaultAuthoritativeNetworkRegistry } from '@elis/chains';
+import { ELIS_CANONICAL_TOKENS } from './canonicalTokens.data';
 import { TokenRegistryValidationEngine } from './tokenRegistryValidation';
 import { normalizeTokenAddress } from './addressNormalizer';
 import { buildTokenIdentityKey } from './tokenIdentity.types';
@@ -24,7 +24,7 @@ export class AuthoritativeTokenRegistry {
   private readonly nativeTokenByNetwork = new Map<string, TokenIdentity>();
   private readonly wrappedNativeTokenByNetwork = new Map<string, TokenIdentity>();
 
-  constructor(initialTokens: readonly TokenIdentity[] = ZENITH_CANONICAL_TOKENS) {
+  constructor(initialTokens: readonly TokenIdentity[] = ELIS_CANONICAL_TOKENS) {
     TokenRegistryValidationEngine.validate([...initialTokens]);
     for (const token of initialTokens) {
       this.indexToken(token);

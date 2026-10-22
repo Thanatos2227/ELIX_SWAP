@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
-import { defaultTokenService } from '@zenith/tokens';
-import { defaultChainRegistry } from '@zenith/chains';
-import { Token, ChainConfig } from '@zenith/types';
+import { useElisStore } from '../../stores/useElisStore';
+import { defaultTokenService } from '@elis/tokens';
+import { defaultChainRegistry } from '@elis/chains';
+import { Token, ChainConfig } from '@elis/types';
 import { TokenLogo } from '../common/TokenLogo';
 import { X, Search, CheckCircle2, PlusCircle, TrendingUp, TrendingDown, Layers } from 'lucide-react';
 export const TokenPickerModal: React.FC = () => {
-    const { isTokenPickerOpen, closeTokenPicker, tokenPickerTarget, sourceChain, destChain, tokenIn, tokenOut, setSourceChain, setDestChain, setTokenIn, setTokenOut } = useZenithStore();
+    const { isTokenPickerOpen, closeTokenPicker, tokenPickerTarget, sourceChain, destChain, tokenIn, tokenOut, setSourceChain, setDestChain, setTokenIn, setTokenOut } = useElisStore();
     const [searchQuery, setSearchQuery] = useState('');
     const [isImportMode, setIsImportMode] = useState(false);
     const [customAddress, setCustomAddress] = useState('');

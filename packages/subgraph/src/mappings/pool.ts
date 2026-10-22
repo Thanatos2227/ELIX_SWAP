@@ -1,8 +1,8 @@
 import { BigInt, BigDecimal, Address, ethereum } from "@graphprotocol/graph-ts";
-import { Swap as V1SwapEvent, Sync as V1SyncEvent } from "../../generated/templates/ZenithV1Pair/ZenithV1Pair";
-import { Swap as V3SwapEvent } from "../../generated/templates/ZenithV3Pool/ZenithV3Pool";
-import { Pool, Swap, PoolDayData, PoolHourData, ZenithDayData, ZenithProtocol } from "../../generated/schema";
-const PROTOCOL_ID = "zenith-v4-canonical";
+import { Swap as V1SwapEvent, Sync as V1SyncEvent } from "../../generated/templates/ElisV1Pair/ElisV1Pair";
+import { Swap as V3SwapEvent } from "../../generated/templates/ElisV3Pool/ElisV3Pool";
+import { Pool, Swap, PoolDayData, PoolHourData, ElisDayData, ElisProtocol } from "../../generated/schema";
+const PROTOCOL_ID = "elis-v4-canonical";
 const ZERO_BD = BigDecimal.fromString("0");
 const ZERO_BI = BigInt.fromI32(0);
 const ONE_BI = BigInt.fromI32(1);

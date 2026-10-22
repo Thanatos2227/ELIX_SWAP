@@ -1,4 +1,4 @@
-import { WalletOption, WalletType } from '@zenith/types';
+import { WalletOption, WalletType } from '@elis/types';
 export const formatAddress = (address: string, prefixLen = 6, suffixLen = 4): string => {
     if (!address)
         return '';
@@ -6,15 +6,15 @@ export const formatAddress = (address: string, prefixLen = 6, suffixLen = 4): st
         return address;
     return `${address.slice(0, prefixLen)}...${address.slice(-suffixLen)}`;
 };
-export const ZENITH_WALLET_DISCONNECTED_KEY = 'zenith_wallet_disconnected';
-export const ZENITH_WALLET_CONNECTED_KEY = 'zenith_wallet_connected';
-export const ZENITH_WALLET_TYPE_KEY = 'zenith_wallet_type';
-export const ZENITH_WALLET_ADDRESS_KEY = 'zenith_wallet_address';
+export const ELIS_WALLET_DISCONNECTED_KEY = 'elis_wallet_disconnected';
+export const ELIS_WALLET_CONNECTED_KEY = 'elis_wallet_connected';
+export const ELIS_WALLET_TYPE_KEY = 'elis_wallet_type';
+export const ELIS_WALLET_ADDRESS_KEY = 'elis_wallet_address';
 export const isExplicitlyDisconnected = (): boolean => {
     if (typeof window === 'undefined' || !window.localStorage)
         return false;
     try {
-        return window.localStorage.getItem(ZENITH_WALLET_DISCONNECTED_KEY) === 'true';
+        return window.localStorage.getItem(ELIS_WALLET_DISCONNECTED_KEY) === 'true';
     }
     catch {
         return false;
@@ -26,13 +26,13 @@ export const setExplicitlyDisconnected = (disconnected: boolean): void => {
     try {
         if (disconnected) {
             if (window.localStorage) {
-                window.localStorage.setItem(ZENITH_WALLET_DISCONNECTED_KEY, 'true');
+                window.localStorage.setItem(ELIS_WALLET_DISCONNECTED_KEY, 'true');
             }
             clearStoredWalletSession();
         }
         else {
             if (window.localStorage) {
-                window.localStorage.removeItem(ZENITH_WALLET_DISCONNECTED_KEY);
+                window.localStorage.removeItem(ELIS_WALLET_DISCONNECTED_KEY);
             }
         }
     }
@@ -49,13 +49,13 @@ export const getStoredWalletSession = (): {
         return { isConnected: false, walletType: null, address: null };
     }
     try {
-        const isDisconnected = window.localStorage.getItem(ZENITH_WALLET_DISCONNECTED_KEY) === 'true';
+        const isDisconnected = window.localStorage.getItem(ELIS_WALLET_DISCONNECTED_KEY) === 'true';
         if (isDisconnected) {
             return { isConnected: false, walletType: null, address: null };
         }
-        const isConnected = window.localStorage.getItem(ZENITH_WALLET_CONNECTED_KEY) === 'true';
-        const walletType = (window.localStorage.getItem(ZENITH_WALLET_TYPE_KEY) as WalletType) || null;
-        const address = window.localStorage.getItem(ZENITH_WALLET_ADDRESS_KEY) || null;
+        const isConnected = window.localStorage.getItem(ELIS_WALLET_CONNECTED_KEY) === 'true';
+        const walletType = (window.localStorage.getItem(ELIS_WALLET_TYPE_KEY) as WalletType) || null;
+        const address = window.localStorage.getItem(ELIS_WALLET_ADDRESS_KEY) || null;
         return { isConnected, walletType, address };
     }
     catch {
@@ -67,10 +67,10 @@ export const setStoredWalletSession = (walletType: WalletType, address: string):
         return;
     try {
         if (window.localStorage) {
-            window.localStorage.removeItem(ZENITH_WALLET_DISCONNECTED_KEY);
-            window.localStorage.setItem(ZENITH_WALLET_CONNECTED_KEY, 'true');
-            window.localStorage.setItem(ZENITH_WALLET_TYPE_KEY, walletType);
-            window.localStorage.setItem(ZENITH_WALLET_ADDRESS_KEY, address);
+            window.localStorage.removeItem(ELIS_WALLET_DISCONNECTED_KEY);
+            window.localStorage.setItem(ELIS_WALLET_CONNECTED_KEY, 'true');
+            window.localStorage.setItem(ELIS_WALLET_TYPE_KEY, walletType);
+            window.localStorage.setItem(ELIS_WALLET_ADDRESS_KEY, address);
         }
     }
     catch (err) {
@@ -82,16 +82,16 @@ export const clearStoredWalletSession = (): void => {
         return;
     try {
         if (window.localStorage) {
-            window.localStorage.removeItem(ZENITH_WALLET_CONNECTED_KEY);
-            window.localStorage.removeItem(ZENITH_WALLET_TYPE_KEY);
-            window.localStorage.removeItem(ZENITH_WALLET_ADDRESS_KEY);
+            window.localStorage.removeItem(ELIS_WALLET_CONNECTED_KEY);
+            window.localStorage.removeItem(ELIS_WALLET_TYPE_KEY);
+            window.localStorage.removeItem(ELIS_WALLET_ADDRESS_KEY);
             window.localStorage.removeItem('walletconnect');
             window.localStorage.removeItem('WALLETCONNECT_DEEPLINK_CHOICE');
         }
         if (window.sessionStorage) {
-            window.sessionStorage.removeItem(ZENITH_WALLET_CONNECTED_KEY);
-            window.sessionStorage.removeItem(ZENITH_WALLET_TYPE_KEY);
-            window.sessionStorage.removeItem(ZENITH_WALLET_ADDRESS_KEY);
+            window.sessionStorage.removeItem(ELIS_WALLET_CONNECTED_KEY);
+            window.sessionStorage.removeItem(ELIS_WALLET_TYPE_KEY);
+            window.sessionStorage.removeItem(ELIS_WALLET_ADDRESS_KEY);
         }
     }
     catch (err) {

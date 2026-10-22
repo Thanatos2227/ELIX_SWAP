@@ -1,5 +1,5 @@
 {
-  "name": "@zenith/security",
+  "name": "@elis/security",
   "version": "4.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -7,9 +7,9 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@zenith/types": "*",
-    "@zenith/chains": "*",
-    "@zenith/tokens": "*"
+    "@elis/types": "*",
+    "@elis/chains": "*",
+    "@elis/tokens": "*"
   },
   "devDependencies": {
     "typescript": "^5.4.5"

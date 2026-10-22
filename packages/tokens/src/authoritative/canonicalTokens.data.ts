@@ -1,7 +1,7 @@
-import type { TokenIdentity } from '@zenith/types';
+import type { TokenIdentity } from '@elis/types';
 import { buildTokenId } from './tokenIdentity.types';
 import { normalizeTokenAddress } from './addressNormalizer';
-export const ZENITH_CANONICAL_TOKENS: readonly TokenIdentity[] = [
+export const ELIS_CANONICAL_TOKENS: readonly TokenIdentity[] = [
     {
         tokenId: buildTokenId('ethereum', 'NATIVE', 'ETH'),
         networkId: 'ethereum',

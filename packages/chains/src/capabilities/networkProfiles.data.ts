@@ -97,7 +97,7 @@ function createProfile(params: {
         notes: params.notes
     };
 }
-export const ZENITH_NETWORK_PROFILES: Record<string, NetworkCapabilityProfile> = {
+export const ELIS_NETWORK_PROFILES: Record<string, NetworkCapabilityProfile> = {
     ethereum: createProfile({
         networkId: 'ethereum',
         name: 'Ethereum',

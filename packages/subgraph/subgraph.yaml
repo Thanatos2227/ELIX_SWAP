@@ -2,13 +2,13 @@ specVersion: 0.0.5
 schema:
   file: ./schema.graphql
 dataSources:
-  # Zenith V1 Factory
+  # Elis V1 Factory
   - kind: ethereum
-    name: ZenithV1Factory
+    name: ElisV1Factory
     network: mainnet
     source:
       address: "0x3333333333333333333333333333333333333333"
-      abi: ZenithV1Factory
+      abi: ElisV1Factory
       startBlock: 20000000
     mapping:
       kind: ethereum/events
@@ -18,8 +18,8 @@ dataSources:
         - Pool
         - Token
       abis:
-        - name: ZenithV1Factory
-          file: ../../contracts/evm/out/ZenithV1Factory.sol/ZenithV1Factory.json
+        - name: ElisV1Factory
+          file: ../../contracts/evm/out/ElisV1Factory.sol/ElisV1Factory.json
         - name: IERC20
           file: ../../contracts/evm/out/IERC20.sol/IERC20.json
       eventHandlers:
@@ -27,13 +27,13 @@ dataSources:
           handler: handleV1PairCreated
       file: ./src/mappings/factory.ts
 
-  # Zenith V2 Factory
+  # Elis V2 Factory
   - kind: ethereum
-    name: ZenithV2Factory
+    name: ElisV2Factory
     network: mainnet
     source:
       address: "0x4444444444444444444444444444444444444444"
-      abi: ZenithV2Factory
+      abi: ElisV2Factory
       startBlock: 20000000
     mapping:
       kind: ethereum/events
@@ -43,8 +43,8 @@ dataSources:
         - Pool
         - Token
       abis:
-        - name: ZenithV2Factory
-          file: ../../contracts/evm/out/ZenithV2Factory.sol/ZenithV2Factory.json
+        - name: ElisV2Factory
+          file: ../../contracts/evm/out/ElisV2Factory.sol/ElisV2Factory.json
         - name: IERC20
           file: ../../contracts/evm/out/IERC20.sol/IERC20.json
       eventHandlers:
@@ -52,13 +52,13 @@ dataSources:
           handler: handleV2PoolCreated
       file: ./src/mappings/factory.ts
 
-  # Zenith V3 Factory
+  # Elis V3 Factory
   - kind: ethereum
-    name: ZenithV3Factory
+    name: ElisV3Factory
     network: mainnet
     source:
       address: "0x5555555555555555555555555555555555555555"
-      abi: ZenithV3Factory
+      abi: ElisV3Factory
       startBlock: 20000000
     mapping:
       kind: ethereum/events
@@ -68,8 +68,8 @@ dataSources:
         - Pool
         - Token
       abis:
-        - name: ZenithV3Factory
-          file: ../../contracts/evm/out/ZenithV3Factory.sol/ZenithV3Factory.json
+        - name: ElisV3Factory
+          file: ../../contracts/evm/out/ElisV3Factory.sol/ElisV3Factory.json
         - name: IERC20
           file: ../../contracts/evm/out/IERC20.sol/IERC20.json
       eventHandlers:
@@ -77,13 +77,13 @@ dataSources:
           handler: handleV3PoolCreated
       file: ./src/mappings/factory.ts
 
-  # Zenith Sovereign Treasury
+  # Elis Sovereign Treasury
   - kind: ethereum
-    name: ZenithTreasury
+    name: ElisTreasury
     network: mainnet
     source:
       address: "0x1111111111111111111111111111111111111111"
-      abi: ZenithTreasury
+      abi: ElisTreasury
       startBlock: 20000000
     mapping:
       kind: ethereum/events
@@ -91,22 +91,22 @@ dataSources:
       language: wasm/assemblyscript
       entities:
         - TreasuryFeeEvent
-        - ZenithProtocol
+        - ElisProtocol
       abis:
-        - name: ZenithTreasury
-          file: ../../contracts/evm/out/ZenithTreasury.sol/ZenithTreasury.json
+        - name: ElisTreasury
+          file: ../../contracts/evm/out/ElisTreasury.sol/ElisTreasury.json
       eventHandlers:
         - event: FeeReceived(indexed address,indexed address,uint256)
           handler: handleFeeReceived
       file: ./src/mappings/treasury.ts
 
 templates:
-  # Zenith V1 Pair Template
+  # Elis V1 Pair Template
   - kind: ethereum
-    name: ZenithV1Pair
+    name: ElisV1Pair
     network: mainnet
     source:
-      abi: ZenithV1Pair
+      abi: ElisV1Pair
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -117,8 +117,8 @@ templates:
         - Burn
         - Pool
       abis:
-        - name: ZenithV1Pair
-          file: ../../contracts/evm/out/ZenithV1Pair.sol/ZenithV1Pair.json
+        - name: ElisV1Pair
+          file: ../../contracts/evm/out/ElisV1Pair.sol/ElisV1Pair.json
       eventHandlers:
         - event: Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)
           handler: handleV1Swap
@@ -126,12 +126,12 @@ templates:
           handler: handleV1Sync
       file: ./src/mappings/pool.ts
 
-  # Zenith V3 Pool Template
+  # Elis V3 Pool Template
   - kind: ethereum
-    name: ZenithV3Pool
+    name: ElisV3Pool
     network: mainnet
     source:
-      abi: ZenithV3Pool
+      abi: ElisV3Pool
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -142,8 +142,8 @@ templates:
         - Burn
         - Pool
       abis:
-        - name: ZenithV3Pool
-          file: ../../contracts/evm/out/ZenithV3Pool.sol/ZenithV3Pool.json
+        - name: ElisV3Pool
+          file: ../../contracts/evm/out/ElisV3Pool.sol/ElisV3Pool.json
       eventHandlers:
         - event: Swap(indexed address,indexed address,int256,int256,uint160,uint128,int24)
           handler: handleV3Swap

@@ -1,10 +1,10 @@
 """
-ZENITH SWAP Institutional Multi-Chain Analytics & Subgraph Schema
+ELIS SWAP Institutional Multi-Chain Analytics & Subgraph Schema
 Tracks Protocol Global Stats, Tokens, Pools (V1, V2, V3), Swaps, Positions, and Time-Series Metrics
 """
 
-type ZenithProtocol @entity {
-  id: ID! # Canonical Protocol Identifier (e.g. 'zenith-v4-ethereum')
+type ElisProtocol @entity {
+  id: ID! # Canonical Protocol Identifier (e.g. 'elis-v4-ethereum')
   totalValueLockedUSD: BigDecimal!
   totalVolumeUSD: BigDecimal!
   untrackedVolumeUSD: BigDecimal!
@@ -159,7 +159,7 @@ type PoolHourData @entity {
   txCount: BigInt!
 }
 
-type ZenithDayData @entity {
+type ElisDayData @entity {
   id: ID! # Day ID (timestamp / 86400)
   date: Int!
   tvlUSD: BigDecimal!

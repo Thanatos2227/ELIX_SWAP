@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useZenithStore } from './stores/useZenithStore';
+import { useElisStore } from './stores/useElisStore';
 import { Navbar } from './components/layout/Navbar';
 import { UnifiedTradingView } from './components/trading/UnifiedTradingView';
 import { PoolsView } from './components/pools/PoolsView';
@@ -16,7 +16,7 @@ import { ReceiptModal } from './components/postTrade/ReceiptModal';
 import { NotificationCenter } from './components/notifications/NotificationCenter';
 import { ShieldCheck, Lock, Globe } from 'lucide-react';
 export const App: React.FC = () => {
-    const { activeTab, theme, fetchMarketData, initializeWalletSession } = useZenithStore();
+    const { activeTab, theme, fetchMarketData, initializeWalletSession } = useElisStore();
     const isDark = theme === 'dark';
     useEffect(() => {
         fetchMarketData();
@@ -67,7 +67,7 @@ export const App: React.FC = () => {
           </div>
 
           <p className="text-[11px] text-slate-500 font-mono">
-            ZENITH SWAP v4.0.0 — Trade Beyond Limits.
+            ElixSwap v4.0.0 — Trade Beyond Limits.
           </p>
         </div>
       </footer>

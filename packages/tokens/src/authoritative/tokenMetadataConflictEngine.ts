@@ -1,4 +1,4 @@
-import type { TokenIdentity, TokenConflictEvaluation } from '@zenith/types';
+import type { TokenIdentity, TokenConflictEvaluation } from '@elis/types';
 export class TokenMetadataConflictEngine {
     public static evaluate(canonical: TokenIdentity, candidate: {
         networkId?: string;

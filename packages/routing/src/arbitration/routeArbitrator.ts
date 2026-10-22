@@ -1,4 +1,4 @@
-import { NormalizedRoute, QuoteRequest, RouteArbitrationResult } from '@zenith/types';
+import { NormalizedRoute, QuoteRequest, RouteArbitrationResult } from '@elis/types';
 import { RouteCapabilityFilter, RouteFilterOptions } from './routeCapabilityFilter';
 import { CrossChainProviderCapabilityMatrix } from '../crosschain/crossChainProviderCapabilityMatrix';
 import { defaultProviderHealthRegistry } from './providerHealthRegistry';

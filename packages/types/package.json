@@ -1,5 +1,5 @@
 {
-  "name": "@zenith/types",
+  "name": "@elis/types",
   "version": "4.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",

@@ -1,5 +1,5 @@
 import { Contract } from 'ethers';
-import { defaultChainRegistry } from '@zenith/chains';
+import { defaultChainRegistry } from '@elis/chains';
 const ERC20_ABI = [
     'function balanceOf(address account) view returns (uint256)',
     'function allowance(address owner, address spender) view returns (uint256)',
@@ -7,7 +7,7 @@ const ERC20_ABI = [
     'function decimals() view returns (uint8)',
     'function symbol() view returns (string)'
 ];
-import { ExecutionStep, QuoteResponse, ReceiptView, ExecutionPlan, ExecutionPlanStep, StepStatus } from '@zenith/types';
+import { ExecutionStep, QuoteResponse, ReceiptView, ExecutionPlan, ExecutionPlanStep, StepStatus } from '@elis/types';
 import { defaultEVMAdapter, EVMExecutionAdapter } from './adapters/evmAdapter';
 import { defaultSolanaAdapter, SolanaExecutionAdapter } from './adapters/solanaAdapter';
 import { ExecutionStateMachine } from './stateMachine';
@@ -15,11 +15,11 @@ import { defaultIntentEngine, CrossChainIntentEngine } from './crosschain/intent
 import { defaultCrossChainTracker, CrossChainTracker, ActiveCrossChainOrder } from './crosschain/crossChainTracker';
 import { defaultDestinationExecutionEngine, DestinationExecutionEngine } from './crosschain/destinationExecutionEngine';
 import { ExecutionPlanBuilder, ExecutionPlanValidator, sealPlan, assertPlanIntegrity } from './executionPlanBuilder';
-import { defaultTokenRiskEngine } from '@zenith/security';
-import { RecipientMismatchError, SecurityPolicyViolationError, ConfigurationError, SignerRequiredError, ExecutionUnavailableError, DestinationExecutionUnavailableError, SourceSwapUnavailableError, SourceSwapFailedError, BridgeFailedError, DestinationExecutionFailedError, CompositeExecutionUnavailableError, RecoveryRequiredError, LeaseLockConflictError, AmountMismatchError, StatusConflictError, QuoteUnavailableError } from '@zenith/contracts';
+import { defaultTokenRiskEngine } from '@elis/security';
+import { RecipientMismatchError, SecurityPolicyViolationError, ConfigurationError, SignerRequiredError, ExecutionUnavailableError, DestinationExecutionUnavailableError, SourceSwapUnavailableError, SourceSwapFailedError, BridgeFailedError, DestinationExecutionFailedError, CompositeExecutionUnavailableError, RecoveryRequiredError, LeaseLockConflictError, AmountMismatchError, StatusConflictError, QuoteUnavailableError } from '@elis/contracts';
 import { CrossChainStateRepository, defaultInMemoryRepository } from './persistence/repository';
 import { extractActualSourceSwapOutput } from './crosschain/sourceSwapOutputExtractor';
-import { defaultDEXAggregator, defaultCrossChainAggregator, validateCrossChainQuoteExecutability } from '@zenith/routing';
+import { defaultDEXAggregator, defaultCrossChainAggregator, validateCrossChainQuoteExecutability } from '@elis/routing';
 export interface ExecuteTradeParams {
     quote?: QuoteResponse;
     plan?: ExecutionPlan;
@@ -210,7 +210,7 @@ export class ExecutionCoordinator {
                 const idempotencyKey = `${plan.planId}:${step.id}`;
                 const existingExecution = this.executedStepRegistry.get(idempotencyKey);
                 if ((persistedStep && persistedStep.status === 'SUCCESS') || (existingExecution && existingExecution.status === 'SUCCESS') || step.status === 'SUCCESS') {
-                    console.log(`[ZENITH ExecutionCoordinator] Idempotency: Step "${step.id}" already completed successfully. Skipping re-broadcast.`);
+                    console.log(`[ELIS ExecutionCoordinator] Idempotency: Step "${step.id}" already completed successfully. Skipping re-broadcast.`);
                     step.status = 'SUCCESS';
                     step.txHash = persistedStep?.txHash || existingExecution?.txHash || step.txHash;
                     if (step.type === 'SOURCE_SWAP' || step.type === 'BRIDGE_DEPOSIT') {

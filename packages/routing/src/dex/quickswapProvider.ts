@@ -1,6 +1,6 @@
-import { DEXProtocol, Token } from '@zenith/types';
+import { DEXProtocol, Token } from '@elis/types';
 import { Interface } from 'ethers';
-import { QUICKSWAP_V3_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getQuickSwapRouter } from '@zenith/contracts';
+import { QUICKSWAP_V3_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getQuickSwapRouter } from '@elis/contracts';
 import { DEXProvider, DEXQuote, DEXExecution, DEXQuoteParams } from './types';
 import { calculateDEXLiquidityOutput, isNativeToken, resolvePoolTokenAddress } from './dexMath';
 export class QuickSwapProvider implements DEXProvider {
@@ -52,7 +52,8 @@ export class QuickSwapProvider implements DEXProvider {
                 gasCostUSD: 0.04,
                 quoteTimestamp,
                 expiration: quoteTimestamp + 15000,
-                routePath: [params.tokenIn.address, params.tokenOut.address]
+                routePath: [params.tokenIn.address, params.tokenOut.address],
+                liquiditySource: calculated.liquiditySource
             };
         }
         catch {

@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * ZENITH Protocol — Pre-Broadcast Testnet Execution Readiness & Route Integrity Audit
+ * ELIS Protocol — Pre-Broadcast Testnet Execution Readiness & Route Integrity Audit
  *
  * Runs a deterministic read-only on-chain audit across:
  * - Sepolia (11155111) USDC -> Across V3 -> Arbitrum Sepolia (421614) USDC
@@ -15,7 +15,7 @@ import { PreBroadcastReadinessAuditor } from '../packages/execution/src/crosscha
 
 async function main() {
   console.log('================================================================================');
-  console.log('   ZENITH — PRE-BROADCAST TESTNET EXECUTION READINESS & ROUTE INTEGRITY AUDIT   ');
+  console.log('   ELIS — PRE-BROADCAST TESTNET EXECUTION READINESS & ROUTE INTEGRITY AUDIT   ');
   console.log('================================================================================\n');
 
   const auditor = new PreBroadcastReadinessAuditor();
@@ -56,10 +56,10 @@ async function main() {
   // 5. Test Wallet Readiness & Balances
   console.log('--- 5. Signer State Model & Wallet Readiness ---');
   console.log(`Signer Environment:`);
+  console.log(`  ELIS_TESTNET_PRIVATE_KEY:   ${report.walletReadiness.environmentDiagnostic.elisTestnetPrivateKeyPresent ? 'PRESENT' : 'ABSENT'}`);
   console.log(`  TESTNET_PRIVATE_KEY:        ${report.walletReadiness.environmentDiagnostic.testnetPrivateKeyPresent ? 'PRESENT' : 'ABSENT'}`);
-  console.log(`  ZENITH_TESTNET_PRIVATE_KEY: ${report.walletReadiness.environmentDiagnostic.zenithTestnetPrivateKeyPresent ? 'PRESENT' : 'ABSENT'}`);
-  if (report.walletReadiness.environmentDiagnostic.multipleSourcesDetected) {
-    console.log(`  Multiple signer sources detected. Precedence: options > TESTNET_PRIVATE_KEY > ZENITH_TESTNET_PRIVATE_KEY`);
+    if (report.walletReadiness.environmentDiagnostic.multipleSourcesDetected) {
+    console.log(`  Multiple signer sources detected. Precedence: options > TESTNET_PRIVATE_KEY > ELIS_TESTNET_PRIVATE_KEY`);
   }
   console.log(`Authoritative Signer Source:  ${report.walletReadiness.environmentDiagnostic.authoritativeSource}`);
   console.log(`Signer Configured:            ${report.walletReadiness.signerConfigured ? 'YES' : 'NO'}`);

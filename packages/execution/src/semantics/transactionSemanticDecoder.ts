@@ -1,5 +1,5 @@
 import { Interface, TransactionDescription, LogDescription } from 'ethers';
-import { InvalidCalldataError, CalldataAuthorizationError, AbiEncodingMismatchError } from '@zenith/contracts';
+import { InvalidCalldataError, CalldataAuthorizationError, AbiEncodingMismatchError } from '@elis/contracts';
 export const ERC20_INTERFACE = new Interface([
     'function approve(address spender, uint256 amount) returns (bool)',
     'function transfer(address to, uint256 amount) returns (bool)',

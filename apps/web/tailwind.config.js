@@ -8,7 +8,7 @@ export default {
     theme: {
         extend: {
             colors: {
-                zenith: {
+                elis: {
                     cyan: '#00F2FE',
                     indigo: '#4FACFE',
                     darkBg: '#080B11',

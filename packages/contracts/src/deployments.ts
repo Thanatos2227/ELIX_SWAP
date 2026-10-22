@@ -1,4 +1,4 @@
-export interface ZenithDeployment {
+export interface ElisDeployment {
     chainId: number;
     name: string;
     treasury: string | null;
@@ -13,7 +13,8 @@ export interface ZenithDeployment {
     unifiedRouter: string | null;
     crossChainRouter: string | null;
 }
-export const ZENITH_DEPLOYMENTS: Record<number, ZenithDeployment> = {
+
+export const ELIS_DEPLOYMENTS: Record<number, ElisDeployment> = {
     31337: {
         chainId: 31337,
         name: 'Anvil Local Devnet',
@@ -135,12 +136,14 @@ export const ZENITH_DEPLOYMENTS: Record<number, ZenithDeployment> = {
         crossChainRouter: null
     }
 };
-export function getZenithDeployment(chainId: number): ZenithDeployment | undefined {
-    return ZENITH_DEPLOYMENTS[chainId];
+
+export function getElisDeployment(chainId: number): ElisDeployment | undefined {
+    return ELIS_DEPLOYMENTS[chainId];
 }
-export function registerZenithDeployment(chainId: number, deployment: Partial<ZenithDeployment>): void {
-    ZENITH_DEPLOYMENTS[chainId] = {
-        ...(ZENITH_DEPLOYMENTS[chainId] || {
+
+export function registerElisDeployment(chainId: number, deployment: Partial<ElisDeployment>): void {
+    ELIS_DEPLOYMENTS[chainId] = {
+        ...(ELIS_DEPLOYMENTS[chainId] || {
             chainId,
             name: `Chain ${chainId}`,
             treasury: null,
@@ -158,33 +161,38 @@ export function registerZenithDeployment(chainId: number, deployment: Partial<Ze
         ...deployment
     };
 }
-export function isZenithDeployed(chainId: number): boolean {
-    const d = getZenithDeployment(chainId);
+
+export function isElisDeployed(chainId: number): boolean {
+    const d = getElisDeployment(chainId);
     if (!d)
         return false;
     return Boolean(d.v3Router || d.v2Router || d.v1Router || d.unifiedRouter);
 }
-export function isZenithV1Deployed(chainId: number): boolean {
-    const d = getZenithDeployment(chainId);
+
+export function isElisV1Deployed(chainId: number): boolean {
+    const d = getElisDeployment(chainId);
     return Boolean(d?.v1Router && d?.v1Factory);
 }
-export function isZenithV2Deployed(chainId: number): boolean {
-    const d = getZenithDeployment(chainId);
+
+export function isElisV2Deployed(chainId: number): boolean {
+    const d = getElisDeployment(chainId);
     return Boolean(d?.v2Router && d?.v2Factory);
 }
-export function isZenithV3Deployed(chainId: number): boolean {
-    const d = getZenithDeployment(chainId);
+
+export function isElisV3Deployed(chainId: number): boolean {
+    const d = getElisDeployment(chainId);
     return Boolean(d?.v3Router && d?.v3Factory);
 }
+
 export interface BytecodeVerificationResult {
     isFullyDeployed: boolean;
     deployedContracts: Record<string, boolean>;
     missingBytecode: string[];
 }
-export async function verifyZenithBytecode(provider: {
+export async function verifyElisBytecode(provider: {
     getCode: (address: string) => Promise<string>;
 }, chainId: number): Promise<BytecodeVerificationResult> {
-    const deployment = getZenithDeployment(chainId);
+    const deployment = getElisDeployment(chainId);
     if (!deployment) {
         return {
             isFullyDeployed: false,

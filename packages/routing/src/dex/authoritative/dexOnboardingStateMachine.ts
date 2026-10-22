@@ -1,5 +1,5 @@
-import type { DexOnboardingState } from '@zenith/types';
-import { DexOnboardingTransitionError } from '@zenith/contracts';
+import type { DexOnboardingState } from '@elis/types';
+import { DexOnboardingTransitionError } from '@elis/contracts';
 export const VALID_ONBOARDING_TRANSITIONS: Record<DexOnboardingState, readonly DexOnboardingState[]> = {
     DISCOVERED: ['CONFIGURED', 'DISABLED', 'DEPRECATED'],
     CONFIGURED: ['IDENTITY_VERIFIED', 'DISABLED', 'DEPRECATED'],

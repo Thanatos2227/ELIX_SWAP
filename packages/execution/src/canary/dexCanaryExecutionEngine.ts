@@ -1,9 +1,9 @@
 import { Provider, Signer, ZeroAddress } from 'ethers';
-import type { ExecutionPlan, ExecutionPlanStep, AuthoritativeDexQuote, DexSwapTransaction, TokenIdentity } from '@zenith/types';
-import { defaultAuthoritativeNetworkRegistry, AuthoritativeNetworkRegistry, AuthoritativeRpcProviderRegistry, defaultAuthoritativeRpcProviderRegistry } from '@zenith/chains';
-import { defaultAuthoritativeTokenRegistry, AuthoritativeTokenRegistry } from '@zenith/tokens';
-import { LiveExecutionBlockedError, UnauthorizedExecutionError, SignerRequiredError, ReceiptRevertedError, EconomicSafetyBreachError, DexNetworkMismatchError, ConfigurationError, validateEvmAddress } from '@zenith/contracts';
-import { defaultAuthoritativeDexRegistry, AuthoritativeDexRegistry, DexSimulationPipeline, RouteFreshnessValidator, isCapabilityAtLeast } from '@zenith/routing';
+import type { ExecutionPlan, ExecutionPlanStep, AuthoritativeDexQuote, DexSwapTransaction, TokenIdentity } from '@elis/types';
+import { defaultAuthoritativeNetworkRegistry, AuthoritativeNetworkRegistry, AuthoritativeRpcProviderRegistry, defaultAuthoritativeRpcProviderRegistry } from '@elis/chains';
+import { defaultAuthoritativeTokenRegistry, AuthoritativeTokenRegistry } from '@elis/tokens';
+import { LiveExecutionBlockedError, UnauthorizedExecutionError, SignerRequiredError, ReceiptRevertedError, EconomicSafetyBreachError, DexNetworkMismatchError, ConfigurationError, validateEvmAddress } from '@elis/contracts';
+import { defaultAuthoritativeDexRegistry, AuthoritativeDexRegistry, DexSimulationPipeline, RouteFreshnessValidator, isCapabilityAtLeast } from '@elis/routing';
 import { extractActualSourceSwapOutput } from '../crosschain/sourceSwapOutputExtractor';
 import { assertPlanIntegrity, sealPlan } from '../executionPlanBuilder';
 export function formatAmountHumanExact(amount: bigint, decimals: number): string {

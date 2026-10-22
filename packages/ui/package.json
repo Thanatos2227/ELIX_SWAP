@@ -1,5 +1,5 @@
 {
-  "name": "@zenith/ui",
+  "name": "@elis/ui",
   "version": "4.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -7,7 +7,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@zenith/types": "*"
+    "@elis/types": "*"
   },
   "devDependencies": {
     "typescript": "^5.4.5"

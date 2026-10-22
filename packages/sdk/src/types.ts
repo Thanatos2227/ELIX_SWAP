@@ -1,12 +1,12 @@
-import { DEXProtocol, Token, QuoteResponse } from '@zenith/types';
+import { DEXProtocol, Token, QuoteResponse } from '@elis/types';
 import { Provider } from 'ethers';
-export interface ZenithSDKConfig {
+export interface ElisSDKConfig {
     rpcUrls?: Record<number, string>;
     providers?: Record<number, Provider>;
     defaultSlippageBps?: number;
     referralAddress?: string;
 }
-export interface ZenithQuoteParams {
+export interface ElisQuoteParams {
     chainId: number;
     tokenIn: Token | string;
     tokenOut: Token | string;
@@ -16,7 +16,7 @@ export interface ZenithQuoteParams {
     destinationChainId?: number;
     allowedProtocols?: DEXProtocol[];
 }
-export interface ZenithQuoteResult {
+export interface ElisQuoteResult {
     sourceChainId: number;
     destinationChainId: number;
     tokenIn: Token;
@@ -34,14 +34,14 @@ export interface ZenithQuoteResult {
     estimatedGas: bigint;
     rawQuote: QuoteResponse;
 }
-export interface ZenithRouteParams {
+export interface ElisRouteParams {
     chainId: number;
     tokenIn: Token | string;
     tokenOut: Token | string;
     amountIn: bigint | string;
     destinationChainId?: number;
 }
-export interface ZenithRoute {
+export interface ElisRoute {
     protocol: DEXProtocol;
     tokenIn: Token;
     tokenOut: Token;
@@ -52,7 +52,7 @@ export interface ZenithRoute {
     path: string[];
     executionTarget: string;
 }
-export interface ZenithPoolInfo {
+export interface ElisPoolInfo {
     protocol: DEXProtocol;
     chainId: number;
     address: string;
@@ -67,7 +67,7 @@ export interface ZenithPoolInfo {
     totalLpSupply?: bigint;
 }
 export interface AddLiquidityV1Params {
-    protocol: 'ZENITH_V1';
+    protocol: 'ELIS_V1';
     chainId: number;
     tokenA: string;
     tokenB: string;
@@ -79,7 +79,7 @@ export interface AddLiquidityV1Params {
     deadline: number;
 }
 export interface RemoveLiquidityV1Params {
-    protocol: 'ZENITH_V1';
+    protocol: 'ELIS_V1';
     chainId: number;
     tokenA: string;
     tokenB: string;
@@ -90,7 +90,7 @@ export interface RemoveLiquidityV1Params {
     deadline: number;
 }
 export interface AddLiquidityV2Params {
-    protocol: 'ZENITH_V2';
+    protocol: 'ELIS_V2';
     chainId: number;
     tokenA: string;
     tokenB: string;
@@ -103,7 +103,7 @@ export interface AddLiquidityV2Params {
     deadline: number;
 }
 export interface MintPositionV3Params {
-    protocol: 'ZENITH_V3';
+    protocol: 'ELIS_V3';
     chainId: number;
     token0: string;
     token1: string;
@@ -118,7 +118,7 @@ export interface MintPositionV3Params {
     deadline: number;
 }
 export interface IncreaseLiquidityV3Params {
-    protocol: 'ZENITH_V3';
+    protocol: 'ELIS_V3';
     chainId: number;
     tokenId: bigint;
     amount0Desired: bigint;
@@ -128,7 +128,7 @@ export interface IncreaseLiquidityV3Params {
     deadline: number;
 }
 export interface DecreaseLiquidityV3Params {
-    protocol: 'ZENITH_V3';
+    protocol: 'ELIS_V3';
     chainId: number;
     tokenId: bigint;
     liquidity: bigint;
@@ -137,7 +137,7 @@ export interface DecreaseLiquidityV3Params {
     deadline: number;
 }
 export interface CollectV3FeesParams {
-    protocol: 'ZENITH_V3';
+    protocol: 'ELIS_V3';
     chainId: number;
     tokenId: bigint;
     recipient: string;
@@ -145,7 +145,7 @@ export interface CollectV3FeesParams {
     amount1Max: bigint;
 }
 export type LiquidityParams = AddLiquidityV1Params | RemoveLiquidityV1Params | AddLiquidityV2Params | MintPositionV3Params | IncreaseLiquidityV3Params | DecreaseLiquidityV3Params | CollectV3FeesParams;
-export interface ZenithV3PositionInfo {
+export interface ElisV3PositionInfo {
     tokenId: bigint;
     nonce: bigint;
     operator: string;
@@ -160,7 +160,7 @@ export interface ZenithV3PositionInfo {
     tokensOwed0: bigint;
     tokensOwed1: bigint;
 }
-export interface ZenithTreasuryInfo {
+export interface ElisTreasuryInfo {
     chainId: number;
     treasuryAddress: string;
     feeControllerAddress: string;

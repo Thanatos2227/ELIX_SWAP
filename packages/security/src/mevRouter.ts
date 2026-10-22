@@ -1,4 +1,4 @@
-import { MEVProtectionLevel } from '@zenith/types';
+import { MEVProtectionLevel } from '@elis/types';
 export interface MEVRouteConfig {
     protectionLevel: MEVProtectionLevel;
     rpcEndpoint: string;

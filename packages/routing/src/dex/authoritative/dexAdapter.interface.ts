@@ -1,4 +1,4 @@
-import type { DexIdentity, DexCapabilities, DexPairValidationResult, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexSwapTransaction, DexSimulationResult, DexPoolState, DexDeploymentVerificationResult, DexLiquidityState, TokenIdentity, Token } from '@zenith/types';
+import type { DexIdentity, DexCapabilities, DexPairValidationResult, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexSwapTransaction, DexSimulationResult, DexPoolState, DexDeploymentVerificationResult, DexLiquidityState, TokenIdentity, Token } from '@elis/types';
 export interface DexQuoteParams {
     chainId: number | string;
     tokenIn: TokenIdentity | Token;

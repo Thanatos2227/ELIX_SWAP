@@ -1,7 +1,7 @@
 import { JsonRpcProvider, FetchRequest, Contract, formatUnits, formatEther, getAddress, parseUnits, parseEther, Interface, sha256, toUtf8Bytes, ZeroAddress } from 'ethers';
-import { defaultAuthoritativeNetworkRegistry, defaultAuthoritativeRpcProviderRegistry } from '@zenith/chains';
-import { defaultAuthoritativeTokenRegistry } from '@zenith/tokens';
-import { defaultAuthoritativeDexRegistry, DexLiveCapabilityVerifier } from '@zenith/routing';
+import { defaultAuthoritativeNetworkRegistry, defaultAuthoritativeRpcProviderRegistry } from '@elis/chains';
+import { defaultAuthoritativeTokenRegistry } from '@elis/tokens';
+import { defaultAuthoritativeDexRegistry, DexLiveCapabilityVerifier } from '@elis/routing';
 import { defaultDexCanaryExecutionEngine } from '../packages/execution/src/canary';
 import { resolveSecureSignerKey } from './secure-runtime-loader';
 import { normalizePrivateKey, EXPECTED_OPERATOR_ADDRESS } from './execute-controlled-polygon-crosschain';
@@ -58,7 +58,7 @@ async function getArbitrumQuorumProvider(): Promise<{
 }
 export async function certifyArbitrumUniswapV3() {
     console.log('================================================================');
-    console.log('ZENITH — PHASE 2: ARBITRUM UNISWAP V3 CAPABILITY CERTIFIER');
+    console.log('ELIS — PHASE 2: ARBITRUM UNISWAP V3 CAPABILITY CERTIFIER');
     console.log('================================================================');
     console.log('TARGET_NETWORK:       Arbitrum One (Chain ID: 42161)');
     console.log('TARGET_DEX:           arbitrum:uniswap-v3');

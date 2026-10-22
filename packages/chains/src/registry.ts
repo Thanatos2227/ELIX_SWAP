@@ -1,5 +1,5 @@
-import { ChainConfig, ExecutionEnvironment, GasPreset, NetworkSupportTier, OperationalStatus, ChainCapabilities } from '@zenith/types';
-import { ZENITH_SUPPORTED_CHAINS, ZENITH_TESTNET_CHAINS } from './chains.data';
+import { ChainConfig, ExecutionEnvironment, GasPreset, NetworkSupportTier, OperationalStatus, ChainCapabilities } from '@elis/types';
+import { ELIS_SUPPORTED_CHAINS, ELIS_TESTNET_CHAINS } from './chains.data';
 export interface NetworkGasProfile {
     swapGasUnits: number;
     avgGasPriceGwei: number;
@@ -70,7 +70,7 @@ export class ChainRegistry {
     private chains: Map<string, ChainConfig> = new Map();
     private chainIdToKey: Map<number, string> = new Map();
     constructor(customChains?: Record<string, ChainConfig>) {
-        const initial = customChains || { ...ZENITH_SUPPORTED_CHAINS, ...ZENITH_TESTNET_CHAINS };
+        const initial = customChains || { ...ELIS_SUPPORTED_CHAINS, ...ELIS_TESTNET_CHAINS };
         Object.entries(initial).forEach(([key, config]) => {
             this.registerChain(key, config);
         });
@@ -110,7 +110,7 @@ export class ChainRegistry {
     public getAllChains(includeMaintenance = true, includeTestnets = false): ChainConfig[] {
         let all = Array.from(this.chains.values());
         if (!includeTestnets) {
-            const testnetKeys = new Set(Object.keys(ZENITH_TESTNET_CHAINS).map((k) => k.toLowerCase()));
+            const testnetKeys = new Set(Object.keys(ELIS_TESTNET_CHAINS).map((k) => k.toLowerCase()));
             all = all.filter((c) => !testnetKeys.has(c.id.toLowerCase()) && (c.category as string) !== 'TESTNET');
         }
         if (includeMaintenance)

@@ -1,4 +1,4 @@
-import { NormalizedRoute, NormalizedRouteType, SwapRoute, QuoteRequest, ProviderCapabilityLevel, CrossChainQuote } from '@zenith/types';
+import { NormalizedRoute, NormalizedRouteType, SwapRoute, QuoteRequest, ProviderCapabilityLevel, CrossChainQuote } from '@elis/types';
 import { CrossChainProviderCapabilityMatrix } from '../crosschain/crossChainProviderCapabilityMatrix';
 import { defaultAuthoritativeDexRegistry } from '../dex/authoritative/authoritativeDexRegistry';
 export class RouteNormalizer {
@@ -37,7 +37,9 @@ export class RouteNormalizer {
         }
         const quotedAt = quote.quoteTimestamp || Date.now();
         const expiresAt = quote.expiration || (quotedAt + 15000);
-        const cap = CrossChainProviderCapabilityMatrix.getCapability(quote.provider, sourceChainId, destinationChainId, sourceToken.symbol, destinationToken.symbol);
+        const bridgeSrcSym = quoteAny.sourceConnectorToken?.symbol || sourceToken.symbol;
+        const bridgeDstSym = quoteAny.destConnectorToken?.symbol || destinationToken.symbol;
+        const cap = CrossChainProviderCapabilityMatrix.getCapability(quote.provider, sourceChainId, destinationChainId, bridgeSrcSym, bridgeDstSym);
         const capabilityLevel = cap.capabilityLevel || 'UNSUPPORTED';
         const routeId = (quote as any).routeIdentifier || `route-${quote.provider.toLowerCase()}-${sourceChainId}-${destinationChainId}`;
         return {
@@ -66,7 +68,9 @@ export class RouteNormalizer {
             calldata: quote.calldata,
             executionTarget: quote.executionTarget,
             approvalTarget: quote.approvalTarget,
-            valueWei: quote.value || '0'
+            valueWei: quote.value || '0',
+            approvalTxns: quote.approvalTxns,
+            crossChainQuote: quote
         };
     }
     public static normalize(route: SwapRoute, request: QuoteRequest): NormalizedRoute {
@@ -127,7 +131,10 @@ export class RouteNormalizer {
             }
             quotedAt = ccQuote.quoteTimestamp || Date.now();
             expiresAt = ccQuote.expiration || (quotedAt + 15000);
-            const cap = CrossChainProviderCapabilityMatrix.getCapability(ccQuote.provider, sourceChainId, destinationChainId, sourceToken.symbol, destinationToken.symbol);
+            const quoteAny = ccQuote as any;
+            const bridgeSrcSym = quoteAny.sourceConnectorToken?.symbol || sourceToken.symbol;
+            const bridgeDstSym = quoteAny.destConnectorToken?.symbol || destinationToken.symbol;
+            const cap = CrossChainProviderCapabilityMatrix.getCapability(ccQuote.provider, sourceChainId, destinationChainId, bridgeSrcSym, bridgeDstSym);
             capabilityLevel = cap.capabilityLevel || 'UNSUPPORTED';
             if (ccQuote.isExecutable !== undefined) {
                 isExecutable = Boolean(ccQuote.isExecutable);
@@ -194,7 +201,9 @@ export class RouteNormalizer {
             calldata,
             executionTarget,
             approvalTarget,
-            valueWei
+            valueWei,
+            approvalTxns: ccQuote?.approvalTxns,
+            crossChainQuote: ccQuote
         };
     }
 }

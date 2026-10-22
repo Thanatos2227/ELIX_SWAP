@@ -1,4 +1,3 @@
-import { Interface } from 'ethers';
 import {
   BridgeProtocol,
   CrossChainExecution,
@@ -8,28 +7,108 @@ import {
   ExecutionPlanDiagnostic,
   QuoteRequest,
   Token
-} from '@zenith/types';
-import { defaultChainRegistry } from '@zenith/chains';
+} from '@elis/types';
+import { defaultChainRegistry } from '@elis/chains';
 import {
   getAcrossSpokePool,
   isAcrossSupported,
-  ACROSS_SPOKE_POOL_ABI,
-  validateEvmAddress,
   validateTokenAddress,
-  validateRecipientAddress,
   validateExecutionTarget,
-  ProviderUnavailableError
-} from '@zenith/contracts';
+  ProviderUnavailableError,
+  ExecutionUnavailableError
+} from '@elis/contracts';
 import { isNativeToken } from '../../dex/dexMath';
 import { validateCrossChainQuoteExecutability } from '../quoteValidator';
 import { defaultQuoteDiagnosticLogger } from '../quoteDiagnostics';
 
-const spokePoolInterface = new Interface(ACROSS_SPOKE_POOL_ABI);
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+const EVM_ADDRESS_REGEX = /^0x[0-9a-fA-F]{40}$/;
+const ACROSS_INTEGRATOR_ID_REGEX = /^0x[0-9a-fA-F]{4}$/;
+const EXACT_INTEGER_REGEX = /^(0|[1-9][0-9]*)$/;
+const UINT256_MAX = (1n << 256n) - 1n;
+
+interface SafeAmountParseResult {
+  success: boolean;
+  amount?: bigint;
+  errorReason?: string;
+}
+
+function parseSafeAmountField(val: unknown, fieldName: string): SafeAmountParseResult {
+  if (val === undefined || val === null) {
+    return { success: false, errorReason: `${fieldName} is missing` };
+  }
+  const str = typeof val === 'number'
+    ? (Number.isSafeInteger(val) && val >= 0 ? String(val) : '')
+    : (typeof val === 'string' ? val.trim() : '');
+
+  if (!str) {
+    return { success: false, errorReason: `${fieldName} is empty or not a valid string` };
+  }
+  if (str.includes('.') || str.includes('e') || str.includes('E') || str.includes('-') || str.includes('+')) {
+    return { success: false, errorReason: `${fieldName} contains invalid format (decimals, signs, or scientific notation)` };
+  }
+  if (!EXACT_INTEGER_REGEX.test(str)) {
+    return { success: false, errorReason: `${fieldName} must be a non-negative integer string without leading zeros` };
+  }
+  let big: bigint;
+  try {
+    big = BigInt(str);
+  } catch {
+    return { success: false, errorReason: `${fieldName} failed BigInt conversion` };
+  }
+  if (big < 0n) {
+    return { success: false, errorReason: `${fieldName} cannot be negative` };
+  }
+  if (big > UINT256_MAX) {
+    return { success: false, errorReason: `${fieldName} exceeds UINT256_MAX` };
+  }
+  return { success: true, amount: big };
+}
+
+export interface AcrossProviderOptions {
+  apiKey?: string;
+  integratorId?: string;
+  apiBaseUrl?: string;
+  statusApiBaseUrl?: string;
+  fetchFn?: typeof fetch;
+  timeoutMs?: number;
+}
 
 export class AcrossProvider implements CrossChainProvider {
   public readonly id: BridgeProtocol = 'ACROSS';
   public readonly name = 'Across Protocol V3';
+  private apiKey?: string;
+  private integratorId?: string;
+  private customApiBaseUrl?: string;
+  private customStatusApiBaseUrl?: string;
+  private customFetch?: typeof fetch;
+  private timeoutMs: number;
+
+  constructor(options?: AcrossProviderOptions) {
+    this.apiKey = options?.apiKey;
+    this.integratorId = options?.integratorId;
+    this.customApiBaseUrl = options?.apiBaseUrl;
+    this.customStatusApiBaseUrl = options?.statusApiBaseUrl;
+    this.customFetch = options?.fetchFn;
+    this.timeoutMs = options?.timeoutMs || 4000;
+  }
+
+  private getCredentials(): { apiKey?: string; integratorId?: string } {
+    const apiKey =
+      this.apiKey ||
+      (typeof process !== 'undefined'
+        ? process.env.ACROSS_API_KEY || process.env.ELIS_ACROSS_API_KEY
+        : undefined);
+    const integratorId =
+      this.integratorId ||
+      (typeof process !== 'undefined'
+        ? process.env.ACROSS_INTEGRATOR_ID || process.env.ELIS_ACROSS_INTEGRATOR_ID
+        : undefined);
+    return {
+      apiKey: apiKey?.trim(),
+      integratorId: integratorId?.trim()
+    };
+  }
 
   public isAvailable(
     sourceChainId?: string,
@@ -48,9 +127,11 @@ export class AcrossProvider implements CrossChainProvider {
     if (!isAcrossSupported(src.chainId) || !isAcrossSupported(dst.chainId)) return false;
 
     if (tokenIn && tokenOut) {
-      if (tokenIn.symbol.toUpperCase() !== tokenOut.symbol.toUpperCase()) {
+      const symIn = (tokenIn.symbol || '').toUpperCase().replace(/^W/, '');
+      const symOut = (tokenOut.symbol || '').toUpperCase().replace(/^W/, '');
+      if (symIn !== symOut) {
         const isUsd = (s: string) => s.startsWith('USD');
-        if (!isUsd(tokenIn.symbol) || !isUsd(tokenOut.symbol)) {
+        if (!isUsd(symIn) || !isUsd(symOut)) {
           return false;
         }
       }
@@ -62,7 +143,6 @@ export class AcrossProvider implements CrossChainProvider {
   public async getQuote(request: QuoteRequest): Promise<CrossChainQuote | null> {
     const sourceChainId = request.sourceChainId || (request as any).srcChainId;
     const destinationChainId = request.destinationChainId || (request as any).destChainId;
-    const recipient = request.recipientAddress || (request as any).recipient || request.userWalletAddress;
 
     if (!this.isAvailable(sourceChainId, destinationChainId, request.tokenIn, request.tokenOut)) {
       return null;
@@ -78,19 +158,19 @@ export class AcrossProvider implements CrossChainProvider {
     const validatedInputToken = validateTokenAddress(request.tokenIn.address, srcChain.id, request.tokenIn.isNative);
     const validatedOutputToken = validateTokenAddress(request.tokenOut.address, dstChain.id, request.tokenOut.isNative);
 
-    let destinationAmountBig = amountInBig;
-    let bridgeFeeUSD = 0;
-    let relayerFeePctStr = '0.05%';
-    let estTransferTimeSec = 30;
-    const quoteArrivalTimestamp = Date.now();
-    let protocolTimestampSec = Math.floor(quoteArrivalTimestamp / 1000);
-    let fillDeadlineSec = protocolTimestampSec + 1800;
-    let exclusiveRelayer = ZERO_ADDRESS;
-    let isLiveQuote = false;
-    let quoteDiagnostic: ExecutionPlanDiagnostic | undefined = undefined;
-    let httpStatus: number | undefined = undefined;
-    const startTime = Date.now();
+    const isSrcNative = isNativeToken(request.tokenIn.address) || Boolean(request.tokenIn.isNative);
+    const isDstNative = isNativeToken(request.tokenOut.address) || Boolean(request.tokenOut.isNative);
 
+    const acrossInputToken = isSrcNative
+      ? (request.tokenIn.wrappedAddress || (srcChain.nativeCurrency as any)?.wrappedAddress || validatedInputToken)
+      : validatedInputToken;
+
+    const acrossOutputToken = isDstNative
+      ? (request.tokenOut.wrappedAddress || (dstChain.nativeCurrency as any)?.wrappedAddress || validatedOutputToken)
+      : validatedOutputToken;
+
+    const quoteArrivalTimestamp = Date.now();
+    const startTime = Date.now();
     const isTestnet = (
       srcChain.chainId === 11155111 ||
       srcChain.chainId === 421614 ||
@@ -101,44 +181,668 @@ export class AcrossProvider implements CrossChainProvider {
       dstChain.chainId === 84532 ||
       dstChain.chainId === 11155420
     );
-    const apiBase = isTestnet ? 'https://testnet.across.to/api' : 'https://app.across.to/api';
-    const url = `${apiBase}/suggested-fees?inputToken=${validatedInputToken}&outputToken=${validatedOutputToken}&originChainId=${srcChain.chainId}&destinationChainId=${dstChain.chainId}&amount=${amountInBig.toString()}${recipient ? `&recipient=${recipient}` : ''}`;
+
+    // 1. FAIL-CLOSED DEPOSITOR REQUIREMENT
+    const rawDepositor = (request.userWalletAddress || (request as any).sender)?.trim();
+    if (!rawDepositor || rawDepositor === ZERO_ADDRESS || !EVM_ADDRESS_REGEX.test(rawDepositor) || rawDepositor.toLowerCase() === spokePool.toLowerCase()) {
+      const depDiagnostic: ExecutionPlanDiagnostic = {
+        code: 'ACROSS_DEPOSITOR_REQUIRED',
+        message: 'Valid non-zero user depositor wallet address is required for Across execution.',
+        severity: 'ERROR',
+        providerId: 'ACROSS',
+        timestamp: Date.now()
+      };
+
+      const unexecutableQuote: CrossChainQuote = {
+        provider: 'ACROSS',
+        providerName: this.name,
+        sourceChainId: request.sourceChainId,
+        destinationChainId: request.destinationChainId,
+        sourceToken: request.tokenIn,
+        destinationToken: request.tokenOut,
+        sourceAmountRaw: amountInBig.toString(),
+        destinationAmountRaw: '0',
+        minDestinationAmountRaw: '0',
+        bridgeFeeUSD: 0,
+        relayerFee: '0%',
+        gasEstimateUSD: defaultChainRegistry.getEstimatedGasCostUSD(srcChain.id, 'BRIDGE', request.gasPreset),
+        recipient: '',
+        expiration: quoteArrivalTimestamp + 60000,
+        routeIdentifier: `across-${srcChain.id}-${dstChain.id}-${Date.now()}`,
+        executionTarget: spokePool,
+        calldata: '0x',
+        value: '0',
+        approvalTarget: spokePool,
+        quoteTimestamp: quoteArrivalTimestamp,
+        estimatedTransferTimeSec: 30,
+        securityRating: 'A+',
+        isExecutable: false,
+        unexecutableReason: 'ACROSS_DEPOSITOR_REQUIRED',
+        diagnostics: [depDiagnostic]
+      };
+
+      defaultQuoteDiagnosticLogger.record({
+        provider: 'ACROSS',
+        providerName: this.name,
+        sourceChainId: request.sourceChainId,
+        destinationChainId: request.destinationChainId,
+        sourceToken: request.tokenIn.symbol,
+        destinationToken: request.tokenOut.symbol,
+        amountInRaw: amountInBig.toString(),
+        requestStatus: 'FAILED',
+        httpStatus: 400,
+        normalizedError: 'INVALID_TARGET',
+        providerErrorMessage: 'Valid non-zero user depositor wallet address is required.',
+        isExecutable: false,
+        unexecutableReason: unexecutableQuote.unexecutableReason,
+        latencyMs: 0,
+        endpoint: 'https://app.across.to/api/swap/approval',
+        timestamp: Date.now()
+      });
+
+      return unexecutableQuote;
+    }
+
+    // 2. FAIL-CLOSED RECIPIENT REQUIREMENT
+    const rawRecipient = (request.recipientAddress || (request as any).recipient)?.trim();
+    if (!rawRecipient || rawRecipient === ZERO_ADDRESS || !EVM_ADDRESS_REGEX.test(rawRecipient) || rawRecipient.toLowerCase() === spokePool.toLowerCase()) {
+      const recDiagnostic: ExecutionPlanDiagnostic = {
+        code: 'ACROSS_RECIPIENT_REQUIRED',
+        message: 'Valid non-zero destination recipient address is required for Across execution.',
+        severity: 'ERROR',
+        providerId: 'ACROSS',
+        timestamp: Date.now()
+      };
+
+      const unexecutableQuote: CrossChainQuote = {
+        provider: 'ACROSS',
+        providerName: this.name,
+        sourceChainId: request.sourceChainId,
+        destinationChainId: request.destinationChainId,
+        sourceToken: request.tokenIn,
+        destinationToken: request.tokenOut,
+        sourceAmountRaw: amountInBig.toString(),
+        destinationAmountRaw: '0',
+        minDestinationAmountRaw: '0',
+        bridgeFeeUSD: 0,
+        relayerFee: '0%',
+        gasEstimateUSD: defaultChainRegistry.getEstimatedGasCostUSD(srcChain.id, 'BRIDGE', request.gasPreset),
+        recipient: '',
+        expiration: quoteArrivalTimestamp + 60000,
+        routeIdentifier: `across-${srcChain.id}-${dstChain.id}-${Date.now()}`,
+        executionTarget: spokePool,
+        calldata: '0x',
+        value: '0',
+        approvalTarget: spokePool,
+        quoteTimestamp: quoteArrivalTimestamp,
+        estimatedTransferTimeSec: 30,
+        securityRating: 'A+',
+        isExecutable: false,
+        unexecutableReason: 'ACROSS_RECIPIENT_REQUIRED',
+        diagnostics: [recDiagnostic]
+      };
+
+      defaultQuoteDiagnosticLogger.record({
+        provider: 'ACROSS',
+        providerName: this.name,
+        sourceChainId: request.sourceChainId,
+        destinationChainId: request.destinationChainId,
+        sourceToken: request.tokenIn.symbol,
+        destinationToken: request.tokenOut.symbol,
+        amountInRaw: amountInBig.toString(),
+        requestStatus: 'FAILED',
+        httpStatus: 400,
+        normalizedError: 'INVALID_TARGET',
+        providerErrorMessage: 'Valid non-zero destination recipient address is required.',
+        isExecutable: false,
+        unexecutableReason: unexecutableQuote.unexecutableReason,
+        latencyMs: 0,
+        endpoint: 'https://app.across.to/api/swap/approval',
+        timestamp: Date.now()
+      });
+
+      return unexecutableQuote;
+    }
+
+    const { apiKey, integratorId } = this.getCredentials();
+
+    // 3. FAIL-CLOSED AUTHENTICATION GATING: Across API Key
+    if (!apiKey) {
+      const authDiagnostic: ExecutionPlanDiagnostic = {
+        code: 'API_AUTH_REQUIRED',
+        message: 'Across API key (ACROSS_API_KEY) is unconfigured. Fail-closed: Production execution disabled.',
+        severity: 'ERROR',
+        providerId: 'ACROSS',
+        timestamp: Date.now()
+      };
+
+      const unauthQuote: CrossChainQuote = {
+        provider: 'ACROSS',
+        providerName: this.name,
+        sourceChainId: request.sourceChainId,
+        destinationChainId: request.destinationChainId,
+        sourceToken: request.tokenIn,
+        destinationToken: request.tokenOut,
+        sourceAmountRaw: amountInBig.toString(),
+        destinationAmountRaw: '0',
+        minDestinationAmountRaw: '0',
+        bridgeFeeUSD: 0,
+        relayerFee: '0%',
+        gasEstimateUSD: defaultChainRegistry.getEstimatedGasCostUSD(srcChain.id, 'BRIDGE', request.gasPreset),
+        recipient: rawRecipient,
+        expiration: quoteArrivalTimestamp + 60000,
+        routeIdentifier: `across-${srcChain.id}-${dstChain.id}-${Date.now()}`,
+        executionTarget: spokePool,
+        calldata: '0x',
+        value: '0',
+        approvalTarget: spokePool,
+        quoteTimestamp: quoteArrivalTimestamp,
+        estimatedTransferTimeSec: 30,
+        securityRating: 'A+',
+        isExecutable: false,
+        unexecutableReason: 'ACROSS_AUTH_REQUIRED',
+        diagnostics: [authDiagnostic]
+      };
+
+      defaultQuoteDiagnosticLogger.record({
+        provider: 'ACROSS',
+        providerName: this.name,
+        sourceChainId: request.sourceChainId,
+        destinationChainId: request.destinationChainId,
+        sourceToken: request.tokenIn.symbol,
+        destinationToken: request.tokenOut.symbol,
+        amountInRaw: amountInBig.toString(),
+        requestStatus: 'FAILED',
+        httpStatus: 401,
+        normalizedError: 'API_AUTH_REQUIRED',
+        providerErrorMessage: 'ACROSS_API_KEY not configured in environment.',
+        isExecutable: false,
+        unexecutableReason: unauthQuote.unexecutableReason,
+        latencyMs: 0,
+        endpoint: 'https://app.across.to/api/swap/approval',
+        timestamp: Date.now()
+      });
+
+      return unauthQuote;
+    }
+
+    // 4. FAIL-CLOSED INTEGRATOR ID GATING: Presence and 2-byte Hex Format
+    if (!integratorId) {
+      const idDiagnostic: ExecutionPlanDiagnostic = {
+        code: 'ACROSS_INTEGRATOR_ID_REQUIRED',
+        message: 'Across Integrator ID (ACROSS_INTEGRATOR_ID) is unconfigured. Fail-closed: Production execution disabled.',
+        severity: 'ERROR',
+        providerId: 'ACROSS',
+        timestamp: Date.now()
+      };
+
+      const unauthQuote: CrossChainQuote = {
+        provider: 'ACROSS',
+        providerName: this.name,
+        sourceChainId: request.sourceChainId,
+        destinationChainId: request.destinationChainId,
+        sourceToken: request.tokenIn,
+        destinationToken: request.tokenOut,
+        sourceAmountRaw: amountInBig.toString(),
+        destinationAmountRaw: '0',
+        minDestinationAmountRaw: '0',
+        bridgeFeeUSD: 0,
+        relayerFee: '0%',
+        gasEstimateUSD: defaultChainRegistry.getEstimatedGasCostUSD(srcChain.id, 'BRIDGE', request.gasPreset),
+        recipient: rawRecipient,
+        expiration: quoteArrivalTimestamp + 60000,
+        routeIdentifier: `across-${srcChain.id}-${dstChain.id}-${Date.now()}`,
+        executionTarget: spokePool,
+        calldata: '0x',
+        value: '0',
+        approvalTarget: spokePool,
+        quoteTimestamp: quoteArrivalTimestamp,
+        estimatedTransferTimeSec: 30,
+        securityRating: 'A+',
+        isExecutable: false,
+        unexecutableReason: 'ACROSS_INTEGRATOR_ID_REQUIRED',
+        diagnostics: [idDiagnostic]
+      };
+
+      defaultQuoteDiagnosticLogger.record({
+        provider: 'ACROSS',
+        providerName: this.name,
+        sourceChainId: request.sourceChainId,
+        destinationChainId: request.destinationChainId,
+        sourceToken: request.tokenIn.symbol,
+        destinationToken: request.tokenOut.symbol,
+        amountInRaw: amountInBig.toString(),
+        requestStatus: 'FAILED',
+        httpStatus: 401,
+        normalizedError: 'API_AUTH_REQUIRED',
+        providerErrorMessage: 'ACROSS_INTEGRATOR_ID not configured in environment.',
+        isExecutable: false,
+        unexecutableReason: unauthQuote.unexecutableReason,
+        latencyMs: 0,
+        endpoint: 'https://app.across.to/api/swap/approval',
+        timestamp: Date.now()
+      });
+
+      return unauthQuote;
+    }
+
+    if (!ACROSS_INTEGRATOR_ID_REGEX.test(integratorId)) {
+      const invalidIdDiagnostic: ExecutionPlanDiagnostic = {
+        code: 'ACROSS_INVALID_INTEGRATOR_ID',
+        message: `Invalid Across Integrator ID format "${integratorId}". Expected 2-byte hexadecimal string matching /^0x[0-9a-fA-F]{4}$/ (e.g. 0x0001, 0xdead).`,
+        severity: 'ERROR',
+        providerId: 'ACROSS',
+        timestamp: Date.now()
+      };
+
+      const invalidIdQuote: CrossChainQuote = {
+        provider: 'ACROSS',
+        providerName: this.name,
+        sourceChainId: request.sourceChainId,
+        destinationChainId: request.destinationChainId,
+        sourceToken: request.tokenIn,
+        destinationToken: request.tokenOut,
+        sourceAmountRaw: amountInBig.toString(),
+        destinationAmountRaw: '0',
+        minDestinationAmountRaw: '0',
+        bridgeFeeUSD: 0,
+        relayerFee: '0%',
+        gasEstimateUSD: defaultChainRegistry.getEstimatedGasCostUSD(srcChain.id, 'BRIDGE', request.gasPreset),
+        recipient: rawRecipient,
+        expiration: quoteArrivalTimestamp + 60000,
+        routeIdentifier: `across-${srcChain.id}-${dstChain.id}-${Date.now()}`,
+        executionTarget: spokePool,
+        calldata: '0x',
+        value: '0',
+        approvalTarget: spokePool,
+        quoteTimestamp: quoteArrivalTimestamp,
+        estimatedTransferTimeSec: 30,
+        securityRating: 'A+',
+        isExecutable: false,
+        unexecutableReason: 'ACROSS_INVALID_INTEGRATOR_ID',
+        diagnostics: [invalidIdDiagnostic]
+      };
+
+      defaultQuoteDiagnosticLogger.record({
+        provider: 'ACROSS',
+        providerName: this.name,
+        sourceChainId: request.sourceChainId,
+        destinationChainId: request.destinationChainId,
+        sourceToken: request.tokenIn.symbol,
+        destinationToken: request.tokenOut.symbol,
+        amountInRaw: amountInBig.toString(),
+        requestStatus: 'FAILED',
+        httpStatus: 400,
+        normalizedError: 'PROVIDER_UNAVAILABLE',
+        providerErrorMessage: invalidIdDiagnostic.message,
+        isExecutable: false,
+        unexecutableReason: invalidIdQuote.unexecutableReason,
+        latencyMs: 0,
+        endpoint: 'https://app.across.to/api/swap/approval',
+        timestamp: Date.now()
+      });
+
+      return invalidIdQuote;
+    }
+
+    const defaultApiBase = isTestnet ? 'https://testnet.across.to/api/swap/approval' : 'https://app.across.to/api/swap/approval';
+    const apiBase = this.customApiBaseUrl || defaultApiBase;
+
+    const queryParams = new URLSearchParams({
+      originChainId: String(srcChain.chainId),
+      destinationChainId: String(dstChain.chainId),
+      inputToken: acrossInputToken.toLowerCase(),
+      outputToken: acrossOutputToken.toLowerCase(),
+      amount: amountInBig.toString(),
+      tradeType: 'exactInput',
+      depositor: rawDepositor.toLowerCase(),
+      recipient: rawRecipient.toLowerCase(),
+      integratorId
+    });
+
+    const url = `${apiBase}?${queryParams.toString()}`;
+    const sanitizedUrl = `${apiBase}?originChainId=${srcChain.chainId}&destinationChainId=${dstChain.chainId}&inputToken=${acrossInputToken}&outputToken=${acrossOutputToken}&amount=${amountInBig.toString()}&tradeType=exactInput&integratorId=[REDACTED]`;
+
+    let destinationAmountBig = 0n;
+    let minDestinationAmountBig = 0n;
+    let bridgeFeeUSD = 0;
+    let relayerFeePctStr = '0.05%';
+    let estTransferTimeSec = 30;
+    let protocolTimestampSec = Math.floor(quoteArrivalTimestamp / 1000);
+    let quoteExpiryMs = quoteArrivalTimestamp + 300000;
+    let isLiveQuote = false;
+    let quoteDiagnostic: ExecutionPlanDiagnostic | undefined = undefined;
+    let httpStatus: number | undefined = undefined;
+    let swapTx: { to: string; data: string; value?: string; chainId?: number } | undefined = undefined;
+    let approvalTxns: any[] = [];
+    let checks: any = undefined;
+
+    const fetchImpl = this.customFetch || fetch;
 
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+      const res = await fetchImpl(url, {
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Accept': 'application/json'
+        },
+        signal: AbortSignal.timeout(this.timeoutMs)
+      });
       httpStatus = res.status;
+
       if (res.ok) {
         const data = await res.json();
-        if (data.totalRelayFee && data.totalRelayFee.total) {
-          const totalFeeRaw = BigInt(data.totalRelayFee.total);
-          destinationAmountBig = amountInBig > totalFeeRaw ? amountInBig - totalFeeRaw : 0n;
+
+        if (data && typeof data === 'object') {
+          // Parse swapTx from Across Swap API
+          if (data.swapTx && typeof data.swapTx === 'object' && data.swapTx.to && data.swapTx.data) {
+            const rawTo = String(data.swapTx.to).trim();
+            const rawData = String(data.swapTx.data).trim();
+
+            if (rawData.startsWith('0x') && rawData.length >= 10 && rawTo !== ZERO_ADDRESS) {
+              swapTx = {
+                to: validateExecutionTarget(rawTo, srcChain.id),
+                data: rawData,
+                value: data.swapTx.value ? String(data.swapTx.value) : (isSrcNative ? amountInBig.toString() : '0'),
+                chainId: data.swapTx.chainId ? Number(data.swapTx.chainId) : srcChain.chainId
+              };
+            }
+          }
+
+          // Parse approval transactions
+          if (Array.isArray(data.approvalTxns)) {
+            let malformedApproval = false;
+            for (const item of data.approvalTxns) {
+              if (!item || typeof item !== 'object') {
+                malformedApproval = true;
+                break;
+              }
+              const itemTo = item.to ? String(item.to).trim() : '';
+              const itemData = item.data ? String(item.data).trim() : '';
+              if (!itemTo || !EVM_ADDRESS_REGEX.test(itemTo) || itemTo === ZERO_ADDRESS) {
+                malformedApproval = true;
+                break;
+              }
+              if (!itemData || !itemData.startsWith('0x') || itemData.length < 10 || !/^0x[0-9a-fA-F]+$/.test(itemData)) {
+                malformedApproval = true;
+                break;
+              }
+              if (item.chainId && Number(item.chainId) !== srcChain.chainId) {
+                malformedApproval = true;
+                break;
+              }
+            }
+
+            if (malformedApproval) {
+              quoteDiagnostic = {
+                code: 'MALFORMED_APPROVAL_TRANSACTION',
+                message: 'Across Swap API returned an invalid or malformed approval transaction.',
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            } else {
+              approvalTxns = data.approvalTxns;
+            }
+          }
+
+          // Parse checks
+          checks = data.checks;
+
+          // 1. Parse and validate expected output amount according to documented precedence
+          // Precedence:
+          // 1. data.expectedOutputAmount (Across V3 primary standard)
+          // 2. data.outputAmount (Across V2 / legacy API)
+          // 3. data.destinationAmount (alternative generic bridge field)
+          // 4. data.totalRelayFee.total deduction (fallback fee deduction)
+          if (data.expectedOutputAmount !== undefined && data.expectedOutputAmount !== null) {
+            const res = parseSafeAmountField(data.expectedOutputAmount, 'expectedOutputAmount');
+            if (res.success && res.amount !== undefined) {
+              destinationAmountBig = res.amount;
+            } else {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: `Across Swap API returned malformed expectedOutputAmount: ${res.errorReason}`,
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
+          } else if (data.outputAmount !== undefined && data.outputAmount !== null) {
+            const res = parseSafeAmountField(data.outputAmount, 'outputAmount');
+            if (res.success && res.amount !== undefined) {
+              destinationAmountBig = res.amount;
+            } else {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: `Across Swap API returned malformed outputAmount: ${res.errorReason}`,
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
+          } else if (data.destinationAmount !== undefined && data.destinationAmount !== null) {
+            const res = parseSafeAmountField(data.destinationAmount, 'destinationAmount');
+            if (res.success && res.amount !== undefined) {
+              destinationAmountBig = res.amount;
+            } else {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: `Across Swap API returned malformed destinationAmount: ${res.errorReason}`,
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
+          } else if (data.totalRelayFee && data.totalRelayFee.total !== undefined && data.totalRelayFee.total !== null) {
+            const feeRes = parseSafeAmountField(data.totalRelayFee.total, 'totalRelayFee.total');
+            if (feeRes.success && feeRes.amount !== undefined) {
+              if (amountInBig > feeRes.amount) {
+                destinationAmountBig = amountInBig - feeRes.amount;
+              } else {
+                destinationAmountBig = 0n;
+                quoteDiagnostic = {
+                  code: 'INVALID_AMOUNT',
+                  message: 'Across Swap API totalRelayFee exceeds or equals source input amount.',
+                  severity: 'ERROR',
+                  providerId: 'ACROSS',
+                  timestamp: Date.now()
+                };
+              }
+            } else {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: `Across Swap API returned malformed totalRelayFee.total: ${feeRes.errorReason}`,
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
+          } else {
+            destinationAmountBig = 0n;
+          }
+
+          // 2. Parse and validate provider minimum output (Across guarantee / constraint)
+          // Precedence:
+          // 1. data.minOutputAmount
+          // 2. data.minimumOutputAmount
+          // 3. data.minDestinationAmount
+          let providerMinBig: bigint | undefined = undefined;
+          const rawMinField =
+            data.minOutputAmount !== undefined && data.minOutputAmount !== null
+              ? { val: data.minOutputAmount, name: 'minOutputAmount' }
+              : data.minimumOutputAmount !== undefined && data.minimumOutputAmount !== null
+              ? { val: data.minimumOutputAmount, name: 'minimumOutputAmount' }
+              : data.minDestinationAmount !== undefined && data.minDestinationAmount !== null
+              ? { val: data.minDestinationAmount, name: 'minDestinationAmount' }
+              : undefined;
+
+          if (rawMinField) {
+            const minRes = parseSafeAmountField(rawMinField.val, rawMinField.name);
+            if (minRes.success && minRes.amount !== undefined) {
+              providerMinBig = minRes.amount;
+              if (destinationAmountBig > 0n && providerMinBig > destinationAmountBig) {
+                if (!quoteDiagnostic) {
+                  quoteDiagnostic = {
+                    code: 'INVALID_AMOUNT',
+                    message: `Across Swap API returned minimum output amount (${providerMinBig.toString()}) exceeding expected output amount (${destinationAmountBig.toString()}).`,
+                    severity: 'ERROR',
+                    providerId: 'ACROSS',
+                    timestamp: Date.now()
+                  };
+                }
+              }
+            } else if (!quoteDiagnostic) {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: `Across Swap API returned malformed minimum output amount: ${minRes.errorReason}`,
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
+          }
+
+          // 3. Validate user slippage tolerance and compute conservative minimum destination amount
+          let userMinDestinationAmountBig = 0n;
+          let slippagePct = 0.5; // default 0.5%
+          if (request.slippageTolerancePercent !== undefined && request.slippageTolerancePercent !== null) {
+            const reqSlippage = request.slippageTolerancePercent;
+            if (
+              typeof reqSlippage !== 'number' ||
+              isNaN(reqSlippage) ||
+              !isFinite(reqSlippage) ||
+              reqSlippage < 0 ||
+              reqSlippage > 50
+            ) {
+              if (!quoteDiagnostic) {
+                quoteDiagnostic = {
+                  code: 'INVALID_AMOUNT',
+                  message: `Invalid slippageTolerancePercent: ${reqSlippage}. Must be a finite number between 0 and 50.`,
+                  severity: 'ERROR',
+                  providerId: 'ACROSS',
+                  timestamp: Date.now()
+                };
+              }
+            } else {
+              slippagePct = reqSlippage;
+            }
+          }
 
           if (destinationAmountBig > 0n) {
-            const rawPct = Number(data.totalRelayFee.pct);
-            relayerFeePctStr = data.totalRelayFee.pct
-              ? (rawPct > 100 ? `${(rawPct / 1e16).toFixed(4)}%` : `${(rawPct * 100).toFixed(2)}%`)
-              : '0.05%';
-            exclusiveRelayer = data.exclusiveRelayer || ZERO_ADDRESS;
-            protocolTimestampSec = Number(data.timestamp || protocolTimestampSec);
-            fillDeadlineSec = Number(data.fillDeadline || protocolTimestampSec + 1800);
-            estTransferTimeSec = Number(data.estimatedFillTimeSec || 30);
-            isLiveQuote = true;
+            if (slippagePct === 0) {
+              userMinDestinationAmountBig = destinationAmountBig;
+            } else {
+              const slippageFactor = BigInt(Math.round(slippagePct * 10000));
+              userMinDestinationAmountBig = (destinationAmountBig * (1000000n - slippageFactor)) / 10000n / 100n;
+            }
+
+            // Conservative bound: never less protective than protocol guarantee or user constraint
+            if (providerMinBig !== undefined) {
+              minDestinationAmountBig = userMinDestinationAmountBig > providerMinBig
+                ? userMinDestinationAmountBig
+                : providerMinBig;
+            } else {
+              minDestinationAmountBig = userMinDestinationAmountBig;
+            }
           } else {
-            quoteDiagnostic = {
-              code: 'INVALID_AMOUNT',
-              message: `Across relay fee (${totalFeeRaw.toString()} raw) exceeds input amount (${amountInBig.toString()} raw). Net output is zero.`,
-              severity: 'WARNING',
-              providerId: 'ACROSS',
-              timestamp: Date.now()
-            };
+            minDestinationAmountBig = 0n;
           }
+
+          // Parse fees
+          if (data.totalRelayFee && data.totalRelayFee.total !== undefined && data.totalRelayFee.total !== null) {
+            const feeParsed = parseSafeAmountField(data.totalRelayFee.total, 'totalRelayFee.total');
+            if (feeParsed.success && feeParsed.amount !== undefined) {
+              const totalFeeRaw = feeParsed.amount;
+              const inDecimals = request.tokenIn.decimals !== undefined ? request.tokenIn.decimals : 18;
+              const feeNum = Number(totalFeeRaw) / (10 ** inDecimals);
+              bridgeFeeUSD = request.tokenIn.priceUSD ? Number((feeNum * request.tokenIn.priceUSD).toFixed(4)) : 0.05;
+
+              const rawPct = Number(data.totalRelayFee.pct);
+              relayerFeePctStr = data.totalRelayFee.pct
+                ? (rawPct > 100 ? `${(rawPct / 1e16).toFixed(4)}%` : `${(rawPct * 100).toFixed(2)}%`)
+                : '0.05%';
+            }
+          }
+
+          // Parse expiration
+          if (data.timestamp) {
+            protocolTimestampSec = Number(data.timestamp);
+          }
+
+          if (data.quoteExpiryTimestamp) {
+            const expSec = Number(data.quoteExpiryTimestamp);
+            quoteExpiryMs = expSec > 1e11 ? expSec : expSec * 1000;
+          } else if (data.timestamp) {
+            quoteExpiryMs = Math.max(quoteArrivalTimestamp + 300000, (protocolTimestampSec + 300) * 1000);
+          }
+
+          if (data.estimatedFillTimeSec) {
+            estTransferTimeSec = Number(data.estimatedFillTimeSec);
+          }
+
+          if (!quoteDiagnostic) {
+            if (swapTx && destinationAmountBig > 0n && quoteExpiryMs > Date.now()) {
+              isLiveQuote = true;
+            } else if (quoteExpiryMs <= Date.now()) {
+              quoteDiagnostic = {
+                code: 'QUOTE_EXPIRED',
+                message: 'Across API returned an expired quote timestamp.',
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            } else if (!swapTx) {
+              quoteDiagnostic = {
+                code: 'EXECUTION_DATA_UNAVAILABLE',
+                message: 'Across Swap API response is missing valid executable swapTx object.',
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            } else if (destinationAmountBig <= 0n) {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: 'Across Swap API returned zero or negative net output amount after fees.',
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
+          }
+        } else {
+          quoteDiagnostic = {
+            code: 'MALFORMED_RESPONSE',
+            message: 'Across API returned 200 OK but payload is not a valid JSON object.',
+            severity: 'WARNING',
+            providerId: 'ACROSS',
+            timestamp: Date.now()
+          };
         }
       } else {
-        const normalizedCode = defaultQuoteDiagnosticLogger.normalizeErrorCode(res.statusText, res.status);
+        let providerErrorMsg = '';
+        let providerErrorPayload: any = null;
+        try {
+          const bodyText = await res.text();
+          try {
+            providerErrorPayload = JSON.parse(bodyText);
+            providerErrorMsg = providerErrorPayload.message || providerErrorPayload.error || providerErrorPayload.errorMessage || bodyText;
+          } catch {
+            providerErrorMsg = bodyText;
+          }
+        } catch {
+          providerErrorMsg = res.statusText;
+        }
+
+        const normalizedCode = defaultQuoteDiagnosticLogger.normalizeErrorCode(
+          providerErrorMsg || res.statusText,
+          res.status,
+          providerErrorPayload
+        );
+        const detailSuffix = providerErrorMsg ? ` (${providerErrorMsg})` : (res.statusText ? `: ${res.statusText}` : '');
         quoteDiagnostic = {
           code: normalizedCode,
-          message: `Across API returned HTTP ${res.status}: ${res.statusText}`,
-          severity: 'WARNING',
+          message: `Across Swap API returned HTTP ${res.status}${detailSuffix}`,
+          severity: res.status === 401 || res.status === 403 ? 'ERROR' : 'WARNING',
           providerId: 'ACROSS',
           timestamp: Date.now()
         };
@@ -147,63 +851,29 @@ export class AcrossProvider implements CrossChainProvider {
       const normalizedCode = defaultQuoteDiagnosticLogger.normalizeErrorCode(err, httpStatus);
       quoteDiagnostic = {
         code: normalizedCode,
-        message: `Across API request failed: ${err?.message || 'Network error'}`,
+        message: `Across Swap API request failed: ${err?.message || 'Network error'}`,
         severity: 'WARNING',
         providerId: 'ACROSS',
         timestamp: Date.now()
       };
     }
 
-    if (!isLiveQuote) {
-      const fallbackFeeBps = 5n;
-      const feeAmountRaw = (amountInBig * fallbackFeeBps) / 10000n;
-      destinationAmountBig = amountInBig > feeAmountRaw ? amountInBig - feeAmountRaw : 1n;
-      const inDecimals = request.tokenIn.decimals !== undefined ? request.tokenIn.decimals : 18;
-      const feeNum = Number(feeAmountRaw) / (10 ** inDecimals);
-      bridgeFeeUSD = request.tokenIn.priceUSD ? Number((feeNum * request.tokenIn.priceUSD).toFixed(4)) : 0.05;
-      isLiveQuote = false;
-      if (!quoteDiagnostic) {
-        quoteDiagnostic = {
-          code: 'PROVIDER_UNAVAILABLE',
-          message: 'Across API did not return executable quote output. Informational estimate only.',
-          severity: 'WARNING',
-          providerId: 'ACROSS',
-          timestamp: Date.now()
-        };
-      }
-    }
+    const approvalTarget =
+      (approvalTxns.length > 0 && (approvalTxns[0].spender || approvalTxns[0].to))
+        ? approvalTxns[0].spender || approvalTxns[0].to
+        : (swapTx ? swapTx.to : spokePool);
 
-    const slippagePct = request.slippageTolerancePercent !== undefined && !isNaN(request.slippageTolerancePercent) ? request.slippageTolerancePercent : 0.5;
-    const slippageBps = BigInt(Math.floor(slippagePct * 100));
-    const slippageMultiplier = 10000n - slippageBps;
-    const minDestinationAmountBig = (destinationAmountBig * slippageMultiplier) / 10000n;
+    const calldata = swapTx ? swapTx.data : '0x';
+    const executionTarget = swapTx ? swapTx.to : spokePool;
+    const value = swapTx?.value || (isSrcNative ? amountInBig.toString() : '0');
 
-    const gasEstimateUSD = defaultChainRegistry.getEstimatedGasCostUSD(srcChain.id, 'BRIDGE', request.gasPreset);
-    const isNative = isNativeToken(request.tokenIn.address) || Boolean(request.tokenIn.isNative);
-    const value = isNative ? amountInBig.toString() : '0';
-
-    let calldata = '0x';
-    if (recipient) {
-      try {
-        const safeRecipient = validateRecipientAddress(recipient, srcChain.id);
-        calldata = spokePoolInterface.encodeFunctionData('depositV3', [
-          safeRecipient.toLowerCase(),
-          safeRecipient.toLowerCase(),
-          validatedInputToken.toLowerCase(),
-          validatedOutputToken.toLowerCase(),
-          amountInBig,
-          minDestinationAmountBig,
-          dstChain.chainId!,
-          exclusiveRelayer,
-          protocolTimestampSec,
-          fillDeadlineSec,
-          0,
-          '0x'
-        ]);
-      } catch (encErr) {
-        console.warn('[AcrossProvider] Error encoding calldata preview:', encErr);
-      }
-    }
+    const isQuoteExecutable = Boolean(
+      isLiveQuote &&
+      (!quoteDiagnostic || quoteDiagnostic.severity !== 'ERROR') &&
+      swapTx &&
+      calldata !== '0x' &&
+      quoteExpiryMs > Date.now()
+    );
 
     const diagnostics = quoteDiagnostic ? [quoteDiagnostic] : [];
 
@@ -219,27 +889,31 @@ export class AcrossProvider implements CrossChainProvider {
       minDestinationAmountRaw: minDestinationAmountBig.toString(),
       bridgeFeeUSD,
       relayerFee: relayerFeePctStr,
-      gasEstimateUSD,
-      recipient: recipient || '',
-      expiration: Math.max(quoteArrivalTimestamp + 300000, (protocolTimestampSec + 300) * 1000),
+      gasEstimateUSD: defaultChainRegistry.getEstimatedGasCostUSD(srcChain.id, 'BRIDGE', request.gasPreset),
+      recipient: rawRecipient,
+      expiration: quoteExpiryMs,
       routeIdentifier: `across-${srcChain.id}-${dstChain.id}-${Date.now()}`,
-      executionTarget: spokePool,
+      executionTarget,
       calldata,
       value,
-      approvalTarget: spokePool,
+      approvalTarget,
       quoteTimestamp: quoteArrivalTimestamp,
       protocolTimestampSec,
       estimatedTransferTimeSec: estTransferTimeSec,
       securityRating: 'A+',
-      isExecutable: isLiveQuote,
-      unexecutableReason: !isLiveQuote ? (quoteDiagnostic?.code || 'PROVIDER_UNAVAILABLE') : undefined,
+      isExecutable: isQuoteExecutable,
+      unexecutableReason: !isQuoteExecutable ? (quoteDiagnostic?.code || 'PROVIDER_UNAVAILABLE') : undefined,
       diagnostics
     };
 
+    (quote as any).swapTx = swapTx;
+    (quote as any).approvalTxns = approvalTxns;
+    (quote as any).checks = checks;
+
     const validationResult = validateCrossChainQuoteExecutability(quote, request);
-    quote.isExecutable = validationResult.isExecutable;
-    if (!validationResult.isExecutable) {
-      quote.unexecutableReason = validationResult.unexecutableReason;
+    quote.isExecutable = Boolean(isQuoteExecutable && validationResult.isExecutable);
+    if (!quote.isExecutable) {
+      quote.unexecutableReason = quote.unexecutableReason || validationResult.unexecutableReason;
     }
 
     defaultQuoteDiagnosticLogger.record({
@@ -250,14 +924,14 @@ export class AcrossProvider implements CrossChainProvider {
       sourceToken: request.tokenIn.symbol,
       destinationToken: request.tokenOut.symbol,
       amountInRaw: amountInBig.toString(),
-      requestStatus: isLiveQuote ? 'SUCCESS' : 'FAILED',
+      requestStatus: isQuoteExecutable ? 'SUCCESS' : 'FAILED',
       httpStatus,
       normalizedError: quoteDiagnostic?.code as any,
       providerErrorMessage: quoteDiagnostic?.message,
       isExecutable: Boolean(quote.isExecutable),
       unexecutableReason: quote.unexecutableReason,
       latencyMs: Date.now() - startTime,
-      endpoint: url,
+      endpoint: sanitizedUrl,
       timestamp: Date.now()
     });
 
@@ -266,8 +940,8 @@ export class AcrossProvider implements CrossChainProvider {
 
   public async buildExecution(
     quote: CrossChainQuote,
-    userAddress: string,
-    recipientAddress?: string
+    _userAddress: string,
+    _recipientAddress?: string
   ): Promise<CrossChainExecution> {
     if (quote.isExecutable === false) {
       throw new ProviderUnavailableError(
@@ -282,63 +956,26 @@ export class AcrossProvider implements CrossChainProvider {
     if (!dstChain || !dstChain.chainId) {
       throw new Error(`[AcrossProvider] Invalid destination chain: ${quote.destinationChainId}`);
     }
-    const spokePool = validateExecutionTarget(getAcrossSpokePool(srcChain.chainId), srcChain.id);
 
-    const safeUser = validateEvmAddress(userAddress, 'User Address');
-    const safeRecipient = validateRecipientAddress(recipientAddress || userAddress, srcChain.id);
-    const safeInputToken = validateTokenAddress(quote.sourceToken.address, srcChain.id, quote.sourceToken.isNative);
-    const safeOutputToken = validateTokenAddress(quote.destinationToken.address, dstChain.id, quote.destinationToken.isNative);
+    const quoteAny = quote as any;
+    const swapTx = quoteAny.swapTx;
+    const to = swapTx?.to || quote.executionTarget;
+    const data = swapTx?.data || quote.calldata;
+    const value = swapTx?.value || quote.value || '0';
+    const chainId = swapTx?.chainId || srcChain.chainId;
+    const approvalTarget = quote.approvalTarget || to;
 
-    let exclusiveRelayer = ZERO_ADDRESS;
-    let protocolTimestampSec = quote.protocolTimestampSec;
-    let fillDeadlineSec: number | undefined;
-
-    if (quote.calldata && quote.calldata !== '0x') {
-      try {
-        const decoded = spokePoolInterface.decodeFunctionData('depositV3', quote.calldata);
-        exclusiveRelayer = decoded[7] || ZERO_ADDRESS;
-        if (protocolTimestampSec === undefined) {
-          protocolTimestampSec = Number(decoded[8]);
-        }
-        if (fillDeadlineSec === undefined) {
-          fillDeadlineSec = Number(decoded[9]);
-        }
-      } catch {
-        // Fallback if calldata is not decodable depositV3
-      }
+    if (!to || to === ZERO_ADDRESS || !data || data === '0x') {
+      throw new ExecutionUnavailableError('[AcrossProvider] Missing valid execution target or swapTx calldata.');
     }
-
-    if (protocolTimestampSec === undefined) {
-      protocolTimestampSec = Math.floor(quote.quoteTimestamp / 1000);
-    }
-    if (fillDeadlineSec === undefined) {
-      fillDeadlineSec = protocolTimestampSec + 1800;
-    }
-
-    const data = spokePoolInterface.encodeFunctionData('depositV3', [
-      safeUser.toLowerCase(),
-      safeRecipient.toLowerCase(),
-      safeInputToken.toLowerCase(),
-      safeOutputToken.toLowerCase(),
-      BigInt(quote.sourceAmountRaw),
-      BigInt(quote.minDestinationAmountRaw),
-      dstChain.chainId,
-      exclusiveRelayer,
-      protocolTimestampSec,
-      fillDeadlineSec,
-      0,
-      '0x'
-    ]);
-
-    const isNative = isNativeToken(quote.sourceToken.address) || Boolean(quote.sourceToken.isNative);
 
     return {
-      to: spokePool,
+      to,
       data,
       calldata: data,
-      value: isNative ? quote.sourceAmountRaw : '0',
-      chainId: srcChain.chainId,
-      approvalTarget: spokePool,
+      value,
+      chainId,
+      approvalTarget,
       requiredAllowanceRaw: quote.sourceAmountRaw,
       approvalAmount: quote.sourceAmountRaw
     } as any;
@@ -353,11 +990,14 @@ export class AcrossProvider implements CrossChainProvider {
       chainIdNum === 84532 ||
       chainIdNum === 11155420
     );
-    const apiBase = isTestnet ? 'https://testnet.across.to/api' : 'https://app.across.to/api';
+    const defaultStatusBase = isTestnet ? 'https://testnet.across.to/api' : 'https://app.across.to/api';
+    const apiBase = this.customStatusApiBaseUrl || defaultStatusBase;
+
+    const fetchImpl = this.customFetch || fetch;
 
     try {
       const url = `${apiBase}/deposit/status?originChainId=${chainIdNum}&depositTxHash=${sourceTxHash}`;
-      const res = await fetch(url, { signal: AbortSignal.timeout(4000) });
+      const res = await fetchImpl(url, { signal: AbortSignal.timeout(this.timeoutMs) });
       if (res.ok) {
         const data = await res.json();
         const normalized = normalizeAcrossDepositStatus(data);

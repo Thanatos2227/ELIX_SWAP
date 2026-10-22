@@ -1,8 +1,8 @@
 import { sha256, toUtf8Bytes, Provider } from 'ethers';
-import type { DexIdentity, DexCapabilities, DexPairValidationResult, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexSwapTransaction, DexSimulationResult, DexPoolState, DexDeploymentVerificationResult, DexLiquidityState, TokenIdentity, Token, TokenStandard } from '@zenith/types';
-import { defaultAuthoritativeNetworkRegistry, AuthoritativeNetworkRegistry } from '@zenith/chains';
-import { defaultAuthoritativeTokenRegistry, AuthoritativeTokenRegistry, isFungibleStandard } from '@zenith/tokens';
-import { validateEvmAddress, InvalidCalldataError, MinimumOutputBreachError } from '@zenith/contracts';
+import type { DexIdentity, DexCapabilities, DexPairValidationResult, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexSwapTransaction, DexSimulationResult, DexPoolState, DexDeploymentVerificationResult, DexLiquidityState, TokenIdentity, Token, TokenStandard } from '@elis/types';
+import { defaultAuthoritativeNetworkRegistry, AuthoritativeNetworkRegistry } from '@elis/chains';
+import { defaultAuthoritativeTokenRegistry, AuthoritativeTokenRegistry, isFungibleStandard } from '@elis/tokens';
+import { validateEvmAddress, InvalidCalldataError, MinimumOutputBreachError } from '@elis/contracts';
 import type { IDexAdapter, DexQuoteParams } from './dexAdapter.interface';
 import { DexAddressVerifier } from './dexAddressVerifier';
 import { getTokenAddress } from './dexIdentity.types';

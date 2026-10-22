@@ -1,8 +1,8 @@
 import React from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
+import { useElisStore } from '../../stores/useElisStore';
 import { ExternalLink, History, ArrowRight } from 'lucide-react';
 export const HistoryView: React.FC = () => {
-    const { transactionHistory } = useZenithStore();
+    const { transactionHistory } = useElisStore();
     return (<div className="w-full max-w-7xl mx-auto space-y-6">
       <div className="glass-panel rounded-2xl p-6 border border-slate-800 flex items-center justify-between">
         <div>

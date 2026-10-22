@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "zenith-swap",
+  "name": "elis-swap",
   "deployments": [
     {
       "network": "ethereum",

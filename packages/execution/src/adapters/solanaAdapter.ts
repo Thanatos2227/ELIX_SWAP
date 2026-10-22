@@ -1,5 +1,5 @@
-import { QuoteResponse, TransactionStatus } from '@zenith/types';
-import { SignerRequiredError, ConfigurationError } from '@zenith/contracts';
+import { QuoteResponse, TransactionStatus } from '@elis/types';
+import { SignerRequiredError, ConfigurationError } from '@elis/contracts';
 export interface SolanaExecutionParams {
     quote: QuoteResponse;
     userPublicKey: string;

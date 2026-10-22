@@ -1,11 +1,11 @@
 import { JsonRpcProvider, Contract, formatEther, formatUnits, parseUnits, parseEther, Wallet } from 'ethers';
 import { POLYGON_CROSSCHAIN_CONFIG, EXPECTED_OPERATOR_ADDRESS, computeExecutionPlanHash, normalizePrivateKey, SafeSignerDiagnostic } from './execute-controlled-polygon-crosschain';
-import { defaultAcrossProvider } from '@zenith/routing';
-import { ExecutionPlan } from '@zenith/types';
+import { defaultAcrossProvider } from '@elis/routing';
+import { ExecutionPlan } from '@elis/types';
 export const OLD_COMPROMISED_WALLET = '0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B';
 export async function runTask21CValidationProbe() {
     console.log('================================================================');
-    console.log('ZENITH — PHASE 1 TASK 21C: NEW WALLET ROTATION READ-ONLY PROBE');
+    console.log('ELIS — PHASE 1 TASK 21C: NEW WALLET ROTATION READ-ONLY PROBE');
     console.log('================================================================\n');
     const polygonRpc = process.env.POLYGON_MAINNET_RPC_URL || 'https://polygon-bor-rpc.publicnode.com';
     const arbitrumRpc = process.env.ARBITRUM_MAINNET_RPC_URL || 'https://arb1.arbitrum.io/rpc';
@@ -20,7 +20,7 @@ export async function runTask21CValidationProbe() {
     const authoritativeOperator = EXPECTED_OPERATOR_ADDRESS;
     console.log(`[CHECK 3] Configured Signer Address: ${authoritativeOperator} -> PASS`);
     let derivedAddress: string | null = null;
-    const rawKey = process.env.ZENITH_MAINNET_PRIVATE_KEY || process.env.TESTNET_PRIVATE_KEY;
+    const rawKey = process.env.ELIS_MAINNET_PRIVATE_KEY || process.env.TESTNET_PRIVATE_KEY;
     const normalizedKey = normalizePrivateKey(rawKey);
     let signerEnvConfigured = Boolean(normalizedKey);
     let signerObjectInitialized = false;
@@ -139,7 +139,7 @@ export async function runTask21CValidationProbe() {
         recipient: arbRecipient,
         steps: [
             { id: 'step-1-validate', type: 'VALIDATE_CONDITIONS', chainId: 137, status: 'COMPLETED' },
-            { id: 'step-2-source-swap', type: 'SOURCE_DEX_SWAP', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.zenithV3Router, status: 'PENDING' },
+            { id: 'step-2-source-swap', type: 'SOURCE_DEX_SWAP', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.elisV3Router, status: 'PENDING' },
             { id: 'step-3-bridge-requote', type: 'BRIDGE_QUOTE_REFRESH', chainId: 137, status: 'PENDING' },
             { id: 'step-4-bridge-approval', type: 'SOURCE_APPROVE', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.polygonUsdcAddress, status: 'PENDING' },
             { id: 'step-5-bridge-deposit', type: 'BRIDGE_DEPOSIT', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.acrossPolygonSpokePool, status: 'PENDING' },

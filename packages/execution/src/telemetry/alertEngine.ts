@@ -1,4 +1,4 @@
-import { CanonicalAlert, CanonicalAlertType, CanonicalTelemetryEvent, TelemetrySeverity } from '@zenith/types';
+import { CanonicalAlert, CanonicalAlertType, CanonicalTelemetryEvent, TelemetrySeverity } from '@elis/types';
 import { scrubTelemetrySecrets } from './canonicalTelemetryEvent';
 
 export class AlertEngine {

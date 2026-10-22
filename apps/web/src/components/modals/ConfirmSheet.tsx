@@ -1,9 +1,9 @@
 import React from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
+import { useElisStore } from '../../stores/useElisStore';
 import { TokenLogo } from '../common/TokenLogo';
 import { X, ShieldCheck, Zap, ArrowDown, Lock, CheckCircle2, Loader2 } from 'lucide-react';
 export const ConfirmSheet: React.FC = () => {
-    const { isConfirmSheetOpen, closeConfirmSheet, quote, sourceChain, destChain, tokenIn, tokenOut, amountIn, slippageTolerancePercent, mevProtection, executionMode, executionStatus, executionSteps, isExecutingTrade, executeTrade } = useZenithStore();
+    const { isConfirmSheetOpen, closeConfirmSheet, quote, sourceChain, destChain, tokenIn, tokenOut, amountIn, slippageTolerancePercent, mevProtection, executionMode, executionStatus, executionSteps, isExecutingTrade, executeTrade } = useElisStore();
     if (!isConfirmSheetOpen || !quote)
         return null;
     const isExecuting = isExecutingTrade || (executionStatus !== 'IDLE' && executionStatus !== 'COMPLETED' && executionStatus !== 'FAILED');
@@ -33,7 +33,7 @@ export const ConfirmSheet: React.FC = () => {
             : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'}`}>
               {quote.request.sourceChainId !== quote.request.destinationChainId
             ? `⚡ ${quote.bestRoute.crossChainQuote?.provider || 'ACROSS'} Bridge Router`
-            : (quote.bestRoute?.dexQuote?.providerName || quote.dexQuote?.providerName || (executionMode === 'GASLESS_INTENT' ? '⚡ Gasless Dutch Auction (Permit2)' : '⚡ ZENITH V3 Concentrated AMM'))}
+            : (quote.bestRoute?.dexQuote?.providerName || quote.dexQuote?.providerName || (executionMode === 'GASLESS_INTENT' ? '⚡ Gasless Dutch Auction (Permit2)' : '⚡ ElixSwap V3 Concentrated AMM'))}
             </span>
           </div>
 

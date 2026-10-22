@@ -1,4 +1,4 @@
-import { SettlementTelemetryRecord } from '@zenith/types';
+import { SettlementTelemetryRecord } from '@elis/types';
 function sanitizeSecrets(str: string): string {
     return str.replace(/0x[a-fA-F0-9]{64}/g, '[REDACTED_SECRET]');
 }

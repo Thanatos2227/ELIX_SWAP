@@ -1,2 +1,2 @@
-export type { RpcManagerConfig } from '@zenith/chains';
-export { MultiProviderRpcManager, defaultMultiProviderRpcManager } from '@zenith/chains';
+export type { RpcManagerConfig } from '@elis/chains';
+export { MultiProviderRpcManager, defaultMultiProviderRpcManager } from '@elis/chains';

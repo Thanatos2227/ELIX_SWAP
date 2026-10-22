@@ -1,7 +1,7 @@
 import { Interface, AbiCoder } from 'ethers';
-import { BridgeProtocol, CrossChainExecution, CrossChainProvider, CrossChainQuote, CrossChainStatus, ExecutionPlanDiagnostic, QuoteRequest, Token } from '@zenith/types';
-import { defaultChainRegistry } from '@zenith/chains';
-import { getStargateRouter, isStargateSupported, STARGATE_ROUTER_ABI, validateEvmAddress, validateTokenAddress, validateRecipientAddress, validateExecutionTarget, ProviderUnavailableError } from '@zenith/contracts';
+import { BridgeProtocol, CrossChainExecution, CrossChainProvider, CrossChainQuote, CrossChainStatus, ExecutionPlanDiagnostic, QuoteRequest, Token } from '@elis/types';
+import { defaultChainRegistry } from '@elis/chains';
+import { getStargateRouter, isStargateSupported, STARGATE_ROUTER_ABI, validateEvmAddress, validateTokenAddress, validateRecipientAddress, validateExecutionTarget, ProviderUnavailableError } from '@elis/contracts';
 import { isNativeToken, scaleTokenUnits } from '../../dex/dexMath';
 import { validateCrossChainQuoteExecutability } from '../quoteValidator';
 import { defaultQuoteDiagnosticLogger } from '../quoteDiagnostics';

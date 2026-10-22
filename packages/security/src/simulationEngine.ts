@@ -1,6 +1,6 @@
 import { JsonRpcProvider, Contract, Interface, Network } from 'ethers';
-import { SimulationRequest, SimulationResult, Token, TokenBalanceDelta } from '@zenith/types';
-import { defaultChainRegistry } from '@zenith/chains';
+import { SimulationRequest, SimulationResult, Token, TokenBalanceDelta } from '@elis/types';
+import { defaultChainRegistry } from '@elis/chains';
 const ERC20_SIM_ABI = [
     'function balanceOf(address owner) view returns (uint256)',
     'function allowance(address owner, address spender) view returns (uint256)'

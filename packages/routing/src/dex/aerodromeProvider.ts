@@ -1,6 +1,6 @@
-import { DEXProtocol, Token } from '@zenith/types';
+import { DEXProtocol, Token } from '@elis/types';
 import { Interface } from 'ethers';
-import { AERODROME_FACTORY, AERODROME_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getAerodromeRouter } from '@zenith/contracts';
+import { AERODROME_FACTORY, AERODROME_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getAerodromeRouter } from '@elis/contracts';
 import { DEXProvider, DEXQuote, DEXExecution, DEXQuoteParams } from './types';
 import { calculateDEXLiquidityOutput, isNativeToken, resolvePoolTokenAddress } from './dexMath';
 export class AerodromeProvider implements DEXProvider {
@@ -52,7 +52,8 @@ export class AerodromeProvider implements DEXProvider {
                 gasCostUSD: 0.02,
                 quoteTimestamp,
                 expiration: quoteTimestamp + 15000,
-                routePath: [params.tokenIn.address, params.tokenOut.address]
+                routePath: [params.tokenIn.address, params.tokenOut.address],
+                liquiditySource: calculated.liquiditySource
             };
         }
         catch {

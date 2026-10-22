@@ -1,17 +1,17 @@
 import { Contract, Provider } from 'ethers';
-import { ZENITH_TREASURY_ABI, ZENITH_FEE_CONTROLLER_ABI, getZenithTreasuryAddress, getZenithFeeController } from '@zenith/contracts';
-import { ZenithTreasuryInfo } from './types';
-export async function getTreasuryInfo(provider: Provider, chainId: number): Promise<ZenithTreasuryInfo> {
-    const treasuryAddress = getZenithTreasuryAddress(chainId);
-    const feeControllerAddress = getZenithFeeController(chainId);
+import { ELIS_TREASURY_ABI, ELIS_FEE_CONTROLLER_ABI, getElisTreasuryAddress, getElisFeeController } from '@elis/contracts';
+import { ElisTreasuryInfo } from './types';
+export async function getElisTreasuryInfo(provider: Provider, chainId: number): Promise<ElisTreasuryInfo> {
+    const treasuryAddress = getElisTreasuryAddress(chainId);
+    const feeControllerAddress = getElisFeeController(chainId);
     if (!treasuryAddress) {
-        throw new Error(`ZENITH_TREASURY_NOT_CONFIGURED for chain ${chainId}`);
+        throw new Error(`ELIS_TREASURY_NOT_CONFIGURED for chain ${chainId}`);
     }
     if (!feeControllerAddress) {
-        throw new Error(`ZENITH_FEE_CONTROLLER_NOT_CONFIGURED for chain ${chainId}`);
+        throw new Error(`ELIS_FEE_CONTROLLER_NOT_CONFIGURED for chain ${chainId}`);
     }
-    const treasuryContract = new Contract(treasuryAddress, ZENITH_TREASURY_ABI, provider);
-    const feeControllerContract = new Contract(feeControllerAddress, ZENITH_FEE_CONTROLLER_ABI, provider);
+    const treasuryContract = new Contract(treasuryAddress, ELIS_TREASURY_ABI, provider);
+    const feeControllerContract = new Contract(feeControllerAddress, ELIS_FEE_CONTROLLER_ABI, provider);
     const [owner, protocolFeeBps] = await Promise.all([
         treasuryContract.governance(),
         feeControllerContract.protocolFeeBps()
@@ -24,3 +24,5 @@ export async function getTreasuryInfo(provider: Provider, chainId: number): Prom
         owner
     };
 }
+
+export const getTreasuryInfo = getElisTreasuryInfo;

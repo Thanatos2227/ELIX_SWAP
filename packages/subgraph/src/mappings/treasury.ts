@@ -1,7 +1,7 @@
 import { BigInt, BigDecimal } from "@graphprotocol/graph-ts";
-import { FeeReceived } from "../../generated/ZenithTreasury/ZenithTreasury";
-import { TreasuryFeeEvent, ZenithProtocol, Token } from "../../generated/schema";
-const PROTOCOL_ID = "zenith-v4-canonical";
+import { FeeReceived } from "../../generated/ElisTreasury/ElisTreasury";
+import { TreasuryFeeEvent, ElisProtocol, Token } from "../../generated/schema";
+const PROTOCOL_ID = "elis-v4-canonical";
 const ZERO_BD = BigDecimal.fromString("0");
 export function handleFeeReceived(event: FeeReceived): void {
     let eventId = event.transaction.hash.toHexString().concat("-").concat(event.logIndex.toString());
@@ -13,7 +13,7 @@ export function handleFeeReceived(event: FeeReceived): void {
     feeEvent.amount = event.params.amount.toBigDecimal();
     feeEvent.amountUSD = ZERO_BD;
     feeEvent.save();
-    let protocol = ZenithProtocol.load(PROTOCOL_ID);
+    let protocol = ElisProtocol.load(PROTOCOL_ID);
     if (protocol !== null) {
         protocol.totalTreasuryFeesUSD = protocol.totalTreasuryFeesUSD.plus(ZERO_BD);
         protocol.save();

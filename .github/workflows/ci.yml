@@ -1,10 +1,11 @@
-name: ZENITH Protocol CI
+name: ElixSwap Protocol CI
 
 on:
   push:
-    branches: 
+    branches:
       - main
-      - fix/zenith-v3-execution
+      - fix/elis-v3-execution
+      - feature/elixswap-rebrand
   pull_request:
     branches: [ main ]
 
@@ -69,4 +70,3 @@ jobs:
 
       - name: Production Web Application Build Gate
         run: npm run build
-

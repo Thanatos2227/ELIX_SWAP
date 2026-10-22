@@ -1,6 +1,6 @@
 import { JsonRpcProvider, FetchRequest, Contract, formatUnits, formatEther, Wallet, getAddress, parseEther } from 'ethers';
 import { defaultDexCanaryExecutionEngine } from '../packages/execution/src/canary';
-import { defaultAuthoritativeRpcProviderRegistry } from '@zenith/chains';
+import { defaultAuthoritativeRpcProviderRegistry } from '@elis/chains';
 import type { CanaryExecutionConfig } from '../packages/execution/src/canary';
 import { normalizePrivateKey, EXPECTED_OPERATOR_ADDRESS } from './execute-controlled-polygon-crosschain';
 import { resolveSecureSignerKey } from './secure-runtime-loader';
@@ -42,7 +42,7 @@ async function getQuorumProvider(): Promise<JsonRpcProvider> {
 }
 export async function runControlledCanarySwap() {
     console.log('================================================================');
-    console.log('ZENITH — PHASE 2: CONTROLLED LIVE CANARY SWAP EXECUTION');
+    console.log('ELIS — PHASE 2: CONTROLLED LIVE CANARY SWAP EXECUTION');
     console.log('================================================================');
     console.log('TARGET_NETWORK:       Polygon Mainnet (Chain ID: 137)');
     console.log('TARGET_DEX:           polygon:quickswap-v3');

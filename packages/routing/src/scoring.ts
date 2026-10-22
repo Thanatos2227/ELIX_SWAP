@@ -1,14 +1,14 @@
-import { PriceImpact, ProtocolFee, Token } from '@zenith/types';
+import { PriceImpact, ProtocolFee, Token } from '@elis/types';
 import { MAX_SWAP_AMOUNT_NUM } from './amountValidation';
-import { isZenithTreasuryConfigured, getZenithTreasury } from '@zenith/contracts';
-export interface ZenithFeePolicy {
+import { isElisTreasuryConfigured, getElisTreasury } from '@elis/contracts';
+export interface ElisFeePolicy {
     sameChainProtocolFeeBps: number;
     crossChainProtocolFeeBps: number;
     stableSwapFeeBps: number;
     largeTradeDiscountBps?: number;
     volumeDiscountBps?: number;
 }
-export const DEFAULT_FEE_POLICY: ZenithFeePolicy = {
+export const DEFAULT_FEE_POLICY: ElisFeePolicy = {
     sameChainProtocolFeeBps: 5,
     crossChainProtocolFeeBps: 10,
     stableSwapFeeBps: 2,
@@ -16,14 +16,14 @@ export const DEFAULT_FEE_POLICY: ZenithFeePolicy = {
     volumeDiscountBps: 1
 };
 export class ScoringService {
-    private feePolicy: ZenithFeePolicy;
-    constructor(feePolicy: ZenithFeePolicy = DEFAULT_FEE_POLICY) {
+    private feePolicy: ElisFeePolicy;
+    constructor(feePolicy: ElisFeePolicy = DEFAULT_FEE_POLICY) {
         this.feePolicy = feePolicy;
     }
-    public setFeePolicy(policy: ZenithFeePolicy): void {
+    public setFeePolicy(policy: ElisFeePolicy): void {
         this.feePolicy = { ...policy };
     }
-    public getFeePolicy(): ZenithFeePolicy {
+    public getFeePolicy(): ElisFeePolicy {
         return { ...this.feePolicy };
     }
     public calculatePriceImpact(params: {
@@ -91,7 +91,7 @@ export class ScoringService {
         chainId?: string | number;
         isCrossChain?: boolean;
         isStableSwap?: boolean;
-        feePolicy?: ZenithFeePolicy;
+        feePolicy?: ElisFeePolicy;
     }): ProtocolFee {
         if (params.amountInNum > MAX_SWAP_AMOUNT_NUM) {
             throw new Error(`Amount (${params.amountInNum.toLocaleString()}) exceeds maximum allowed limit of ${MAX_SWAP_AMOUNT_NUM.toLocaleString()}`);
@@ -110,9 +110,9 @@ export class ScoringService {
         const feeUSD = params.tokenIn.priceUSD ? feeAmountNum * params.tokenIn.priceUSD : 0;
         const chainKey = params.chainId || params.tokenIn.chainId;
         let treasuryRecipient: string | undefined = undefined;
-        if (chainKey && isZenithTreasuryConfigured(chainKey)) {
+        if (chainKey && isElisTreasuryConfigured(chainKey)) {
             try {
-                treasuryRecipient = getZenithTreasury(chainKey);
+                treasuryRecipient = getElisTreasury(chainKey);
             }
             catch {
                 treasuryRecipient = undefined;

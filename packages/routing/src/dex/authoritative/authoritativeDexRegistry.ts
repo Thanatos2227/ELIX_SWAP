@@ -1,4 +1,4 @@
-import type { DexIdentity, DexVerificationStatus, DexOnboardingState, CapabilityLevel, DexResolutionInput, DexResolutionResult, DexValidationResult } from '@zenith/types';
+import type { DexIdentity, DexVerificationStatus, DexOnboardingState, CapabilityLevel, DexResolutionInput, DexResolutionResult, DexValidationResult } from '@elis/types';
 import { CANONICAL_DEXES } from './canonicalDexes.data';
 import { DexRegistryValidation } from './dexRegistryValidation';
 import { validateDexOnboardingTransition } from './dexOnboardingStateMachine';

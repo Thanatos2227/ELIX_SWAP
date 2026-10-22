@@ -1,7 +1,7 @@
 {
-  "name": "@zenith/contracts-evm",
+  "name": "@elis/contracts-evm",
   "version": "4.0.0",
-  "description": "ZENITH Core EVM Smart Contracts (Foundry Compatible)",
+  "description": "ElixSwap Core EVM Smart Contracts (Foundry Compatible)",
   "scripts": {
     "test": "echo 'Foundry test suite ready'"
   }

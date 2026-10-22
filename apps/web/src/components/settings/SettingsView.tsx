@@ -1,8 +1,8 @@
 import React from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
+import { useElisStore } from '../../stores/useElisStore';
 import { ShieldCheck, Lock, Fuel, Sliders, CheckCircle2 } from 'lucide-react';
 export const SettingsView: React.FC = () => {
-    const { slippagePreset, setSlippage, gasPreset, setGasPreset, mevProtection, setMEVProtection } = useZenithStore();
+    const { slippagePreset, setSlippage, gasPreset, setGasPreset, mevProtection, setMEVProtection } = useElisStore();
     return (<div className="w-full max-w-4xl mx-auto space-y-6">
       <div className="glass-panel rounded-2xl p-6 border border-slate-800">
         <h2 className="font-display font-extrabold text-2xl text-white mb-1">Trading & Security Settings</h2>

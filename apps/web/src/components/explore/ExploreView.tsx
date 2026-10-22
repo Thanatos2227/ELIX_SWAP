@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
-import { defaultMarketDataService } from '@zenith/tokens';
+import { useElisStore } from '../../stores/useElisStore';
+import { defaultMarketDataService } from '@elis/tokens';
 import { defaultSubgraphService, SubgraphProtocolStats } from '../../services/subgraphService';
-import { ProtocolAnalytics, Token } from '@zenith/types';
+import { ProtocolAnalytics, Token } from '@elis/types';
 import { TokenLogo } from '../common/TokenLogo';
 import { BarChart3, TrendingUp, TrendingDown, Activity, Layers, Search, Zap, DollarSign, Database } from 'lucide-react';
 export const ExploreView: React.FC = () => {
-    const { setTokenIn, setActiveTab, sourceChain } = useZenithStore();
+    const { setTokenIn, setActiveTab, sourceChain } = useElisStore();
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [subgraphStats, setSubgraphStats] = useState<SubgraphProtocolStats | null>(null);
     useEffect(() => {
@@ -28,7 +28,7 @@ export const ExploreView: React.FC = () => {
         setActiveTab('TRADE');
     };
     return (<div className="w-full max-w-6xl mx-auto space-y-6">
-      
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
         <div>
           <div className="flex items-center gap-2">
@@ -50,14 +50,14 @@ export const ExploreView: React.FC = () => {
           </p>
         </div>
 
-        
+
         <div className="relative w-full sm:w-72">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"/>
           <input type="text" placeholder="Search token or pool..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full bg-slate-900/90 border border-slate-800 text-sm rounded-xl pl-9 pr-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 font-mono"/>
         </div>
       </div>
 
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="glass-panel p-5 rounded-2xl border border-slate-800">
           <div className="flex items-center justify-between text-slate-400 text-xs font-mono uppercase">
@@ -94,7 +94,7 @@ export const ExploreView: React.FC = () => {
             ${(subgraphStats?.totalFeesUSD || analytics.totalFees24hUSD).toLocaleString()}
           </div>
           <div className="text-xs text-indigo-400 mt-1 font-mono">
-            60% distributed to veZENITH
+            60% distributed to veELIX
           </div>
         </div>
 
@@ -112,9 +112,9 @@ export const ExploreView: React.FC = () => {
         </div>
       </div>
 
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
+
         <div className="glass-panel rounded-2xl border border-slate-800 overflow-hidden">
           <div className="p-4 border-b border-slate-800 flex items-center justify-between">
             <h2 className="text-sm font-bold text-white uppercase font-mono">Top Verified Tokens</h2>
@@ -143,7 +143,7 @@ export const ExploreView: React.FC = () => {
           </div>
         </div>
 
-        
+
         <div className="glass-panel rounded-2xl border border-slate-800 overflow-hidden">
           <div className="p-4 border-b border-slate-800 flex items-center justify-between">
             <h2 className="text-sm font-bold text-white uppercase font-mono">Top Concentrated Pools</h2>

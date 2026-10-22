@@ -1,8 +1,8 @@
-# ZENITH SWAP — Trade Beyond Limits
+# ElixSwap — Trade Beyond Limits
 
 <div align="center">
 
-![ZENITH SWAP Platform](https://img.shields.io/badge/ZENITH%20SWAP-v4.0.0-00E599?style=for-the-badge&logo=target&logoColor=black)
+![ElixSwap Platform](https://img.shields.io/badge/ElixSwap-v4.0.0-00E599?style=for-the-badge&logo=target&logoColor=black)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)
 ![Supported Chains](https://img.shields.io/badge/Chains-52%2B%20Networks%20by%20Support%20Tier-7C3AED?style=for-the-badge)
 ![Tests](https://img.shields.io/badge/Tests-Comprehensive%20Automated%20Suite-00E599?style=for-the-badge)
@@ -35,7 +35,7 @@
 
 ## 🌟 Overview & Core Principles
 
-**ZENITH SWAP** is an institutional-grade, non-custodial decentralized trading platform engineered to provide seamless liquidity aggregation and atomic cross-chain swaps across the documented 52+ network support tiers, spanning EVM, L2, L3, Solana SVM, and other supported ecosystems.
+**ElixSwap** is an institutional-grade, non-custodial decentralized trading platform engineered to provide seamless liquidity aggregation and atomic cross-chain swaps across the documented 52+ network support tiers, spanning EVM, L2, L3, Solana SVM, and other supported ecosystems.
 
 - **Non-Custodial Architecture:** Zero private key storage; contracts never hold user balances outside of atomic swap execution.
 - **Dynamic Best Execution Router (EES):** Multi-DEX splitting and scoring based on price impact, gas ratios, bridge latency, and liquidity depth.
@@ -50,7 +50,7 @@
 The repository is configured as an npm workspace monorepo dividing business logic into modular, independently versioned packages, smart contracts, and frontend applications:
 
 ```
-ZENITH/
+ELIS/
 ├── apps/
 │   └── web/                            # Production Web Client (React 18, Vite 5, TailwindCSS)
 │       ├── src/
@@ -60,34 +60,34 @@ ZENITH/
 │       │   ├── App.tsx                 # Root Component
 │       │   └── main.tsx                # Entry Point
 │       ├── .env.example                # Web App Environment Configuration Template
-│       └── package.json                # @zenith/web package definition
+│       └── package.json                # @elis/web package definition
 │
 ├── contracts/
 │   └── evm/                            # Foundry EVM Smart Contracts Suite
 │       ├── src/
 │       │   ├── treasury/
-│       │   │   ├── ZenithTreasury.sol      # Sovereign Protocol Revenue Vault
-│       │   │   ├── ZenithFeeController.sol  # Protocol Fee & AMM Tier Controller
-│       │   │   └── interfaces/             # IZenithTreasury & IZenithFeeController
-│       │   ├── v1/                         # Zenith V1 Constant Product AMM Suite
-│       │   ├── v2/                         # Zenith V2 Multi-Fee AMM Suite
-│       │   ├── v3/                         # Zenith V3 Concentrated Liquidity AMM Suite
+│       │   │   ├── ElisTreasury.sol      # Sovereign Protocol Revenue Vault
+│       │   │   ├── ElisFeeController.sol  # Protocol Fee & AMM Tier Controller
+│       │   │   └── interfaces/             # IElisTreasury & IElisFeeController
+│       │   ├── v1/                         # Elis V1 Constant Product AMM Suite
+│       │   ├── v2/                         # Elis V2 Multi-Fee AMM Suite
+│       │   ├── v3/                         # Elis V3 Concentrated Liquidity AMM Suite
 │       │   ├── router/
-│       │   │   └── ZenithRouter.sol        # Unified AMM Aggregator Router
-│       │   ├── ZenithCrossChainRouter.sol  # Sovereign Cross-Chain Swap Router
-│       │   └── ZenithCircuitBreaker.sol    # Emergency Guardian & Governance Pauser
+│       │   │   └── ElisRouter.sol        # Unified AMM Aggregator Router
+│       │   ├── ElisCrossChainRouter.sol  # Sovereign Cross-Chain Swap Router
+│       │   └── ElisCircuitBreaker.sol    # Emergency Guardian & Governance Pauser
 │       ├── script/
 │       │   └── Deploy.s.sol                # Automated Foundry Deployment Script
 │       ├── test/                           # Foundry Test Suites (Treasury, Controller, AMMs)
 │       ├── foundry.toml                    # Foundry Build, Solc 0.8.24 & Optimization Config
 │       ├── .env.example                    # Smart Contract Deployment Variables
-│       └── package.json                    # @zenith/contracts-evm
+│       └── package.json                    # @elis/contracts-evm
 │
 ├── packages/
 │   ├── chains/                         # Network Configurations, RPC Fallbacks & Explorer Metadata
 │   ├── execution/                      # State Machine (IDLE -> QUOTE -> EXEC -> RX) & EVM/Solana Adapters
 │   ├── routing/                        # Best Execution Router, AMM Math & Bridge Aggregator
-│   ├── sdk/                            # Zenith TypeScript SDK
+│   ├── sdk/                            # Elis TypeScript SDK
 │   ├── security/                       # Token Risk Engine, Honeypot Detector & MEV Protection
 │   ├── tokens/                         # Multi-chain Token Registry & Custom Token Importer
 │   ├── types/                          # Shared TypeScript Types, Interfaces & Schemas
@@ -105,18 +105,18 @@ ZENITH/
 
 ### Contract Locations & Roles
 
-All smart contracts are located in [`contracts/evm/`](file:///e:/APEX/ZENITH/contracts/evm/):
+All smart contracts are located in [`contracts/evm/`](file:///e:/APEX/ELIS/contracts/evm/):
 
 | Contract | File Path | Role & Constructor Parameters |
 | :--- | :--- | :--- |
-| **ZenithTreasury** | [`ZenithTreasury.sol`](file:///e:/APEX/ZENITH/contracts/evm/src/treasury/ZenithTreasury.sol) | Sovereign protocol revenue vault (`address _governance`) |
-| **ZenithFeeController** | [`ZenithFeeController.sol`](file:///e:/APEX/ZENITH/contracts/evm/src/treasury/ZenithFeeController.sol) | Fee ceilings & AMM tier parameters (`address _governance`, `address _treasury`) |
-| **ZenithV1Factory / Router** | [`ZenithV1Factory.sol`](file:///e:/APEX/ZENITH/contracts/evm/src/v1/ZenithV1Factory.sol) | V1 Constant product AMM suite |
-| **ZenithV2Factory / Router** | [`ZenithV2Factory.sol`](file:///e:/APEX/ZENITH/contracts/evm/src/v2/ZenithV2Factory.sol) | V2 Multi-tier configurable fee AMM suite |
-| **ZenithV3Factory / Router** | [`ZenithV3Factory.sol`](file:///e:/APEX/ZENITH/contracts/evm/src/v3/ZenithV3Factory.sol) | V3 Concentrated liquidity AMM suite |
-| **ZenithRouter (Unified)** | [`ZenithRouter.sol`](file:///e:/APEX/ZENITH/contracts/evm/src/router/ZenithRouter.sol) | Unified AMM router with automatic treasury fee routing |
-| **ZenithCrossChainRouter** | [`ZenithCrossChainRouter.sol`](file:///e:/APEX/ZENITH/contracts/evm/src/ZenithCrossChainRouter.sol) | Cross-chain intent execution with treasury deposit |
-| **ZenithCircuitBreaker** | [`ZenithCircuitBreaker.sol`](file:///e:/APEX/ZENITH/contracts/evm/src/ZenithCircuitBreaker.sol) | Emergency guardian & protocol pause control |
+| **ElisTreasury** | [`ElisTreasury.sol`](file:///e:/APEX/ELIS/contracts/evm/src/treasury/ElisTreasury.sol) | Sovereign protocol revenue vault (`address _governance`) |
+| **ElisFeeController** | [`ElisFeeController.sol`](file:///e:/APEX/ELIS/contracts/evm/src/treasury/ElisFeeController.sol) | Fee ceilings & AMM tier parameters (`address _governance`, `address _treasury`) |
+| **ElisV1Factory / Router** | [`ElisV1Factory.sol`](file:///e:/APEX/ELIS/contracts/evm/src/v1/ElisV1Factory.sol) | V1 Constant product AMM suite |
+| **ElisV2Factory / Router** | [`ElisV2Factory.sol`](file:///e:/APEX/ELIS/contracts/evm/src/v2/ElisV2Factory.sol) | V2 Multi-tier configurable fee AMM suite |
+| **ElisV3Factory / Router** | [`ElisV3Factory.sol`](file:///e:/APEX/ELIS/contracts/evm/src/v3/ElisV3Factory.sol) | V3 Concentrated liquidity AMM suite |
+| **ElisRouter (Unified)** | [`ElisRouter.sol`](file:///e:/APEX/ELIS/contracts/evm/src/router/ElisRouter.sol) | Unified AMM router with automatic treasury fee routing |
+| **ElisCrossChainRouter** | [`ElisCrossChainRouter.sol`](file:///e:/APEX/ELIS/contracts/evm/src/ElisCrossChainRouter.sol) | Cross-chain intent execution with treasury deposit |
+| **ElisCircuitBreaker** | [`ElisCircuitBreaker.sol`](file:///e:/APEX/ELIS/contracts/evm/src/ElisCircuitBreaker.sol) | Emergency guardian & protocol pause control |
 
 ### Deployment Dependency Order
 
@@ -124,14 +124,14 @@ Contracts **must** be deployed in the following strict order:
 
 ```mermaid
 graph TD
-    A[1. Deploy ZenithTreasury] --> B[2. Deploy ZenithFeeController]
-    B --> C[3. Deploy ZenithV1 Suite]
-    B --> D[4. Deploy ZenithV2 Suite]
-    B --> E[5. Deploy ZenithV3 Suite]
-    C --> F[6. Deploy ZenithRouter Unified]
+    A[1. Deploy ElisTreasury] --> B[2. Deploy ElisFeeController]
+    B --> C[3. Deploy ElisV1 Suite]
+    B --> D[4. Deploy ElisV2 Suite]
+    B --> E[5. Deploy ElisV3 Suite]
+    C --> F[6. Deploy ElisRouter Unified]
     D --> F
     E --> F
-    B --> G[7. Deploy ZenithCrossChainRouter]
+    B --> G[7. Deploy ElisCrossChainRouter]
     F --> H[8. Transfer Governance to Safe Multisig]
     G --> H
 ```
@@ -159,13 +159,13 @@ DEFAULT_FEE_BPS=5
 #### 2. Local Simulation / Dry Run
 Test the deployment on a local Anvil node or with `--dry-run`:
 ```bash
-forge script script/Deploy.s.sol:DeployZenith --rpc-url $RPC_URL
+forge script script/Deploy.s.sol:DeployElis --rpc-url $RPC_URL
 ```
 
 #### 3. Live Deployment & Broadcast
 Broadcast the deployment transaction to the target blockchain:
 ```bash
-forge script script/Deploy.s.sol:DeployZenith \
+forge script script/Deploy.s.sol:DeployElis \
   --rpc-url $RPC_URL \
   --broadcast \
   --verify \
@@ -178,7 +178,7 @@ forge script script/Deploy.s.sol:DeployZenith \
 1. **Verify Contract Sources:**
    If deploying to networks without automated verification during broadcast:
    ```bash
-   forge verify-contract <DEPLOYED_ROUTER_ADDRESS> src/ZenithRouter.sol:ZenithRouter --etherscan-api-key $ETHERSCAN_API_KEY --constructor-args $(cast abi-encode "constructor(address,address)" <FEE_MANAGER_ADDRESS> <CIRCUIT_BREAKER_ADDRESS>)
+   forge verify-contract <DEPLOYED_ROUTER_ADDRESS> src/ElisRouter.sol:ElisRouter --etherscan-api-key $ETHERSCAN_API_KEY --constructor-args $(cast abi-encode "constructor(address,address)" <FEE_MANAGER_ADDRESS> <CIRCUIT_BREAKER_ADDRESS>)
    ```
 
 2. **Multisig Governance Confirmation:**
@@ -195,14 +195,14 @@ The frontend is a high-performance React 18 single-page application built with V
 Copy `apps/web/.env.example` to `apps/web/.env`:
 ```ini
 VITE_APP_ENV=production
-VITE_APP_NAME="ZENITH"
-VITE_APP_URL="https://app.zenith.exchange"
+VITE_APP_NAME="ElixSwap"
+VITE_APP_URL="https://elixswap.com"
 VITE_WALLETCONNECT_PROJECT_ID="your_walletconnect_id"
 VITE_ALCHEMY_API_KEY="your_alchemy_key"
 VITE_SOLANA_RPC_URL="https://api.mainnet-beta.solana.com"
-VITE_ZENITH_ROUTER_ETHEREUM="0x..."
-VITE_ZENITH_ROUTER_ARBITRUM="0x..."
-VITE_ZENITH_ROUTER_BASE="0x..."
+VITE_ELIS_ROUTER_ETHEREUM="0x..."
+VITE_ELIS_ROUTER_ARBITRUM="0x..."
+VITE_ELIS_ROUTER_BASE="0x..."
 ```
 
 ### Build Commands
@@ -212,7 +212,7 @@ VITE_ZENITH_ROUTER_BASE="0x..."
 npm run build
 
 # Or build web client directly
-npm run build --workspace=@zenith/web
+npm run build --workspace=@elis/web
 ```
 The compiled output is emitted to `apps/web/dist/`.
 
@@ -251,7 +251,7 @@ CMD ["nginx", "-g", "daemon off;"]
 
 ## ⛓️ Universal Network Support Tier System (52+ Networks)
 
-ZENITH features a formal, dynamic **Network Support Tier System** covering 52+ documented network targets. The tiers describe capability and execution readiness; they should not be interpreted as a guarantee that every listed network has identical production functionality.
+ElixSwap features a formal, dynamic **Network Support Tier System** covering 52+ documented network targets. The tiers describe capability and execution readiness; they should not be interpreted as a guarantee that every listed network has identical production functionality.
 
 | Tier | Classification | Feature Set & Availability | Network Targets |
 | :-- | :--- | :--- | :--- |
@@ -261,7 +261,7 @@ ZENITH features a formal, dynamic **Network Support Tier System** covering 52+ d
 | **Tier 4** | **Research / Adapter Ready** | Architecture prepared in adapter development / testnet validation (swaps safe-gated) | **Bitcoin, Monad, Robinhood Chain, Tempo, MegaETH** (5+ networks) |
 
 ### 🛠️ Granular Capability Matrix
-Every network exposes 15+ individual capability flags (`wallet`, `tokenDiscovery`, `tokenRisk`, `priceData`, `liquidityDiscovery`, `swap`, `smartRouting`, `simulation`, `portfolio`, `history`, `mevProtection`, `crossChain`, `zenithLiquidity`, `api`, `sdk`) and supported asset standards (`ERC-20`, `SPL`, `Move Coin`, `IBC`, `Runes`, `TRC-20`, etc.).
+Every network exposes 15+ individual capability flags (`wallet`, `tokenDiscovery`, `tokenRisk`, `priceData`, `liquidityDiscovery`, `swap`, `smartRouting`, `simulation`, `portfolio`, `history`, `mevProtection`, `crossChain`, `elisLiquidity`, `api`, `sdk`) and supported asset standards (`ERC-20`, `SPL`, `Move Coin`, `IBC`, `Runes`, `TRC-20`, etc.).
 
 ---
 
@@ -293,8 +293,8 @@ Every asset undergoes pre-trade evaluation:
 ### Installation
 ```bash
 # Clone the repository
-git clone https://github.com/Thanatos2227/ZENITH_SWAP.git
-cd ZENITH_SWAP
+git clone https://github.com/Thanatos2227/ElixSwap.git
+cd ElixSwap
 
 # Install dependencies across all workspaces
 npm install
@@ -321,5 +321,5 @@ The automated suite covers the protocol's routing, execution, persistence/recove
 ---
 
 <div align="center">
-  <sub>Built with precision by ZENITH Core Engineering. Released under the MIT License.</sub>
+  <sub>Built with precision by ElixSwap Core Engineering. Released under the MIT License.</sub>
 </div>

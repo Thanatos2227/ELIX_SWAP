@@ -1,9 +1,9 @@
 import { sha256, toUtf8Bytes } from 'ethers';
-import type { DexIdentity, DexCapabilities, DexPairValidationResult, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexSwapTransaction, DexSimulationResult, DexPoolState, DexDeploymentVerificationResult, DexLiquidityState, TokenIdentity, Token, TokenStandard } from '@zenith/types';
+import type { DexIdentity, DexCapabilities, DexPairValidationResult, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexSwapTransaction, DexSimulationResult, DexPoolState, DexDeploymentVerificationResult, DexLiquidityState, TokenIdentity, Token, TokenStandard } from '@elis/types';
 import type { DEXProvider, DEXQuote } from '../types';
 import type { IDexAdapter, DexQuoteParams } from './dexAdapter.interface';
-import { isFungibleStandard } from '@zenith/tokens';
-import { validateEvmAddress, InvalidCalldataError } from '@zenith/contracts';
+import { isFungibleStandard } from '@elis/tokens';
+import { validateEvmAddress, InvalidCalldataError } from '@elis/contracts';
 import { DexAddressVerifier } from './dexAddressVerifier';
 import { getTokenAddress, toLegacyToken } from './dexIdentity.types';
 export class LegacyDexProviderWrapper implements IDexAdapter {

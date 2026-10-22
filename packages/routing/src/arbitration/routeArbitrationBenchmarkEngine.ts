@@ -1,8 +1,8 @@
-import { NormalizedRoute, QuoteRequest, RouteArbitrationBenchmarkResult, QuoteLoadSimulationBatchResult, RouteArbitrationStageLatencies, StageLatencyMetrics, MultiChainRouteMatrixRow, ArbitrationStressScenarioResult, ProviderFailureScenarioResult, CacheBenchmarkResult, MemoryBenchmarkMetrics, DeterministicFuzzingSummary, Token } from '@zenith/types';
+import { NormalizedRoute, QuoteRequest, RouteArbitrationBenchmarkResult, QuoteLoadSimulationBatchResult, RouteArbitrationStageLatencies, StageLatencyMetrics, MultiChainRouteMatrixRow, ArbitrationStressScenarioResult, ProviderFailureScenarioResult, CacheBenchmarkResult, MemoryBenchmarkMetrics, DeterministicFuzzingSummary, Token } from '@elis/types';
 import { RouteArbitrator, RouteArbitrationOptions } from './routeArbitrator';
 import { RouteCapabilityFilter } from './routeCapabilityFilter';
 import { ProviderHealthRegistry } from './providerHealthRegistry';
-import { defaultNetworkCapabilityRegistry, NetworkCapabilityRegistry } from '@zenith/chains';
+import { defaultNetworkCapabilityRegistry, NetworkCapabilityRegistry } from '@elis/chains';
 export interface RouteArbitrationBenchmarkOptions {
     seedTime?: number;
     fuzzIterations?: number;
@@ -1214,7 +1214,7 @@ export class RouteArbitrationBenchmarkEngine {
         const allFailuresPassed = providerFailures.every((f) => f.passed);
         const overallPassed = allStressPassed && allFailuresPassed && fuzzMetrics.zeroNondeterminismViolations && memoryMetrics.isMemoryBounded;
         return {
-            benchmarkId: `zenith-bench-t52-${Date.now()}`,
+            benchmarkId: `elis-bench-t52-${Date.now()}`,
             timestamp: Date.now(),
             registrySnapshot: 'TASK_50_MULTI_CHAIN_READINESS_CANARIES_V1',
             routeCount: multiChainMatrix.length,

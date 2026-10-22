@@ -1,4 +1,4 @@
-import type { ExecutionCapabilityState, EvidenceClass, AuthoritativeCanaryEntry, UiApiStatusContract, MultiChainReadinessSnapshot } from '@zenith/types';
+import type { ExecutionCapabilityState, EvidenceClass, AuthoritativeCanaryEntry, UiApiStatusContract, MultiChainReadinessSnapshot } from '@elis/types';
 export const CAPABILITY_STATE_RANKS: Record<ExecutionCapabilityState, number> = {
     DISCOVERED: 0,
     CONFIGURED: 10,
