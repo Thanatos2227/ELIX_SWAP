@@ -43,8 +43,7 @@ export interface ChainCapabilities {
     history: boolean;
     mevProtection: boolean;
     crossChain: boolean;
-    zenithLiquidity: boolean;
-    api: boolean;
+    elisLiquidity: boolean;    api: boolean;
     sdk: boolean;
     supportsEIP1559?: boolean;
     supportsPermit2?: boolean;
@@ -123,7 +122,7 @@ export interface UnsupportedTokenMetadata {
     supportedNetworks: string[];
     reason: string;
 }
-export type DEXProtocol = 'ZENITH_V1' | 'ZENITH_V2' | 'ZENITH_V3' | 'ZENITH_V4_CONCENTRATED' | 'ZENITH_DUTCH_INTENT' | 'ZENITH_INTERNAL_RFIS' | 'UNISWAP_V2' | 'UNISWAP_V3' | 'UNISWAP_V4' | 'CURVE' | 'BALANCER_V2' | 'AERODROME' | 'VELODROME' | 'CAMELOT' | 'QUICKSWAP' | 'PANCAKESWAP' | 'TRADER_JOE' | 'RAYDIUM' | 'ORCA_WHIRLPOOL' | 'METEORA';
+export type DEXProtocol = 'ELIS_V1' | 'ELIS_V2' | 'ELIS_V3' | 'ELIS_V4_CONCENTRATED' | 'ELIS_DUTCH_INTENT' | 'ELIS_INTERNAL_RFIS' | 'UNISWAP_V2' | 'UNISWAP_V3' | 'UNISWAP_V4' | 'CURVE' | 'BALANCER_V2' | 'AERODROME' | 'VELODROME' | 'CAMELOT' | 'QUICKSWAP' | 'PANCAKESWAP' | 'TRADER_JOE' | 'RAYDIUM' | 'ORCA_WHIRLPOOL' | 'METEORA';
 export type BridgeProtocol = 'STARGATE' | 'STARGATE_V2' | 'ACROSS' | 'ACROSS_V3' | 'LIFI' | 'SOCKET' | 'CHAINLINK_CCIP' | 'DEBRIDGE' | 'DEBRIDGE_DLN' | 'WORMHOLE';
 export type Address = string;
 export type TxHash = string;
@@ -297,7 +296,7 @@ export interface CrossChainProvider {
 }
 export interface SwapRoute {
     id: string;
-    routeType: 'DIRECT' | 'MULTI_HOP' | 'SPLIT_ROUTE' | 'CROSS_CHAIN' | 'INTENT_SOLVER' | 'ZENITH_V4_CONCENTRATED' | 'ZENITH_DUTCH_INTENT';
+    routeType: 'DIRECT' | 'MULTI_HOP' | 'SPLIT_ROUTE' | 'CROSS_CHAIN' | 'INTENT_SOLVER' | 'ELIS_V4_CONCENTRATED' | 'ELIS_DUTCH_INTENT';
     hops: RouteHop[];
     bridgeStep?: BridgeStep;
     crossChainQuote?: CrossChainQuote;
@@ -578,7 +577,7 @@ export interface UserPreferences {
     soundEnabled: boolean;
     reducedMotion: boolean;
 }
-export interface ZenithNotification {
+export interface ElisNotification {
     id: string;
     title: string;
     message: string;
@@ -591,7 +590,7 @@ export interface ZenithNotification {
 }
 export type ExecutionStatus = TransactionStatus;
 export type SwapQuote = QuoteResponse;
-export interface ZenithPool {
+export interface ElisPool {
     id: string;
     poolAddress: string;
     chainId: string;
@@ -665,7 +664,7 @@ export interface ProtocolAnalytics {
     totalFees24hUSD: number;
     totalTransactions24h: number;
     activeLPsCount: number;
-    topPools: ZenithPool[];
+    topPools: ElisPool[];
     topTokens: Token[];
     historicalVolume: Array<{
         timestamp: number;
@@ -1182,11 +1181,11 @@ export interface NormalizedCrossChainQuote extends CrossChainQuote {
     expiresAt: number;
     providerMetadata?: Record<string, any>;
 }
-export type ZenithExecutionMode = 'READ_ONLY' | 'PREFLIGHT_ONLY' | 'LIVE_TESTNET';
+export type ElisExecutionMode = 'READ_ONLY' | 'PREFLIGHT_ONLY' | 'LIVE_TESTNET';
 export interface OperatorAuditRecord {
     auditId: string;
     timestamp: number;
-    mode: ZenithExecutionMode;
+    mode: ElisExecutionMode;
     planId: string;
     stepId: string;
     action: string;
@@ -2482,7 +2481,7 @@ export type MetricType = 'COUNTER' | 'GAUGE' | 'HISTOGRAM';
 
 export type AlertSeverity = 'INFO' | 'WARNING' | 'CRITICAL';
 
-export type AlertCategory = 
+export type AlertCategory =
     | 'EXECUTION'
     | 'RPC'
     | 'BRIDGE'
@@ -2870,5 +2869,3 @@ export interface IntentStatusApiResponse {
     readonly blockingReason: string | null;
     readonly timeline: CanonicalTelemetryEvent[];
 }
-
-

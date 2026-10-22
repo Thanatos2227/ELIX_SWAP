@@ -1,5 +1,5 @@
-import { ProviderEndpointConfig, ProviderEndpointHealth, ProviderHealthStatus, RpcCircuitBreakerState, TelemetryEvent, ErrorCategory } from '@zenith/types';
-import { ChainIdMismatchError, AllProvidersUnavailableError } from '@zenith/contracts';
+import { ProviderEndpointConfig, ProviderEndpointHealth, ProviderHealthStatus, RpcCircuitBreakerState, TelemetryEvent, ErrorCategory } from '@elis/types';
+import { ChainIdMismatchError, AllProvidersUnavailableError } from '@elis/contracts';
 import { defaultChainRegistry } from '../registry';
 export interface RpcManagerConfig {
     failureThreshold?: number;

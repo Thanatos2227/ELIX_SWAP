@@ -1,10 +1,10 @@
 import { Interface } from 'ethers';
-import type { DexIdentity, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexSwapTransaction, DexSimulationResult, DexPoolState, DexLiquidityState, TokenIdentity, Token, DexCapabilities } from '@zenith/types';
+import type { DexIdentity, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexSwapTransaction, DexSimulationResult, DexPoolState, DexLiquidityState, TokenIdentity, Token, DexCapabilities } from '@elis/types';
 import { EvmDexAdapter } from './evmDexAdapter.base';
 import type { DexQuoteParams } from './dexAdapter.interface';
 import { getTokenAddress, toLegacyToken } from './dexIdentity.types';
 import { calculateDEXLiquidityOutput } from '../dexMath';
-import { EconomicSafetyBreachError, SlippagePolicyViolationError, AERODROME_ROUTER_ABI, AERODROME_FACTORY } from '@zenith/contracts';
+import { EconomicSafetyBreachError, SlippagePolicyViolationError, AERODROME_ROUTER_ABI, AERODROME_FACTORY } from '@elis/contracts';
 export const AERODROME_LIVE_VERIFICATION_UNAVAILABLE = 'AERODROME_LIVE_VERIFICATION_UNAVAILABLE';
 export const CANONICAL_BASE_WETH_USDC_AERODROME_POOL = '0xcDa00DFd10f4381810AE12eB5e33dE0b2C912b7D';
 export class AerodromeDexAdapter extends EvmDexAdapter {

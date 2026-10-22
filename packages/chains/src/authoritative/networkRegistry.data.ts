@@ -1,5 +1,5 @@
 import { AuthoritativeNetworkIdentity, buildNetworkIdentityKey } from './networkIdentity.types';
-export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkIdentity> = {
+export const ELIS_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkIdentity> = {
     ethereum: {
         networkId: 'ethereum',
         canonicalName: 'Ethereum Mainnet',
@@ -84,7 +84,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'USDC', 'USDT', 'DAI', 'WBTC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/ethereum.svg',
+        iconURI: 'https://assets.elixswap.com/chains/ethereum.svg',
         color: '#627EEA'
     },
     polygon: {
@@ -171,7 +171,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WMATIC', 'WPOL', 'USDC', 'USDT'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/polygon.svg',
+        iconURI: 'https://assets.elixswap.com/chains/polygon.svg',
         color: '#8247E5'
     },
     arbitrum: {
@@ -263,7 +263,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'ARB', 'USDC', 'USDT'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/arbitrum.svg',
+        iconURI: 'https://assets.elixswap.com/chains/arbitrum.svg',
         color: '#28A0F0'
     },
     optimism: {
@@ -355,7 +355,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'OP', 'USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/optimism.svg',
+        iconURI: 'https://assets.elixswap.com/chains/optimism.svg',
         color: '#FF0420'
     },
     base: {
@@ -447,7 +447,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/base.svg',
+        iconURI: 'https://assets.elixswap.com/chains/base.svg',
         color: '#0052FF'
     },
     celo: {
@@ -534,7 +534,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['cUSD', 'cEUR', 'CELO'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/celo.svg',
+        iconURI: 'https://assets.elixswap.com/chains/celo.svg',
         color: '#35D07F'
     },
     gnosis: {
@@ -621,7 +621,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WXDAI', 'GNO'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/gnosis.svg',
+        iconURI: 'https://assets.elixswap.com/chains/gnosis.svg',
         color: '#04795B'
     },
     polygon_amoy: {
@@ -707,7 +707,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/polygon.svg',
+        iconURI: 'https://assets.elixswap.com/chains/polygon.svg',
         color: '#8247E5'
     },
     arbitrum_sepolia: {
@@ -793,7 +793,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: [],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/arbitrum.svg',
+        iconURI: 'https://assets.elixswap.com/chains/arbitrum.svg',
         color: '#28A0F0'
     },
     optimism_sepolia: {
@@ -879,7 +879,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: [],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/optimism.svg',
+        iconURI: 'https://assets.elixswap.com/chains/optimism.svg',
         color: '#FF0420'
     },
     base_sepolia: {
@@ -965,7 +965,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: [],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/base.svg',
+        iconURI: 'https://assets.elixswap.com/chains/base.svg',
         color: '#0052FF'
     },
     sepolia: {
@@ -1066,7 +1066,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: [],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/ethereum.svg',
+        iconURI: 'https://assets.elixswap.com/chains/ethereum.svg',
         color: '#627EEA'
     },
     bsc: {
@@ -1153,7 +1153,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WBNB', 'BUSD', 'USDT'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/bsc.svg',
+        iconURI: 'https://assets.elixswap.com/chains/bsc.svg',
         color: '#F3BA2F'
     },
     avalanche: {
@@ -1240,7 +1240,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WAVAX', 'USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/avalanche.svg',
+        iconURI: 'https://assets.elixswap.com/chains/avalanche.svg',
         color: '#E84142'
     },
     fantom: {
@@ -1327,7 +1327,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WFTM', 'USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/fantom.svg',
+        iconURI: 'https://assets.elixswap.com/chains/fantom.svg',
         color: '#1969FF'
     },
     polygon_zkevm: {
@@ -1413,7 +1413,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/polygon.svg',
+        iconURI: 'https://assets.elixswap.com/chains/polygon.svg',
         color: '#8247E5'
     },
     linea: {
@@ -1499,7 +1499,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/linea.svg',
+        iconURI: 'https://assets.elixswap.com/chains/linea.svg',
         color: '#121212'
     },
     scroll: {
@@ -1585,7 +1585,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/scroll.svg',
+        iconURI: 'https://assets.elixswap.com/chains/scroll.svg',
         color: '#FFEED6'
     },
     solana: {
@@ -1671,7 +1671,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WSOL', 'USDC'],
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/solana.svg',
+        iconURI: 'https://assets.elixswap.com/chains/solana.svg',
         color: '#14F195'
     },
     blast: {
@@ -1757,7 +1757,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'USDB'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/blast.svg',
+        iconURI: 'https://assets.elixswap.com/chains/blast.svg',
         color: '#FCFC03'
     },
     mantle: {
@@ -1843,7 +1843,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WMNT', 'USDT'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/mantle.svg',
+        iconURI: 'https://assets.elixswap.com/chains/mantle.svg',
         color: '#000000'
     },
     zksync: {
@@ -1929,7 +1929,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/zksync.svg',
+        iconURI: 'https://assets.elixswap.com/chains/zksync.svg',
         color: '#8C8DFC'
     },
     mode: {
@@ -2015,7 +2015,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/mode.svg',
+        iconURI: 'https://assets.elixswap.com/chains/mode.svg',
         color: '#DFFE00'
     },
     berachain: {
@@ -2101,7 +2101,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WBERA', 'HONEY'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/berachain.svg',
+        iconURI: 'https://assets.elixswap.com/chains/berachain.svg',
         color: '#5B3926'
     },
     unichain: {
@@ -2187,7 +2187,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/unichain.svg',
+        iconURI: 'https://assets.elixswap.com/chains/unichain.svg',
         color: '#FF007A'
     },
     worldchain: {
@@ -2273,7 +2273,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WLD', 'WETH'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/worldchain.svg',
+        iconURI: 'https://assets.elixswap.com/chains/worldchain.svg',
         color: '#000000'
     },
     ink: {
@@ -2359,7 +2359,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'USDC'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/ink.svg',
+        iconURI: 'https://assets.elixswap.com/chains/ink.svg',
         color: '#8A2BE2'
     },
     astar: {
@@ -2445,7 +2445,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WASTR'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/astar.svg',
+        iconURI: 'https://assets.elixswap.com/chains/astar.svg',
         color: '#1B6DC1'
     },
     aurora: {
@@ -2531,7 +2531,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/aurora.svg',
+        iconURI: 'https://assets.elixswap.com/chains/aurora.svg',
         color: '#78D64B'
     },
     boba: {
@@ -2617,7 +2617,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WETH', 'BOBA'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/boba.svg',
+        iconURI: 'https://assets.elixswap.com/chains/boba.svg',
         color: '#CCFF00'
     },
     cronos: {
@@ -2703,7 +2703,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WCRO'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/cronos.svg',
+        iconURI: 'https://assets.elixswap.com/chains/cronos.svg',
         color: '#002D74'
     },
     evmos: {
@@ -2789,7 +2789,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WEVMOS'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/evmos.svg',
+        iconURI: 'https://assets.elixswap.com/chains/evmos.svg',
         color: '#000000'
     },
     kava: {
@@ -2875,7 +2875,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WKAVA'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/kava.svg',
+        iconURI: 'https://assets.elixswap.com/chains/kava.svg',
         color: '#FF433E'
     },
     metis: {
@@ -2961,7 +2961,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['METIS'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/metis.svg',
+        iconURI: 'https://assets.elixswap.com/chains/metis.svg',
         color: '#00DACC'
     },
     moonbeam: {
@@ -3047,7 +3047,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WGLMR'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/moonbeam.svg',
+        iconURI: 'https://assets.elixswap.com/chains/moonbeam.svg',
         color: '#53CBC9'
     },
     moonriver: {
@@ -3133,7 +3133,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['WMOVR'],
         executionAdapterReference: 'EvmExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/moonriver.svg',
+        iconURI: 'https://assets.elixswap.com/chains/moonriver.svg',
         color: '#F4B400'
     },
     aptos: {
@@ -3218,7 +3218,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['APT'],
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/aptos.svg',
+        iconURI: 'https://assets.elixswap.com/chains/aptos.svg',
         color: '#000000',
         notes: 'Aptos Move chain ID decoupled from EVM chain ID 1 collision'
     },
@@ -3304,7 +3304,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['SUI'],
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/sui.svg',
+        iconURI: 'https://assets.elixswap.com/chains/sui.svg',
         color: '#4DA2FF'
     },
     cosmos: {
@@ -3389,7 +3389,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['ATOM'],
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/cosmos.svg',
+        iconURI: 'https://assets.elixswap.com/chains/cosmos.svg',
         color: '#2E3148'
     },
     osmosis: {
@@ -3474,7 +3474,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['OSMO'],
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/osmosis.svg',
+        iconURI: 'https://assets.elixswap.com/chains/osmosis.svg',
         color: '#8A2BE2'
     },
     near: {
@@ -3559,7 +3559,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['wNEAR'],
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/near.svg',
+        iconURI: 'https://assets.elixswap.com/chains/near.svg',
         color: '#000000'
     },
     ton: {
@@ -3644,7 +3644,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['TON'],
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/ton.svg',
+        iconURI: 'https://assets.elixswap.com/chains/ton.svg',
         color: '#0088CC'
     },
     tron: {
@@ -3729,7 +3729,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['USDT_TRC20', 'TRX'],
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/tron.svg',
+        iconURI: 'https://assets.elixswap.com/chains/tron.svg',
         color: '#FF0013'
     },
     polkadot: {
@@ -3814,7 +3814,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['DOT'],
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/polkadot.svg',
+        iconURI: 'https://assets.elixswap.com/chains/polkadot.svg',
         color: '#E6007A'
     },
     xrpl: {
@@ -3899,7 +3899,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['XRP'],
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/xrpl.svg',
+        iconURI: 'https://assets.elixswap.com/chains/xrpl.svg',
         color: '#23292F'
     },
     stellar: {
@@ -3984,7 +3984,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         tokenRegistryReferences: ['XLM'],
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'COMPLETE',
-        iconURI: 'https://assets.zenith.exchange/chains/stellar.svg',
+        iconURI: 'https://assets.elixswap.com/chains/stellar.svg',
         color: '#08B5E5'
     },
     bitcoin: {
@@ -4050,7 +4050,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'PARTIAL',
-        iconURI: 'https://assets.zenith.exchange/chains/bitcoin.svg',
+        iconURI: 'https://assets.elixswap.com/chains/bitcoin.svg',
         color: '#F7931A'
     },
     cardano: {
@@ -4116,7 +4116,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'PARTIAL',
-        iconURI: 'https://assets.zenith.exchange/chains/cardano.svg',
+        iconURI: 'https://assets.elixswap.com/chains/cardano.svg',
         color: '#0033AD'
     },
     icp: {
@@ -4182,7 +4182,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'PARTIAL',
-        iconURI: 'https://assets.zenith.exchange/chains/icp.svg',
+        iconURI: 'https://assets.elixswap.com/chains/icp.svg',
         color: '#29ABE2'
     },
     dogecoin: {
@@ -4248,7 +4248,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'PARTIAL',
-        iconURI: 'https://assets.zenith.exchange/chains/dogecoin.svg',
+        iconURI: 'https://assets.elixswap.com/chains/dogecoin.svg',
         color: '#C2A633'
     },
     litecoin: {
@@ -4314,7 +4314,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'PARTIAL',
-        iconURI: 'https://assets.zenith.exchange/chains/litecoin.svg',
+        iconURI: 'https://assets.elixswap.com/chains/litecoin.svg',
         color: '#345D9D'
     },
     monero: {
@@ -4380,7 +4380,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'PARTIAL',
-        iconURI: 'https://assets.zenith.exchange/chains/monero.svg',
+        iconURI: 'https://assets.elixswap.com/chains/monero.svg',
         color: '#FF6600'
     },
     filecoin: {
@@ -4447,7 +4447,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'PARTIAL',
-        iconURI: 'https://assets.zenith.exchange/chains/filecoin.svg',
+        iconURI: 'https://assets.elixswap.com/chains/filecoin.svg',
         color: '#0090FF'
     },
     klaytn: {
@@ -4514,7 +4514,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'PARTIAL',
-        iconURI: 'https://assets.zenith.exchange/chains/klaytn.svg',
+        iconURI: 'https://assets.elixswap.com/chains/klaytn.svg',
         color: '#FF4100'
     },
     oasis_emerald: {
@@ -4581,7 +4581,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'PARTIAL',
-        iconURI: 'https://assets.zenith.exchange/chains/oasis.svg',
+        iconURI: 'https://assets.elixswap.com/chains/oasis.svg',
         color: '#0092F6'
     },
     ronin: {
@@ -4648,7 +4648,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'PARTIAL',
-        iconURI: 'https://assets.zenith.exchange/chains/ronin.svg',
+        iconURI: 'https://assets.elixswap.com/chains/ronin.svg',
         color: '#1273EA'
     },
     telos: {
@@ -4715,7 +4715,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'PARTIAL',
-        iconURI: 'https://assets.zenith.exchange/chains/telos.svg',
+        iconURI: 'https://assets.elixswap.com/chains/telos.svg',
         color: '#B574FF'
     },
     robinhood: {
@@ -4782,7 +4782,7 @@ export const ZENITH_AUTHORITATIVE_NETWORKS: Record<string, AuthoritativeNetworkI
         onboardingState: 'DISCOVERED',
         executionAdapterReference: 'UnsupportedExecutionAdapter',
         completenessStatus: 'UNKNOWN',
-        iconURI: 'https://assets.zenith.exchange/chains/robinhood.svg',
+        iconURI: 'https://assets.elixswap.com/chains/robinhood.svg',
         color: '#00C805',
         notes: 'Robinhood Orbit L3 disambiguated to numeric chain ID 421610'
     }

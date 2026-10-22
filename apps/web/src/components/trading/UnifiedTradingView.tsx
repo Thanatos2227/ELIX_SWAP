@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
+import { useElisStore } from '../../stores/useElisStore';
 import { TokenLogo } from '../common/TokenLogo';
 import { Share2, Lock, TrendingUp, TrendingDown, ArrowRight, BarChart3 } from 'lucide-react';
 import { SwapCard } from './SwapCard';
@@ -7,7 +7,7 @@ import { LivePriceChart } from './LivePriceChart';
 import { defaultMarketDataService, MarketStats24h } from '../../services/marketDataService';
 type ProTab = 'CHART' | 'ROUTING';
 export const UnifiedTradingView: React.FC = () => {
-    const { sourceChain, destChain, tokenIn, tokenOut, quote, marketData } = useZenithStore();
+    const { sourceChain, destChain, tokenIn, tokenOut, quote, marketData } = useElisStore();
     const [activeProTab, setActiveProTab] = useState<ProTab>('CHART');
     const isCrossChain = sourceChain.id !== destChain.id;
     const currentPair = `${tokenIn.symbol} / ${tokenOut.symbol}`;
@@ -65,10 +65,10 @@ export const UnifiedTradingView: React.FC = () => {
     const markPrice = (liveStats.currentPrice > 0 ? liveStats.currentPrice : storePrice) || basePrice;
     const isPositive = liveStats.change24hPercent >= 0;
     return (<div className="w-full max-w-7xl mx-auto space-y-4">
-      
-      
+
+
       <div className="glass-panel rounded-2xl p-4 sm:p-5 border border-slate-800/80 shadow-xl flex flex-col xl:flex-row xl:items-center justify-between gap-4">
-        
+
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="flex -space-x-2 shrink-0">
@@ -108,7 +108,7 @@ export const UnifiedTradingView: React.FC = () => {
           </div>
         </div>
 
-        
+
         <div className="grid grid-cols-2 sm:grid-cols-4 items-center gap-3 sm:gap-6 text-xs font-mono">
           <div>
             <span className="text-slate-400 block text-[10px] uppercase font-semibold tracking-wider">Mark Price</span>
@@ -138,7 +138,7 @@ export const UnifiedTradingView: React.FC = () => {
           </div>
         </div>
 
-        
+
         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-slate-800 text-slate-300 text-xs font-mono shrink-0 shadow-sm">
           <Lock className="w-3.5 h-3.5 text-cyan-400"/>
           <span className="font-semibold text-cyan-300">Private Relay Protected</span>

@@ -1,7 +1,7 @@
-import { DEXProtocol, Token } from '@zenith/types';
+import { DEXProtocol, Token } from '@elis/types';
 import { Interface, Contract, JsonRpcProvider } from 'ethers';
-import { defaultChainRegistry } from '@zenith/chains';
-import { CAMELOT_V2_ROUTER, CAMELOT_V2_ROUTER_ABI, CAMELOT_V3_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getCamelotRouter } from '@zenith/contracts';
+import { defaultChainRegistry } from '@elis/chains';
+import { CAMELOT_V2_ROUTER, CAMELOT_V2_ROUTER_ABI, CAMELOT_V3_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getCamelotRouter } from '@elis/contracts';
 import { DEXProvider, DEXQuote, DEXExecution, DEXQuoteParams } from './types';
 import { calculateDEXLiquidityOutput, isNativeToken, resolvePoolTokenAddress } from './dexMath';
 

@@ -1,12 +1,12 @@
 import React from 'react';
-import { useZenithStore, resolveTokenBalance } from '../../stores/useZenithStore';
+import { useElisStore, resolveTokenBalance } from '../../stores/useElisStore';
 import { formatAddress } from '../../utils/walletDetector';
-import { defaultTokenService } from '@zenith/tokens';
-import { defaultChainRegistry } from '@zenith/chains';
+import { defaultTokenService } from '@elis/tokens';
+import { defaultChainRegistry } from '@elis/chains';
 import { TokenLogo } from '../common/TokenLogo';
 import { Wallet, ShieldCheck, Zap, RefreshCw, Loader2 } from 'lucide-react';
 export const PortfolioView: React.FC = () => {
-    const { walletAddress, isWalletConnected, walletBalances, isBalanceLoading, sourceChain, openWalletModal, setSourceChain, setTokenIn, setActiveTab, refreshBalance } = useZenithStore();
+    const { walletAddress, isWalletConnected, walletBalances, isBalanceLoading, sourceChain, openWalletModal, setSourceChain, setTokenIn, setActiveTab, refreshBalance } = useElisStore();
     const chainTokens = isWalletConnected
         ? defaultTokenService.getTokensForChain(sourceChain.id)
         : [];

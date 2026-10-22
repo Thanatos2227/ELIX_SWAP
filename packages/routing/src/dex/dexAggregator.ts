@@ -1,8 +1,8 @@
-import { DEXProtocol, Token } from '@zenith/types';
+import { DEXProtocol, Token } from '@elis/types';
 import { DEXProvider, DEXQuote, DEXExecution } from './types';
-import { ZenithV1Provider } from './zenithV1Provider';
-import { ZenithV2Provider } from './zenithV2Provider';
-import { ZenithV3Provider } from './zenithV3Provider';
+import { ElisV1Provider } from './elisV1Provider';
+import { ElisV2Provider } from './elisV2Provider';
+import { ElisV3Provider } from './elisV3Provider';
 import { UniswapV3Provider } from './uniswapV3Provider';
 import { QuickSwapProvider } from './quickswapProvider';
 import { AerodromeProvider } from './aerodromeProvider';
@@ -10,8 +10,8 @@ import { VelodromeProvider } from './velodromeProvider';
 import { CamelotProvider } from './camelotProvider';
 import { PancakeSwapProvider } from './pancakeSwapProvider';
 import { TraderJoeProvider } from './traderJoeProvider';
-export type DEXAggregationMode = 'ZENITH_ONLY' | 'ZENITH_SOVEREIGN' | 'EXTERNAL_AGGREGATION';
-export const SOVEREIGN_ZENITH_PROTOCOLS: DEXProtocol[] = ['ZENITH_V1', 'ZENITH_V2', 'ZENITH_V3'];
+export type DEXAggregationMode = 'ELIS_ONLY' | 'ELIS_SOVEREIGN' | 'EXTERNAL_AGGREGATION';
+export const SOVEREIGN_ELIS_PROTOCOLS: DEXProtocol[] = ['ELIS_V1', 'ELIS_V2', 'ELIS_V3'];
 export class DEXAggregator {
     private providers: Map<DEXProtocol, DEXProvider> = new Map();
     private mode: DEXAggregationMode = 'EXTERNAL_AGGREGATION';
@@ -23,9 +23,9 @@ export class DEXAggregator {
             }
         }
         else {
-            this.registerProvider(new ZenithV3Provider());
-            this.registerProvider(new ZenithV2Provider());
-            this.registerProvider(new ZenithV1Provider());
+            this.registerProvider(new ElisV3Provider());
+            this.registerProvider(new ElisV2Provider());
+            this.registerProvider(new ElisV1Provider());
             this.registerProvider(new UniswapV3Provider());
             this.registerProvider(new QuickSwapProvider());
             this.registerProvider(new AerodromeProvider());
@@ -49,7 +49,7 @@ export class DEXAggregator {
     }
     public isSovereignMode(mode?: DEXAggregationMode): boolean {
         const active = mode || this.mode;
-        return active === 'ZENITH_ONLY' || active === 'ZENITH_SOVEREIGN';
+        return active === 'ELIS_ONLY' || active === 'ELIS_SOVEREIGN';
     }
     public async getQuotes(params: {
         chainId: number;
@@ -63,7 +63,7 @@ export class DEXAggregator {
         const activeMode = params.mode || this.mode;
         const isSovereign = this.isSovereignMode(activeMode);
         const applicableProviders = Array.from(this.providers.values()).filter((p) => {
-            if (isSovereign && !SOVEREIGN_ZENITH_PROTOCOLS.includes(p.protocol)) {
+            if (isSovereign && !SOVEREIGN_ELIS_PROTOCOLS.includes(p.protocol)) {
                 return false;
             }
             return p.supportedChainIds.includes(params.chainId);
@@ -116,8 +116,8 @@ export class DEXAggregator {
     }
     public async buildExecution(quote: DEXQuote, userAddress: string, recipientAddress?: string, deadline?: number, mode?: DEXAggregationMode): Promise<DEXExecution> {
         const activeMode = mode || this.mode;
-        if (this.isSovereignMode(activeMode) && !SOVEREIGN_ZENITH_PROTOCOLS.includes(quote.provider)) {
-            throw new Error(`ZENITH_EXTERNAL_EXECUTION_DETECTED: DEXAggregator is operating in sovereign ZENITH_ONLY mode / ZENITH_SOVEREIGN mode. External protocol execution (${quote.provider}) is strictly prohibited.`);
+        if (this.isSovereignMode(activeMode) && !SOVEREIGN_ELIS_PROTOCOLS.includes(quote.provider)) {
+            throw new Error(`ELIS_EXTERNAL_EXECUTION_DETECTED: DEXAggregator is operating in sovereign ELIS_ONLY mode / ELIS_SOVEREIGN mode. External protocol execution (${quote.provider}) is strictly prohibited.`);
         }
         const provider = this.providers.get(quote.provider);
         if (!provider) {

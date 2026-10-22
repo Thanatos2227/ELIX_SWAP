@@ -1,7 +1,7 @@
-import { NormalizedRoute, QuoteRequest } from '@zenith/types';
-import { ZERO_ADDRESS, validateEvmAddress } from '@zenith/contracts';
-import { defaultNetworkCapabilityRegistry, NetworkCapabilityRegistry } from '@zenith/chains';
-import { defaultAuthoritativeTokenRegistry } from '@zenith/tokens';
+import { NormalizedRoute, QuoteRequest } from '@elis/types';
+import { ZERO_ADDRESS, validateEvmAddress } from '@elis/contracts';
+import { defaultNetworkCapabilityRegistry, NetworkCapabilityRegistry } from '@elis/chains';
+import { defaultAuthoritativeTokenRegistry } from '@elis/tokens';
 import { RouteFreshnessValidator } from './routeFreshnessValidator';
 import { CrossChainProviderCapabilityMatrix } from '../crosschain/crossChainProviderCapabilityMatrix';
 import { defaultProviderHealthRegistry, ProviderHealthRegistry } from './providerHealthRegistry';

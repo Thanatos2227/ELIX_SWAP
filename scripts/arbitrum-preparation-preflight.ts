@@ -27,7 +27,7 @@ const ERC20_ABI = [
 const REQUIRED_ETH_MIN = 0.0008188;
 async function runPreparationPreflight() {
     console.log('================================================================');
-    console.log('ZENITH — ARBITRUM PREPARATION PREFLIGHT ENGINE');
+    console.log('ELIS — ARBITRUM PREPARATION PREFLIGHT ENGINE');
     console.log('================================================================');
     console.log('AUTHORIZED_WALLET:    ' + OPERATOR_ADDR);
     console.log('TARGET_NETWORK:       Arbitrum One (Chain ID: 42161)');

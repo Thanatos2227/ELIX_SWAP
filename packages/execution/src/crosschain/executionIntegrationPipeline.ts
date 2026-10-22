@@ -1,6 +1,6 @@
-import { ExecutionPlan, PersistentSettlement, Token } from '@zenith/types';
-import { AuthorizationBoundaryBreachError, SemanticEquivalenceBreachError, EconomicSafetyBreachError, MinimumOutputBreachError, ConfigurationError } from '@zenith/contracts';
-import { defaultChainRegistry } from '@zenith/chains';
+import { ExecutionPlan, PersistentSettlement, Token } from '@elis/types';
+import { AuthorizationBoundaryBreachError, SemanticEquivalenceBreachError, EconomicSafetyBreachError, MinimumOutputBreachError, ConfigurationError } from '@elis/contracts';
+import { defaultChainRegistry } from '@elis/chains';
 import { ExecutionPlanBuilder, assertPlanIntegrity, computeExecutionPlanHash } from '../executionPlanBuilder';
 import { validateExecutionPlanAuthorization } from '../security/executionAuthorizationValidator';
 import { validateTransactionPlanEquivalence } from '../semantics/semanticEquivalenceValidator';

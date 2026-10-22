@@ -1,7 +1,7 @@
-import { LiveDexVerificationMode, LiveDexPathConfig, LiveDexVerificationEvidence, LiveDexVerificationResult, LiveOnchainGateChecklist, CapabilityLevel, AuthoritativeDexQuote, DexSimulationResult, ProviderHealthStatus, NormalizedRoute, QuoteRequest, ExecutionPlan, ExecutionPlanStep, RpcProviderProfile, MultiDexSweepItemEvidence, MultiDexSweepMatrixRow, MultiDexSweepResult } from '@zenith/types';
-import { validateEvmAddress, DexNetworkMismatchError, LiveDexVerificationError, LiveExecutionBlockedError, UNISWAP_V3_QUOTER_V2_ABI } from '@zenith/contracts';
-import { defaultAuthoritativeNetworkRegistry, AuthoritativeNetworkRegistry, AuthoritativeRpcProviderRegistry } from '@zenith/chains';
-import { defaultAuthoritativeTokenRegistry, AuthoritativeTokenRegistry } from '@zenith/tokens';
+import { LiveDexVerificationMode, LiveDexPathConfig, LiveDexVerificationEvidence, LiveDexVerificationResult, LiveOnchainGateChecklist, CapabilityLevel, AuthoritativeDexQuote, DexSimulationResult, ProviderHealthStatus, NormalizedRoute, QuoteRequest, ExecutionPlan, ExecutionPlanStep, RpcProviderProfile, MultiDexSweepItemEvidence, MultiDexSweepMatrixRow, MultiDexSweepResult } from '@elis/types';
+import { validateEvmAddress, DexNetworkMismatchError, LiveDexVerificationError, LiveExecutionBlockedError, UNISWAP_V3_QUOTER_V2_ABI } from '@elis/contracts';
+import { defaultAuthoritativeNetworkRegistry, AuthoritativeNetworkRegistry, AuthoritativeRpcProviderRegistry } from '@elis/chains';
+import { defaultAuthoritativeTokenRegistry, AuthoritativeTokenRegistry } from '@elis/tokens';
 import { Provider, Contract, ZeroAddress } from 'ethers';
 import { defaultAuthoritativeDexRegistry, AuthoritativeDexRegistry } from './authoritativeDexRegistry';
 import { DexAddressVerifier } from './dexAddressVerifier';

@@ -1,6 +1,6 @@
 import { JsonRpcProvider, Contract, formatEther, formatUnits, parseUnits, parseEther } from 'ethers';
-import { defaultAcrossProvider } from '@zenith/routing';
-import { defaultChainRegistry } from '@zenith/chains';
+import { defaultAcrossProvider } from '@elis/routing';
+import { defaultChainRegistry } from '@elis/chains';
 const POLYGON_RPCS = [
     'https://polygon-bor-rpc.publicnode.com',
     'https://polygon.drpc.org',

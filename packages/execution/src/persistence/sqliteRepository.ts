@@ -9,7 +9,7 @@ import {
   PersistentTransaction,
   WorkerLease,
   TransactionLifecycleState
-} from '@zenith/types';
+} from '@elis/types';
 import {
   CrossChainStateRepository,
   validateTransactionStateTransition,

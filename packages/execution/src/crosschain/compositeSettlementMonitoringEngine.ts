@@ -1,5 +1,5 @@
 import { sha256, toUtf8Bytes } from 'ethers';
-import type { CanonicalCrossChainIntent, SourceSwapStepState, BridgeStepState, DestinationSwapStepState, DestinationVerificationStepState, SettlementStepState, FinalityState, CompositeOverallState, NormalizedMonitoringErrorCode, AmountTransitionAuditRecord, MonitoringApiStatusResponse, CompositeTelemetryEvent } from '@zenith/types';
+import type { CanonicalCrossChainIntent, SourceSwapStepState, BridgeStepState, DestinationSwapStepState, DestinationVerificationStepState, SettlementStepState, FinalityState, CompositeOverallState, NormalizedMonitoringErrorCode, AmountTransitionAuditRecord, MonitoringApiStatusResponse, CompositeTelemetryEvent } from '@elis/types';
 import { verifyDestinationSettlement, DestinationEvidenceTier } from './authoritativeDestinationVerifier';
 import { defaultSettlementTelemetry } from './settlementTelemetry';
 export interface CompositeMonitoringRecord {

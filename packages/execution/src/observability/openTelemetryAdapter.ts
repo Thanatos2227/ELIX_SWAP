@@ -1,4 +1,4 @@
-import { OpenTelemetrySpanRecord } from '@zenith/types';
+import { OpenTelemetrySpanRecord } from '@elis/types';
 import { sha256, toUtf8Bytes } from 'ethers';
 import { sanitizeMetricLabel } from './prometheusRegistry';
 
@@ -44,13 +44,13 @@ export class OpenTelemetryAdapter {
 
     public generateTraceId(): string {
         const seq = this.traceSequence++;
-        const rawHash = sha256(toUtf8Bytes(`zenith-trace-${Date.now()}-${seq}`));
+        const rawHash = sha256(toUtf8Bytes(`elis-trace-${Date.now()}-${seq}`));
         return rawHash.slice(2, 34); // 32 hex characters
     }
 
     public generateSpanId(): string {
         const seq = this.spanSequence++;
-        const rawHash = sha256(toUtf8Bytes(`zenith-span-${Date.now()}-${seq}`));
+        const rawHash = sha256(toUtf8Bytes(`elis-span-${Date.now()}-${seq}`));
         return rawHash.slice(2, 18); // 16 hex characters
     }
 

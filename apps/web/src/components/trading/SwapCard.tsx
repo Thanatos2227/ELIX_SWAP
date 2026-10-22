@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useZenithStore, resolveTokenLivePrice, resolveTokenBalance } from '../../stores/useZenithStore';
+import { useElisStore, resolveTokenLivePrice, resolveTokenBalance } from '../../stores/useElisStore';
 import { TokenLogo } from '../common/TokenLogo';
 import { ArrowDownUp, RefreshCw, ShieldAlert, ShieldCheck, ChevronDown, Sparkles, ArrowRight, Wallet } from 'lucide-react';
 import { validateAndSanitizeAmount, truncateToThreeDecimals, MAX_SWAP_AMOUNT_NUM } from '../../utils/amountValidation';
@@ -15,7 +15,7 @@ const formatRateValue = (rate: number): string => {
     return rate.toExponential(4);
 };
 export const SwapCard: React.FC = () => {
-    const { sourceChain, destChain, tokenIn, tokenOut, amountIn, setAmountIn, switchTokens, openTokenPicker, openChainPicker, quote, quoteError, isQuoteLoading, fetchQuote, fetchMarketData, openConfirmSheet, isWalletConnected, walletBalances, isBalanceLoading, openWalletModal, chainId, switchNetwork, marketData, lastMarketUpdate, executionMode, setExecutionMode, orderType, setOrderType, limitPrice, setLimitPrice, slippageTolerancePercent, slippagePreset, isExecutingTrade } = useZenithStore();
+    const { sourceChain, destChain, tokenIn, tokenOut, amountIn, setAmountIn, switchTokens, openTokenPicker, openChainPicker, quote, quoteError, isQuoteLoading, fetchQuote, fetchMarketData, openConfirmSheet, isWalletConnected, walletBalances, isBalanceLoading, openWalletModal, chainId, switchNetwork, marketData, lastMarketUpdate, executionMode, setExecutionMode, orderType, setOrderType, limitPrice, setLimitPrice, slippageTolerancePercent, slippagePreset, isExecutingTrade } = useElisStore();
     const [refreshTimer, setRefreshTimer] = useState<number>(10);
     useEffect(() => {
         fetchMarketData();
@@ -92,7 +92,7 @@ export const SwapCard: React.FC = () => {
       <div className="glass-panel rounded-2xl p-5 sm:p-6 shadow-2xl relative overflow-hidden border border-slate-800/80">
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent"/>
 
-        
+
         <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800/60">
           <div className="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
             <button onClick={() => setOrderType('SWAP')} className={`px-3 py-1 rounded-lg transition-all ${orderType === 'SWAP' ? 'bg-cyan-500 text-slate-950 shadow-glow-cyan' : 'text-slate-400 hover:text-white'}`}>

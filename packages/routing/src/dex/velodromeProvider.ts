@@ -1,6 +1,6 @@
-import { DEXProtocol, Token } from '@zenith/types';
+import { DEXProtocol, Token } from '@elis/types';
 import { Interface } from 'ethers';
-import { VELODROME_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getVelodromeRouter } from '@zenith/contracts';
+import { VELODROME_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getVelodromeRouter } from '@elis/contracts';
 import { DEXProvider, DEXQuote, DEXExecution, DEXQuoteParams } from './types';
 import { calculateDEXLiquidityOutput, isNativeToken, resolvePoolTokenAddress } from './dexMath';
 export const VELODROME_V2_FACTORY = '0x25CbdDb98b35ab1FF77413456B31EC81A6B6B746';

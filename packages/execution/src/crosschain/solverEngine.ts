@@ -1,7 +1,7 @@
-import { DestinationExecutionCapabilities, DestinationExecutionRequest, DestinationExecutionPlan, DestinationExecutionResult, DestinationExecutionStatus, DestinationVerification, SolverProfile } from '@zenith/types';
-import { defaultChainRegistry } from '@zenith/chains';
-import { defaultDEXAggregator, DEXAggregator } from '@zenith/routing';
-import { validateRecipientAddress, validateTokenAddress, ZERO_ADDRESS, InvalidExecutionTargetError, DestinationExecutionUnavailableError, ExecutionUnavailableError, DestinationExecutionFailedError, IntentExpiredError, SolverLiquidityUnavailableError } from '@zenith/contracts';
+import { DestinationExecutionCapabilities, DestinationExecutionRequest, DestinationExecutionPlan, DestinationExecutionResult, DestinationExecutionStatus, DestinationVerification, SolverProfile } from '@elis/types';
+import { defaultChainRegistry } from '@elis/chains';
+import { defaultDEXAggregator, DEXAggregator } from '@elis/routing';
+import { validateRecipientAddress, validateTokenAddress, ZERO_ADDRESS, InvalidExecutionTargetError, DestinationExecutionUnavailableError, ExecutionUnavailableError, DestinationExecutionFailedError, IntentExpiredError, SolverLiquidityUnavailableError } from '@elis/contracts';
 import { CrossChainStateRepository } from '../persistence/repository';
 import { DestinationExecutionProvider } from './destinationExecutionProvider';
 export interface SolverEngineOptions {
@@ -20,8 +20,8 @@ export class SolverEngine implements DestinationExecutionProvider {
     private submittedTransactions: Map<string, string> = new Map();
     constructor(options: SolverEngineOptions = {}) {
         this.profile = {
-            id: options.profile?.id || 'zenith-reference-solver-1',
-            name: options.profile?.name || 'ZENITH Reference Destination Solver',
+            id: options.profile?.id || 'elis-reference-solver-1',
+            name: options.profile?.name || 'ELIS Reference Destination Solver',
             walletAddress: options.profile?.walletAddress || '0x70997970C51812dc3A010C7d01b50e0d17dc79C8',
             supportedChains: options.profile?.supportedChains || [
                 'ethereum',
@@ -61,8 +61,8 @@ export class SolverEngine implements DestinationExecutionProvider {
                 'QUICKSWAP',
                 'PANCAKESWAP',
                 'TRADER_JOE',
-                'ZENITH_V2',
-                'ZENITH_V3'
+                'ELIS_V2',
+                'ELIS_V3'
             ],
             supportedModes: ['SOLVER', 'ATOMIC', 'SEPARATE_DESTINATION_TX'],
             maxSlippageBps: 500

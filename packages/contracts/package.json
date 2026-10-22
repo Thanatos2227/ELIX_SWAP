@@ -1,11 +1,11 @@
 {
-  "name": "@zenith/contracts",
+  "name": "@elis/contracts",
   "version": "4.0.0",
   "private": true,
-  "description": "ZENITH Canonical Contract & Address Registry with Zero-Invented Address Hardening",
+  "description": "ElixSwap Canonical Contract & Address Registry with Zero-Invented Address Hardening",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "dependencies": {
-    "@zenith/types": "*"
+    "@elis/types": "*"
   }
 }

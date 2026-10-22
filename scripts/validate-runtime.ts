@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * ZENITH Protocol — Authoritative Runtime Validator
+ * ElixSwap Protocol — Authoritative Runtime Validator
  *
  * Verifies that the Node.js runtime satisfies all security, persistence,
  * and cryptographic invariants required for cross-chain execution.
@@ -85,7 +85,7 @@ export function validateRuntimeEnvironment(): RuntimeValidationReport {
 
 if (process.argv[1]?.includes('validate-runtime')) {
   console.log('============================================================');
-  console.log('   ZENITH PROTOCOL — AUTHORITATIVE RUNTIME VALIDATION       ');
+  console.log('  ELIXSWAP PROTOCOL — AUTHORITATIVE RUNTIME VALIDATION      ');
   console.log('============================================================');
 
   const report = validateRuntimeEnvironment();

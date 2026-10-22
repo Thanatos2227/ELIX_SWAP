@@ -3,7 +3,7 @@ import { defaultAcrossProvider } from '../packages/routing/src/crosschain/provid
 import { defaultDeBridgeProvider } from '../packages/routing/src/crosschain/providers/debridgeProvider';
 import { defaultTokenService } from '../packages/tokens/src';
 async function main() {
-    console.log('=== ZENITH — POLYGON CROSS-CHAIN READ-ONLY PROBE ===');
+    console.log('=== ELIS — POLYGON CROSS-CHAIN READ-ONLY PROBE ===');
     const rpcUrls = [
         'https://polygon-bor-rpc.publicnode.com',
         'https://polygon.drpc.org',

@@ -4,52 +4,52 @@
 
 @layer base {
   :root, html.dark {
-    --zenith-bg-main: #080B11;
-    --zenith-bg-card: #0F172A;
-    --zenith-bg-card-glass: rgba(15, 23, 42, 0.72);
-    --zenith-bg-surface: #1E293B;
-    --zenith-bg-input: #0B111E;
-    --zenith-border-subtle: rgba(51, 65, 85, 0.6);
-    --zenith-border-card: #1e293b;
-    --zenith-text-primary: #F8FAFC;
-    --zenith-text-secondary: #94A3B8;
-    --zenith-text-muted: #64748B;
-    --zenith-glass-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    --zenith-scrollbar-track: #080B11;
-    --zenith-scrollbar-thumb: #334155;
-    --zenith-scrollbar-thumb-hover: #475569;
+    --elis-bg-main: #080B11;
+    --elis-bg-card: #0F172A;
+    --elis-bg-card-glass: rgba(15, 23, 42, 0.72);
+    --elis-bg-surface: #1E293B;
+    --elis-bg-input: #0B111E;
+    --elis-border-subtle: rgba(51, 65, 85, 0.6);
+    --elis-border-card: #1e293b;
+    --elis-text-primary: #F8FAFC;
+    --elis-text-secondary: #94A3B8;
+    --elis-text-muted: #64748B;
+    --elis-glass-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    --elis-scrollbar-track: #080B11;
+    --elis-scrollbar-thumb: #334155;
+    --elis-scrollbar-thumb-hover: #475569;
   }
 
   html.light, html[data-theme='light'] {
-    --zenith-bg-main: #F8FAFC;
-    --zenith-bg-card: #FFFFFF;
-    --zenith-bg-card-glass: rgba(255, 255, 255, 0.90);
-    --zenith-bg-surface: #F1F5F9;
-    --zenith-bg-input: #F1F5F9;
-    --zenith-border-subtle: rgba(203, 213, 225, 0.8);
-    --zenith-border-card: #E2E8F0;
-    --zenith-text-primary: #0F172A;
-    --zenith-text-secondary: #475569;
-    --zenith-text-muted: #64748B;
-    --zenith-glass-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
-    --zenith-scrollbar-track: #F8FAFC;
-    --zenith-scrollbar-thumb: #CBD5E1;
-    --zenith-scrollbar-thumb-hover: #94A3B8;
+    --elis-bg-main: #F8FAFC;
+    --elis-bg-card: #FFFFFF;
+    --elis-bg-card-glass: rgba(255, 255, 255, 0.90);
+    --elis-bg-surface: #F1F5F9;
+    --elis-bg-input: #F1F5F9;
+    --elis-border-subtle: rgba(203, 213, 225, 0.8);
+    --elis-border-card: #E2E8F0;
+    --elis-text-primary: #0F172A;
+    --elis-text-secondary: #475569;
+    --elis-text-muted: #64748B;
+    --elis-glass-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+    --elis-scrollbar-track: #F8FAFC;
+    --elis-scrollbar-thumb: #CBD5E1;
+    --elis-scrollbar-thumb-hover: #94A3B8;
   }
 
   body {
-    background-color: var(--zenith-bg-main);
-    color: var(--zenith-text-primary);
+    background-color: var(--elis-bg-main);
+    color: var(--elis-text-primary);
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 
 .glass-panel {
-  background: var(--zenith-bg-card-glass);
+  background: var(--elis-bg-card-glass);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--zenith-border-subtle);
-  box-shadow: var(--zenith-glass-shadow);
+  border: 1px solid var(--elis-border-subtle);
+  box-shadow: var(--elis-glass-shadow);
   transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -204,12 +204,12 @@ html.light .bg-black\/60 {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--zenith-scrollbar-track);
+  background: var(--elis-scrollbar-track);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--zenith-scrollbar-thumb);
+  background: var(--elis-scrollbar-thumb);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--zenith-scrollbar-thumb-hover);
+  background: var(--elis-scrollbar-thumb-hover);
 }

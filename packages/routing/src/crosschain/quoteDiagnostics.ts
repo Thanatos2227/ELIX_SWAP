@@ -1,5 +1,5 @@
-import type { CrossChainQuoteErrorCode, QuoteProviderDiagnostic, Token } from '@zenith/types';
-import { AggregateCrossChainQuoteError } from '@zenith/contracts';
+import type { CrossChainQuoteErrorCode, QuoteProviderDiagnostic, Token } from '@elis/types';
+import { AggregateCrossChainQuoteError } from '@elis/contracts';
 
 export class QuoteDiagnosticLogger {
     private diagnosticsLog: QuoteProviderDiagnostic[] = [];

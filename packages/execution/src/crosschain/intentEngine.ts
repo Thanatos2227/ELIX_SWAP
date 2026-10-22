@@ -1,5 +1,5 @@
-import { CrossChainIntent, SettlementState, SolverFillQuote, PersistentIntent } from '@zenith/types';
-import { defaultCrossChainAggregator, CrossChainAggregator } from '@zenith/routing';
+import { CrossChainIntent, SettlementState, SolverFillQuote, PersistentIntent } from '@elis/types';
+import { defaultCrossChainAggregator, CrossChainAggregator } from '@elis/routing';
 import { CrossChainStateRepository, defaultInMemoryRepository } from '../persistence/repository';
 export interface SolverProfile {
     id: string;

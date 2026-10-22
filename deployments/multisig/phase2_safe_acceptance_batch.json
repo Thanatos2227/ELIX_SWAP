@@ -3,7 +3,7 @@
   "chainId": "1",
   "createdAt": 1789555048637,
   "meta": {
-    "name": "ZENITH — Phase 2: 4-of-7 Safe Multisig Governance Acceptance Batch",
+    "name": "ELIS — Phase 2: 4-of-7 Safe Multisig Governance Acceptance Batch",
     "description": "Batch transaction to be signed and executed by the 4-of-7 Safe Multisig signers to finalize protocol ownership.",
     "txBuilderVersion": "1.16.5",
     "createdAt": 1789555048637,

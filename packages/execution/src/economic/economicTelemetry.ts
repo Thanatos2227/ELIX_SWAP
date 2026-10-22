@@ -1,4 +1,4 @@
-import { EconomicTelemetryRecord } from '@zenith/types';
+import { EconomicTelemetryRecord } from '@elis/types';
 export class EconomicTelemetry {
     private static instance: EconomicTelemetry | null = null;
     private records: EconomicTelemetryRecord[] = [];

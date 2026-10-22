@@ -177,14 +177,14 @@ export class DestinationVerificationFailedError extends Error {
 }
 export class TreasuryNotConfiguredError extends ConfigurationError {
     constructor(chainId: string | number) {
-        super(`ZENITH Treasury address is intentionally undefined and unconfigured on chain ${chainId}. Protocol fee transfer cannot proceed.`, 'ZENITH_TREASURY_NOT_CONFIGURED');
+        super(`ELIS Treasury address is intentionally undefined and unconfigured on chain ${chainId}. Protocol fee transfer cannot proceed.`, 'ELIS_TREASURY_NOT_CONFIGURED');
         this.name = 'TreasuryNotConfiguredError';
         Object.setPrototypeOf(this, TreasuryNotConfiguredError.prototype);
     }
 }
 export class ProtocolFeeRecipientNotConfiguredError extends ConfigurationError {
     constructor(chainId: string | number) {
-        super(`ZENITH Protocol Fee Recipient address is intentionally undefined and unconfigured on chain ${chainId}.`, 'ZENITH_FEE_RECIPIENT_NOT_CONFIGURED');
+        super(`ELIS Protocol Fee Recipient address is intentionally undefined and unconfigured on chain ${chainId}.`, 'ELIS_FEE_RECIPIENT_NOT_CONFIGURED');
         this.name = 'ProtocolFeeRecipientNotConfiguredError';
         Object.setPrototypeOf(this, ProtocolFeeRecipientNotConfiguredError.prototype);
     }
@@ -255,53 +255,53 @@ export class InvalidCalldataError extends Error {
         Object.setPrototypeOf(this, InvalidCalldataError.prototype);
     }
 }
-export class ZenithRouterNotDeployedError extends ConfigurationError {
+export class ElisRouterNotDeployedError extends ConfigurationError {
     constructor(protocol: string, chainId: string | number) {
-        super(`ZENITH_ROUTER_NOT_DEPLOYED: ${protocol} router contract is not deployed or configured on chain ${chainId}. Silent fallback to external DEXes is strictly forbidden.`, 'ZENITH_ROUTER_NOT_DEPLOYED');
-        this.name = 'ZenithRouterNotDeployedError';
-        Object.setPrototypeOf(this, ZenithRouterNotDeployedError.prototype);
+        super(`ELIS_ROUTER_NOT_DEPLOYED: ${protocol} router contract is not deployed or configured on chain ${chainId}. Silent fallback to external DEXes is strictly forbidden.`, 'ELIS_ROUTER_NOT_DEPLOYED');
+        this.name = 'ElisRouterNotDeployedError';
+        Object.setPrototypeOf(this, ElisRouterNotDeployedError.prototype);
     }
 }
-export class ZenithRouteExecutionMismatchError extends Error {
-    public readonly code = 'ZENITH_ROUTE_EXECUTION_MISMATCH';
+export class ElisRouteExecutionMismatchError extends Error {
+    public readonly code = 'ELIS_ROUTE_EXECUTION_MISMATCH';
     constructor(expected: string, actual: string) {
-        super(`ZENITH_ROUTE_EXECUTION_MISMATCH: Quoted route provider (${expected}) does not match actual execution target contract (${actual}). Transaction aborted for user safety.`);
-        this.name = 'ZenithRouteExecutionMismatchError';
-        Object.setPrototypeOf(this, ZenithRouteExecutionMismatchError.prototype);
+        super(`ELIS_ROUTE_EXECUTION_MISMATCH: Quoted route provider (${expected}) does not match actual execution target contract (${actual}). Transaction aborted for user safety.`);
+        this.name = 'ElisRouteExecutionMismatchError';
+        Object.setPrototypeOf(this, ElisRouteExecutionMismatchError.prototype);
     }
 }
-export class ZenithSimulationFailedError extends Error {
-    public readonly code = 'ZENITH_SIMULATION_FAILED';
+export class ElisSimulationFailedError extends Error {
+    public readonly code = 'ELIS_SIMULATION_FAILED';
     public readonly revertReason?: string;
     constructor(message: string, revertReason?: string) {
-        super(`ZENITH_SIMULATION_FAILED: ${message}${revertReason ? ` (Revert Reason: ${revertReason})` : ''}`);
-        this.name = 'ZenithSimulationFailedError';
+        super(`ELIS_SIMULATION_FAILED: ${message}${revertReason ? ` (Revert Reason: ${revertReason})` : ''}`);
+        this.name = 'ElisSimulationFailedError';
         this.revertReason = revertReason;
-        Object.setPrototypeOf(this, ZenithSimulationFailedError.prototype);
+        Object.setPrototypeOf(this, ElisSimulationFailedError.prototype);
     }
 }
-export class ZenithPoolNotFoundError extends Error {
-    public readonly code = 'ZENITH_POOL_NOT_FOUND';
+export class ElisPoolNotFoundError extends Error {
+    public readonly code = 'ELIS_POOL_NOT_FOUND';
     constructor(tokenA: string, tokenB: string, chainId: string | number) {
-        super(`ZENITH_POOL_NOT_FOUND: No deployed ZENITH pool exists for pair ${tokenA}/${tokenB} on chain ${chainId}.`);
-        this.name = 'ZenithPoolNotFoundError';
-        Object.setPrototypeOf(this, ZenithPoolNotFoundError.prototype);
+        super(`ELIS_POOL_NOT_FOUND: No deployed ELIS pool exists for pair ${tokenA}/${tokenB} on chain ${chainId}.`);
+        this.name = 'ElisPoolNotFoundError';
+        Object.setPrototypeOf(this, ElisPoolNotFoundError.prototype);
     }
 }
-export class ZenithLiquidityInsufficientError extends Error {
-    public readonly code = 'ZENITH_LIQUIDITY_INSUFFICIENT';
+export class ElisLiquidityInsufficientError extends Error {
+    public readonly code = 'ELIS_LIQUIDITY_INSUFFICIENT';
     constructor(tokenA: string, tokenB: string, chainId: string | number) {
-        super(`ZENITH_LIQUIDITY_INSUFFICIENT: Insufficient pool liquidity for pair ${tokenA}/${tokenB} on chain ${chainId}.`);
-        this.name = 'ZenithLiquidityInsufficientError';
-        Object.setPrototypeOf(this, ZenithLiquidityInsufficientError.prototype);
+        super(`ELIS_LIQUIDITY_INSUFFICIENT: Insufficient pool liquidity for pair ${tokenA}/${tokenB} on chain ${chainId}.`);
+        this.name = 'ElisLiquidityInsufficientError';
+        Object.setPrototypeOf(this, ElisLiquidityInsufficientError.prototype);
     }
 }
-export class ZenithApprovalTargetMismatchError extends Error {
-    public readonly code = 'ZENITH_APPROVAL_TARGET_MISMATCH';
+export class ElisApprovalTargetMismatchError extends Error {
+    public readonly code = 'ELIS_APPROVAL_TARGET_MISMATCH';
     constructor(approvalSpender: string, executionTarget: string) {
-        super(`ZENITH_APPROVAL_TARGET_MISMATCH: Approval target/spender (${approvalSpender}) does not match execution router (${executionTarget}). Swap aborted for user safety.`);
-        this.name = 'ZenithApprovalTargetMismatchError';
-        Object.setPrototypeOf(this, ZenithApprovalTargetMismatchError.prototype);
+        super(`ELIS_APPROVAL_TARGET_MISMATCH: Approval target/spender (${approvalSpender}) does not match execution router (${executionTarget}). Swap aborted for user safety.`);
+        this.name = 'ElisApprovalTargetMismatchError';
+        Object.setPrototypeOf(this, ElisApprovalTargetMismatchError.prototype);
     }
 }
 export class ProviderUnavailableError extends Error {
@@ -733,7 +733,7 @@ export class AggregateCrossChainQuoteError extends ConfigurationError {
         providerDiagnostics: Record<string, any>;
         message?: string;
     }) {
-        const defaultMsg = `[ZenithRouter] No valid cross-chain bridge quote available for ${params.sourceTokenSymbol} (${params.sourceChainId}) -> ${params.destinationTokenSymbol} (${params.destinationChainId}). Diagnostics: ${JSON.stringify(params.providerDiagnostics)}`;
+        const defaultMsg = `[ElisRouter] No valid cross-chain bridge quote available for ${params.sourceTokenSymbol} (${params.sourceChainId}) -> ${params.destinationTokenSymbol} (${params.destinationChainId}). Diagnostics: ${JSON.stringify(params.providerDiagnostics)}`;
         super(params.message || defaultMsg, 'CROSS_CHAIN_QUOTE_UNAVAILABLE');
         this.name = 'AggregateCrossChainQuoteError';
         this.sourceChainId = params.sourceChainId;

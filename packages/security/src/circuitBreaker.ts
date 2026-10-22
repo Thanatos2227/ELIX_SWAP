@@ -1,4 +1,4 @@
-import { CircuitBreakerState } from '@zenith/types';
+import { CircuitBreakerState } from '@elis/types';
 export class CircuitBreakerMonitor {
     private state: CircuitBreakerState = {
         isEmergencyPaused: false,

@@ -1,6 +1,6 @@
 import { Transaction } from 'ethers';
-import { CanonicalTransactionPayload, ExecutionPlan, ExecutionPlanStep, SemanticEquivalenceCheckResult } from '@zenith/types';
-import { SemanticEquivalenceBreachError, ParameterSemanticMismatchError, NativeValueSemanticError, GasSemanticError, ReceiptSemanticError, ApprovalPolicyViolationError, ZERO_ADDRESS } from '@zenith/contracts';
+import { CanonicalTransactionPayload, ExecutionPlan, ExecutionPlanStep, SemanticEquivalenceCheckResult } from '@elis/types';
+import { SemanticEquivalenceBreachError, ParameterSemanticMismatchError, NativeValueSemanticError, GasSemanticError, ReceiptSemanticError, ApprovalPolicyViolationError, ZERO_ADDRESS } from '@elis/contracts';
 import { decodeCalldata, decodeReceiptEvents, assertByteForByteEquivalence } from './transactionSemanticDecoder';
 import { toNumericChainId } from '../security/executionAuthorizationValidator';
 const UINT256_MAX = (1n << 256n) - 1n;

@@ -1,4 +1,4 @@
-import { Token, ZenithPool, LPPosition, ProtocolAnalytics } from '@zenith/types';
+import { Token, ElisPool, LPPosition, ProtocolAnalytics } from '@elis/types';
 import { DEFAULT_TOKENS } from './defaultTokens';
 export type MarketStatus = 'LIVE' | 'FALLBACK' | 'STALE' | 'OFFLINE' | 'UNAVAILABLE';
 export type MarketSource = 'COINGECKO' | 'BINANCE_REST' | 'BINANCE_WS' | 'CACHE' | 'UNAVAILABLE';
@@ -967,7 +967,7 @@ export class MarketDataService {
         }
         return candles;
     }
-    public getPools(): ZenithPool[] {
+    public getPools(): ElisPool[] {
         const getToken = (symbol: string, chainId?: string): Token => {
             if (chainId) {
                 const found = DEFAULT_TOKENS.find(t => t.symbol.toUpperCase() === symbol.toUpperCase() && t.chainId.toLowerCase() === chainId.toLowerCase());

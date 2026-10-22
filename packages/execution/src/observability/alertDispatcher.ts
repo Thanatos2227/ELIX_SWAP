@@ -1,4 +1,4 @@
-import { AlertEvent, AlertSeverity } from '@zenith/types';
+import { AlertEvent, AlertSeverity } from '@elis/types';
 
 export interface ISecureAlertDispatcher {
     readonly name: string;
@@ -77,7 +77,7 @@ export class SlackWebhookDispatcher implements ISecureAlertDispatcher {
             const color = this.getSeverityColor(alert.severity);
             const payload = {
                 channel: this.channel,
-                text: `[ZENITH ALERT - ${alert.severity}] ${alert.code}: ${alert.message}`,
+                text: `[ELIS ALERT - ${alert.severity}] ${alert.code}: ${alert.message}`,
                 attachments: [
                     {
                         color,
@@ -91,7 +91,7 @@ export class SlackWebhookDispatcher implements ISecureAlertDispatcher {
                             { title: 'Timestamp', value: new Date(alert.timestamp).toISOString(), short: true },
                             ...(alert.remediationHint ? [{ title: 'Remediation', value: alert.remediationHint, short: false }] : [])
                         ],
-                        footer: 'ZENITH Production Observability Engine'
+                        footer: 'ELIS Production Observability Engine'
                     }
                 ]
             };
@@ -155,7 +155,7 @@ export class PagerDutyWebhookDispatcher implements ISecureAlertDispatcher {
                 payload: {
                     summary: `[${alert.severity}] ${alert.code} in ${alert.component}: ${alert.message}`,
                     severity: this.mapSeverity(alert.severity),
-                    source: alert.source || 'zenith-execution-engine',
+                    source: alert.source || 'elis-execution-engine',
                     component: alert.component,
                     group: alert.category,
                     custom_details: {

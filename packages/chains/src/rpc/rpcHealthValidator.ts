@@ -1,5 +1,5 @@
 /**
- * ZENITH Protocol — Authoritative RPC Endpoint Health & Quorum Validator
+ * ELIS Protocol — Authoritative RPC Endpoint Health & Quorum Validator
  *
  * Pre-validates RPC endpoints via raw JSON-RPC before instantiating ethers providers.
  * Completely prevents ethers autodetection retry loops and unhandled 404 / connection errors.

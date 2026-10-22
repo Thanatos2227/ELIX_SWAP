@@ -1,5 +1,5 @@
-import { EconomicBoundaryCheckResult, SlippagePolicyConfig, GasEconomicParams } from '@zenith/types';
-import { validateEvmAddress, validateTokenAddress, EconomicSafetyBreachError, SlippagePolicyViolationError, MinimumOutputBreachError, InsufficientNativeReserveError, QuoteFreshnessExpiredError, FeeAccountingBreachError, PriceImpactExceededError } from '@zenith/contracts';
+import { EconomicBoundaryCheckResult, SlippagePolicyConfig, GasEconomicParams } from '@elis/types';
+import { validateEvmAddress, validateTokenAddress, EconomicSafetyBreachError, SlippagePolicyViolationError, MinimumOutputBreachError, InsufficientNativeReserveError, QuoteFreshnessExpiredError, FeeAccountingBreachError, PriceImpactExceededError } from '@elis/contracts';
 import { validateAmountFormat, UINT256_MAX } from '../security';
 export { validateAmountFormat, UINT256_MAX };
 export const DEFAULT_MAX_SLIPPAGE_BPS = 1000;

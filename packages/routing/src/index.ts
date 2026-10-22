@@ -16,3 +16,5 @@ export * from './router';
 export * from './amountValidation';
 export * from './tokenDecimals';
 export * from './arbitration';
+
+export { defaultElisRouter, ElisRouter } from './router';

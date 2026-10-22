@@ -1,4 +1,4 @@
-import type { NetworkFamily, TokenStandard } from '@zenith/types';
+import type { NetworkFamily, TokenStandard } from '@elis/types';
 export const FAMILY_STANDARD_TAXONOMY: Record<NetworkFamily, readonly TokenStandard[]> = {
     EVM: ['ERC20', 'ERC721', 'ERC1155', 'NATIVE', 'WRAPPED_NATIVE'],
     SOLANA: ['SPL', 'TOKEN_2022', 'NATIVE'],

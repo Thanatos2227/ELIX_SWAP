@@ -1,4 +1,4 @@
-import { defaultAuthoritativeNetworkRegistry, ZENITH_AUTHORITATIVE_NETWORKS } from '../packages/chains/src';
+import { defaultAuthoritativeNetworkRegistry, ELIS_AUTHORITATIVE_NETWORKS } from '../packages/chains/src';
 
 interface NetworkValidationError {
     networkKey: string;
@@ -97,7 +97,7 @@ export function validateNetworkRegistry(): NetworkValidationError[] {
 }
 
 if (require.main === module) {
-    console.log('🌐 Validating ZENITH Network & Chain Registry configurations...');
+    console.log('🌐 Validating ElixSwap Network & Chain Registry configurations...');
     const errors = validateNetworkRegistry();
     if (errors.length > 0) {
         console.error(`❌ Network Registry Validation FAILED with ${errors.length} error(s):`);

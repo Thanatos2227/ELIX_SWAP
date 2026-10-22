@@ -1,4 +1,4 @@
-import { Token, TokenSecurityProfile, UnsupportedTokenMetadata } from '@zenith/types';
+import { Token, TokenSecurityProfile, UnsupportedTokenMetadata } from '@elis/types';
 import { DEFAULT_TOKENS, UNSUPPORTED_TOKEN_METADATA } from './defaultTokens';
 import { defaultAuthoritativeTokenRegistry } from './authoritative/authoritativeTokenRegistry';
 export class TokenService {

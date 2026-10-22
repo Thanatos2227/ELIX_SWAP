@@ -1,4 +1,4 @@
-import type { RpcDisagreementEvaluation } from '@zenith/types';
+import type { RpcDisagreementEvaluation } from '@elis/types';
 export class RpcDisagreementEngine {
     public static evaluateChainId(primaryProviderId: string, primaryChainId: string | number, secondaryProviderId: string, secondaryChainId: string | number): RpcDisagreementEvaluation {
         const pStr = String(primaryChainId).toLowerCase().trim();

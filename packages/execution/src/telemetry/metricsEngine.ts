@@ -3,7 +3,7 @@ import {
     LatencyMetricSummary,
     TelemetryEvidenceLabel,
     UnifiedMetricsSnapshot
-} from '@zenith/types';
+} from '@elis/types';
 
 interface MetricSample {
     value: number;

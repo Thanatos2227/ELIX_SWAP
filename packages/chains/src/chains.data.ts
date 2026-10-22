@@ -1,5 +1,5 @@
-import { ChainConfig } from '@zenith/types';
-export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
+import { ChainConfig } from '@elis/types';
+export const ELIS_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
     ethereum: {
         id: 'ethereum',
         chainId: 1,
@@ -42,7 +42,7 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
             history: true,
             mevProtection: true,
             crossChain: true,
-            zenithLiquidity: true,
+            elisLiquidity: true,
             api: true,
             sdk: true,
             supportsEIP1559: true,
@@ -264,7 +264,7 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
             history: true,
             mevProtection: true,
             crossChain: true,
-            zenithLiquidity: true,
+            elisLiquidity: true,
             api: true,
             sdk: true,
             supportsEIP1559: true,
@@ -405,7 +405,7 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
             history: true,
             mevProtection: true,
             crossChain: true,
-            zenithLiquidity: true,
+            elisLiquidity: true,
             api: true,
             sdk: true,
             supportsEIP1559: true,
@@ -537,7 +537,7 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
             history: true,
             mevProtection: true,
             crossChain: true,
-            zenithLiquidity: true,
+            elisLiquidity: true,
             api: true,
             sdk: true,
             supportsEIP1559: true,
@@ -644,7 +644,7 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
             history: true,
             mevProtection: false,
             crossChain: true,
-            zenithLiquidity: true,
+            elisLiquidity: true,
             api: true,
             sdk: true,
             supportsEIP1559: true,
@@ -758,7 +758,7 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
             history: true,
             mevProtection: false,
             crossChain: true,
-            zenithLiquidity: true,
+            elisLiquidity: true,
             api: true,
             sdk: true,
             supportsEIP1559: true,
@@ -881,7 +881,7 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
             history: true,
             mevProtection: false,
             crossChain: true,
-            zenithLiquidity: true,
+            elisLiquidity: true,
             api: true,
             sdk: true,
             supportsEIP1559: true,
@@ -995,7 +995,7 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
             history: true,
             mevProtection: false,
             crossChain: true,
-            zenithLiquidity: true,
+            elisLiquidity: true,
             api: true,
             sdk: true,
             supportsEIP1559: false,
@@ -1130,7 +1130,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: true, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: true, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1204,7 +1205,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1278,7 +1280,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1352,7 +1355,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1408,7 +1412,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1481,7 +1486,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1546,7 +1552,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1611,7 +1618,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1658,7 +1666,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: false, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1732,7 +1741,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1779,7 +1789,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: true
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1826,7 +1837,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1900,7 +1912,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1947,7 +1960,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -1985,7 +1999,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2050,7 +2065,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: true
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2088,7 +2104,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: true
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2135,7 +2152,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: true
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2173,7 +2191,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2211,7 +2230,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2249,7 +2269,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2287,7 +2308,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: true, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: true, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             hasSubSecondBlocks: true
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2325,7 +2347,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             supportsEIP1559: true, hasSubSecondBlocks: true
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2363,7 +2386,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             supportsEIP1559: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2401,7 +2425,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             supportsEIP1559: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2439,7 +2464,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             supportsEIP1559: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2477,7 +2503,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             supportsEIP1559: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2515,7 +2542,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             supportsEIP1559: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2553,7 +2581,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             supportsEIP1559: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2591,7 +2620,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             supportsEIP1559: false, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2629,7 +2659,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2712,7 +2743,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: false, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: false, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2759,7 +2791,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: false, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: false, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2797,7 +2830,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: false, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: false, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2835,7 +2869,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: false, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: false, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2873,7 +2908,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: false, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: false, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2911,7 +2947,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: false, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: false, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2949,7 +2986,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -2987,7 +3025,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: false, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: false, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -3025,7 +3064,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: false, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: false, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -3066,7 +3106,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: false, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: false,
             swap: false, smartRouting: false, simulation: false, portfolio: true, history: true,
-            mevProtection: false, crossChain: false, zenithLiquidity: false, api: true, sdk: true,
+            mevProtection: false, crossChain: false, elisLiquidity: false,
+            api: true, sdk: true,
             hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -3140,7 +3181,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: true
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -3212,7 +3254,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: true, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: true, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: true
         },
         regulatoryScope: { jurisdictionGated: true, blockedRegions: ['OFAC_SANCTIONED'], tokenizedSecuritiesPresent: true, requiresAccreditationNotice: true },
@@ -3250,7 +3293,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: true, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: true, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: true
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -3314,7 +3358,8 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: true, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: true, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: true
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -3363,7 +3408,7 @@ export const ZENITH_SUPPORTED_CHAINS: Record<string, ChainConfig> = {
         ]
     }
 };
-export const ZENITH_TESTNET_CHAINS: Record<string, ChainConfig> = {
+export const ELIS_TESTNET_CHAINS: Record<string, ChainConfig> = {
     sepolia: {
         id: 'sepolia',
         chainId: 11155111,
@@ -3384,7 +3429,8 @@ export const ZENITH_TESTNET_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -3442,7 +3488,8 @@ export const ZENITH_TESTNET_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: true
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -3500,7 +3547,8 @@ export const ZENITH_TESTNET_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -3549,7 +3597,8 @@ export const ZENITH_TESTNET_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: true, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: true, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },
@@ -3598,7 +3647,8 @@ export const ZENITH_TESTNET_CHAINS: Record<string, ChainConfig> = {
         capabilities: {
             wallet: true, tokenDiscovery: true, tokenRisk: true, priceData: true, liquidityDiscovery: true,
             swap: true, smartRouting: true, simulation: true, portfolio: true, history: true,
-            mevProtection: false, crossChain: false, zenithLiquidity: true, api: true, sdk: true,
+            mevProtection: false, crossChain: false, elisLiquidity: true,
+            api: true, sdk: true,
             supportsEIP1559: true, supportsPermit2: true, hasSubSecondBlocks: false
         },
         regulatoryScope: { jurisdictionGated: false },

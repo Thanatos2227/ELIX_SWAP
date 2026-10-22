@@ -1,5 +1,5 @@
-import type { TokenVerificationState, TokenVerificationDimensions } from '@zenith/types';
-import { defaultAuthoritativeNetworkRegistry, defaultAuthoritativeRpcProviderRegistry, EvmRpcAdapter, INetworkRpcAdapter } from '@zenith/chains';
+import type { TokenVerificationState, TokenVerificationDimensions } from '@elis/types';
+import { defaultAuthoritativeNetworkRegistry, defaultAuthoritativeRpcProviderRegistry, EvmRpcAdapter, INetworkRpcAdapter } from '@elis/chains';
 import { normalizeTokenAddress } from './addressNormalizer';
 export interface Erc20VerificationResult {
     verified: boolean;

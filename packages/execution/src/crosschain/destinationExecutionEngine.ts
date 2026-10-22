@@ -1,5 +1,5 @@
-import { DestinationExecutionRequest, DestinationExecutionPlan, DestinationExecutionResult, DestinationVerification, DestinationExecutionCapabilities } from '@zenith/types';
-import { CompositeExecutionUnavailableError, DestinationExecutionUnavailableError } from '@zenith/contracts';
+import { DestinationExecutionRequest, DestinationExecutionPlan, DestinationExecutionResult, DestinationVerification, DestinationExecutionCapabilities } from '@elis/types';
+import { CompositeExecutionUnavailableError, DestinationExecutionUnavailableError } from '@elis/contracts';
 import { DestinationExecutionProvider } from './destinationExecutionProvider';
 import { defaultSolverEngine } from './solverEngine';
 import { CrossChainStateRepository } from '../persistence/repository';

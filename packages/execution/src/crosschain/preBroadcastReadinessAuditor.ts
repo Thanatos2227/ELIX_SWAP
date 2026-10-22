@@ -1,5 +1,5 @@
 /**
- * ZENITH Protocol — Pre-Broadcast Testnet Execution Readiness & Route Integrity Auditor
+ * ELIS Protocol — Pre-Broadcast Testnet Execution Readiness & Route Integrity Auditor
  *
  * Performs read-only on-chain and architectural pre-flight verification for:
  *   Sepolia (11155111) USDC -> Across V3 -> Arbitrum Sepolia (421614) USDC
@@ -15,10 +15,10 @@
  */
 
 import { ethers, Interface } from 'ethers';
-import { evaluateRpcQuorum, QuorumEvaluationResult } from '@zenith/chains';
-import { ACROSS_SPOKE_POOL_ABI, ZERO_ADDRESS } from '@zenith/contracts';
-import { AcrossProvider } from '@zenith/routing';
-import { Token } from '@zenith/types';
+import { evaluateRpcQuorum, QuorumEvaluationResult } from '@elis/chains';
+import { ACROSS_SPOKE_POOL_ABI, ZERO_ADDRESS } from '@elis/contracts';
+import { AcrossProvider } from '@elis/routing';
+import { Token } from '@elis/types';
 import {
   BroadcastAuthorizationGate,
   BroadcastLifecycleState,
@@ -28,7 +28,7 @@ import {
 
 /**
  * Historical preview address reference.
- * UNDER ZENITH ZERO-FABRICATION POLICY:
+ * UNDER ELIS ZERO-FABRICATION POLICY:
  * This address is strictly PROHIBITED from being used as caller, depositor, recipient,
  * simulation identity, or transaction participant in any execution path.
  */
@@ -56,9 +56,9 @@ export interface Erc20MetadataVerification {
 }
 
 export interface SignerEnvironmentDiagnostic {
+  elisTestnetPrivateKeyPresent?: boolean;
   testnetPrivateKeyPresent: boolean;
-  zenithTestnetPrivateKeyPresent: boolean;
-  multipleSourcesDetected: boolean;
+    multipleSourcesDetected: boolean;
   authoritativeSource: string;
 }
 
@@ -393,9 +393,9 @@ export class PreBroadcastReadinessAuditor {
     recipientAddress?: string;
     refundAddress?: string;
   }): Promise<PreBroadcastReadinessReport> {
-    // Configurable amount: process.env.ZENITH_TESTNET_AUDIT_AMOUNT -> options -> default 5 USDC (testnet pool limit is ~8 USDC)
+    // Configurable amount: process.env.ELIS_TESTNET_AUDIT_AMOUNT -> options -> default 5 USDC (testnet pool limit is ~8 USDC)
     const intendedAmountRaw = options?.intendedAmountRaw ||
-      process.env.ZENITH_TESTNET_AUDIT_AMOUNT ||
+      process.env.ELIS_TESTNET_AUDIT_AMOUNT ||
       process.env.TESTNET_AMOUNT ||
       '5000000'; // 5 USDC
 
@@ -553,28 +553,29 @@ export class PreBroadcastReadinessAuditor {
     }
 
     // 5. Verify Test Wallet, Balances & Allowance (Strict State Machine)
+    const elisTestnetPrivateKeyPresent = Boolean(process.env.ELIS_TESTNET_PRIVATE_KEY && process.env.ELIS_TESTNET_PRIVATE_KEY.trim());
     const testnetPrivateKeyPresent = Boolean(process.env.TESTNET_PRIVATE_KEY && process.env.TESTNET_PRIVATE_KEY.trim());
-    const zenithTestnetPrivateKeyPresent = Boolean(process.env.ZENITH_TESTNET_PRIVATE_KEY && process.env.ZENITH_TESTNET_PRIVATE_KEY.trim());
-    const programmaticKeyPresent = Boolean(options?.testnetPrivateKey && options.testnetPrivateKey.trim());
-    const multipleSourcesDetected = (testnetPrivateKeyPresent ? 1 : 0) + (zenithTestnetPrivateKeyPresent ? 1 : 0) + (programmaticKeyPresent ? 1 : 0) > 1;
+        const programmaticKeyPresent = Boolean(options?.testnetPrivateKey && options.testnetPrivateKey.trim());
+    const multipleSourcesDetected = (elisTestnetPrivateKeyPresent ? 1 : 0) + (testnetPrivateKeyPresent ? 1 : 0) + (programmaticKeyPresent ? 1 : 0) > 1;
 
     let authoritativeSource = 'NONE_AVAILABLE';
     if (programmaticKeyPresent) {
       authoritativeSource = 'PROGRAMMATIC_OPTIONS';
+    } else if (elisTestnetPrivateKeyPresent) {
+      authoritativeSource = 'PROCESS_ENV (ELIS_TESTNET_PRIVATE_KEY)';
     } else if (testnetPrivateKeyPresent) {
       authoritativeSource = 'PROCESS_ENV (TESTNET_PRIVATE_KEY)';
-    } else if (zenithTestnetPrivateKeyPresent) {
-      authoritativeSource = 'PROCESS_ENV (ZENITH_TESTNET_PRIVATE_KEY)';
+
     }
 
     const environmentDiagnostic: SignerEnvironmentDiagnostic = {
+      elisTestnetPrivateKeyPresent,
       testnetPrivateKeyPresent,
-      zenithTestnetPrivateKeyPresent,
-      multipleSourcesDetected,
+            multipleSourcesDetected,
       authoritativeSource
     };
 
-    const rawKey = options?.testnetPrivateKey || process.env.TESTNET_PRIVATE_KEY || process.env.ZENITH_TESTNET_PRIVATE_KEY;
+    const rawKey = options?.testnetPrivateKey || process.env.ELIS_TESTNET_PRIVATE_KEY || process.env.TESTNET_PRIVATE_KEY;
     let signerAddress: string | null = null;
     let signerConfigured = false;
     let sEthBal: bigint | null = null;
@@ -1013,8 +1014,8 @@ export class PreBroadcastReadinessAuditor {
       { check: 'Broadcast authorization', status: 'BLOCKED', details: `BROADCAST AUTHORIZATION: NOT GRANTED (State: ${signerState})` }
     ];
 
-    const configSource = process.env.ZENITH_TESTNET_AUDIT_AMOUNT
-      ? 'ZENITH_TESTNET_AUDIT_AMOUNT env'
+    const configSource = process.env.ELIS_TESTNET_AUDIT_AMOUNT
+      ? 'ELIS_TESTNET_AUDIT_AMOUNT env'
       : process.env.TESTNET_AMOUNT
       ? 'TESTNET_AMOUNT env'
       : options?.intendedAmountRaw

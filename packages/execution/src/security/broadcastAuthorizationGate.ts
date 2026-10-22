@@ -1,5 +1,5 @@
 /**
- * ZENITH Protocol — Authoritative Broadcast Authorization Gate
+ * ELIS Protocol — Authoritative Broadcast Authorization Gate
  *
  * Final safety boundary before any transaction dispatch or on-chain broadcast.
  *
@@ -84,7 +84,7 @@ export class BroadcastAuthorizationError extends Error {
   public readonly details?: Record<string, any>;
 
   constructor(code: string, message: string, details?: Record<string, any>) {
-    super(`[ZENITH BroadcastAuthorizationGate] ${code}: ${message}`);
+    super(`[ELIS BroadcastAuthorizationGate] ${code}: ${message}`);
     this.name = 'BroadcastAuthorizationError';
     this.code = code;
     this.details = details;

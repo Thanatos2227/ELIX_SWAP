@@ -1,5 +1,5 @@
 {
-  "name": "@zenith/sdk",
+  "name": "@elis/sdk",
   "version": "4.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -8,13 +8,13 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@zenith/types": "*",
-    "@zenith/chains": "*",
-    "@zenith/tokens": "*",
-    "@zenith/contracts": "*",
-    "@zenith/security": "*",
-    "@zenith/routing": "*",
-    "@zenith/execution": "*",
+    "@elis/types": "*",
+    "@elis/chains": "*",
+    "@elis/tokens": "*",
+    "@elis/contracts": "*",
+    "@elis/security": "*",
+    "@elis/routing": "*",
+    "@elis/execution": "*",
     "ethers": "^6.12.0"
   },
   "devDependencies": {

@@ -15,7 +15,7 @@ const FUNDS_DEPOSITED_EVENT = 'event FundsDeposited(uint256 inputAmount, uint256
 const FILLED_RELAY_EVENT = 'event FilledRelay(uint256 inputAmount, uint256 outputAmount, uint256 repaymentChainId, uint256 indexed originChainId, uint256 indexed depositId, uint32 fillDeadline, uint32 exclusivityDeadline, address indexed relayer, address depositor, address recipient, address inputToken, address outputToken, bytes message, tuple(address recipient, bytes message, uint256 amount, bytes) executionDetails)';
 async function runTask23Reconciliation() {
     console.log('================================================================================');
-    console.log('ZENITH PHASE 1 TASK 23: EXISTING ACROSS DEPOSIT RECONCILIATION PROBE');
+    console.log('ELIS PHASE 1 TASK 23: EXISTING ACROSS DEPOSIT RECONCILIATION PROBE');
     console.log('Target Wallet:  ', OPERATOR_WALLET);
     console.log('Source Chain:   Polygon Mainnet (137)');
     console.log('Dest Chain:     Arbitrum One (42161)');

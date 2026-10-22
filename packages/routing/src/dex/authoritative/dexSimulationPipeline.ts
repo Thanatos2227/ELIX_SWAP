@@ -1,8 +1,8 @@
 import { Provider, sha256, toUtf8Bytes } from 'ethers';
-import type { DexSwapTransaction, AuthoritativeDexQuote } from '@zenith/types';
-import { defaultAuthoritativeNetworkRegistry, AuthoritativeNetworkRegistry } from '@zenith/chains';
-import { defaultAuthoritativeTokenRegistry, AuthoritativeTokenRegistry } from '@zenith/tokens';
-import { validateEvmAddress, ZERO_ADDRESS, CANONICAL_NATIVE_ADDRESS } from '@zenith/contracts';
+import type { DexSwapTransaction, AuthoritativeDexQuote } from '@elis/types';
+import { defaultAuthoritativeNetworkRegistry, AuthoritativeNetworkRegistry } from '@elis/chains';
+import { defaultAuthoritativeTokenRegistry, AuthoritativeTokenRegistry } from '@elis/tokens';
+import { validateEvmAddress, ZERO_ADDRESS, CANONICAL_NATIVE_ADDRESS } from '@elis/contracts';
 import type { IDexAdapter } from './dexAdapter.interface';
 export interface SwapSimulationOptions {
     userAddress?: string;

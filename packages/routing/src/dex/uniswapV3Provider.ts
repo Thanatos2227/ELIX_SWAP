@@ -1,6 +1,6 @@
-import { DEXProtocol, Token } from '@zenith/types';
+import { DEXProtocol, Token } from '@elis/types';
 import { Interface, AbiCoder, solidityPacked, Contract, JsonRpcProvider } from 'ethers';
-import { defaultChainRegistry } from '@zenith/chains';
+import { defaultChainRegistry } from '@elis/chains';
 import {
   UNISWAP_V3_SWAP_ROUTERS,
   UNISWAP_V3_SWAP_ROUTER_ABI,
@@ -10,7 +10,7 @@ import {
   UNISWAP_UNIVERSAL_ROUTER_ABI,
   getUniswapV3Quoter,
   UNISWAP_V3_QUOTER_V2_ABI
-} from '@zenith/contracts';
+} from '@elis/contracts';
 import { DEXProvider, DEXQuote, DEXExecution, DEXQuoteParams } from './types';
 import { calculateDEXLiquidityOutput, isNativeToken, resolvePoolTokenAddress } from './dexMath';
 

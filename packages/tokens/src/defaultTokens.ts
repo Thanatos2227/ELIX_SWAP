@@ -1,5 +1,5 @@
-import { Token, UnsupportedTokenMetadata } from '@zenith/types';
-import { ZENITH_SUPPORTED_CHAINS } from '@zenith/chains';
+import { Token, UnsupportedTokenMetadata } from '@elis/types';
+import { ELIS_SUPPORTED_CHAINS } from '@elis/chains';
 const TOKEN_CONFIG: Token[] = [
     {
         address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
@@ -2438,7 +2438,7 @@ const NORMALIZED_TOKENS: Token[] = TOKEN_CONFIG.map((token) => {
         ...(wrappedToken ? { wrappedAddress: wrappedToken.address } : {})
     };
 });
-const EVM_NATIVE_TOKENS: Token[] = Object.values(ZENITH_SUPPORTED_CHAINS)
+const EVM_NATIVE_TOKENS: Token[] = Object.values(ELIS_SUPPORTED_CHAINS)
     .filter((chain) => chain.executionEnvironment === 'EVM')
     .filter((chain) => !NORMALIZED_TOKENS.some((token) => token.chainId === chain.id && token.isNative))
     .map((chain) => ({
@@ -2484,3 +2484,5 @@ export const MARKET_EXCLUDED_TOKEN_KEYS = new Set([
     'rootstock:0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 ]);
 export const MARKET_TOKENS: Token[] = DEFAULT_TOKENS.filter((t) => !MARKET_EXCLUDED_TOKEN_KEYS.has(`${t.chainId.toLowerCase()}:${t.address.toLowerCase()}`));
+
+export const ELIS_TOKENS: Token[] = DEFAULT_TOKENS;

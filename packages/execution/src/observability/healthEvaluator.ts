@@ -1,6 +1,6 @@
-import { HealthStatus, ComponentHealth, SystemHealthReport } from '@zenith/types';
-import { MultiProviderRpcManager, defaultMultiProviderRpcManager } from '@zenith/chains';
-import { CircuitBreakerMonitor } from '@zenith/security';
+import { HealthStatus, ComponentHealth, SystemHealthReport } from '@elis/types';
+import { MultiProviderRpcManager, defaultMultiProviderRpcManager } from '@elis/chains';
+import { CircuitBreakerMonitor } from '@elis/security';
 
 export interface HealthEvaluatorDependencies {
     rpcManager?: MultiProviderRpcManager;
@@ -43,7 +43,7 @@ export class HealthEvaluator {
         try {
             const allEndpoints = rpcManager.getEndpoints('all');
             const endpoints = allEndpoints.length > 0 ? allEndpoints : rpcManager.getEndpoints('polygon');
-            
+
             if (endpoints.length === 0) {
                 components['rpc_providers'] = {
                     name: 'rpc_providers',

@@ -8,8 +8,8 @@ import {
   ExecutionPlanDiagnostic,
   QuoteRequest,
   Token
-} from '@zenith/types';
-import { defaultChainRegistry } from '@zenith/chains';
+} from '@elis/types';
+import { defaultChainRegistry } from '@elis/chains';
 import {
   getDeBridgeSourceContract,
   isDeBridgeSupported,
@@ -19,7 +19,7 @@ import {
   validateRecipientAddress,
   validateExecutionTarget,
   ProviderUnavailableError
-} from '@zenith/contracts';
+} from '@elis/contracts';
 import { isNativeToken, scaleTokenUnits } from '../../dex/dexMath';
 import { formatTokenUnits, parseTokenUnits } from '../../tokenDecimals';
 import { validateCrossChainQuoteExecutability } from '../quoteValidator';

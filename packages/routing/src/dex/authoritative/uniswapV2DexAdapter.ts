@@ -1,11 +1,11 @@
 import { Contract, Interface, Provider, ZeroAddress } from 'ethers';
-import type { DexIdentity, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexPoolState, DexLiquidityState, TokenIdentity, Token } from '@zenith/types';
+import type { DexIdentity, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexPoolState, DexLiquidityState, TokenIdentity, Token } from '@elis/types';
 import { EvmDexAdapter } from './evmDexAdapter.base';
 import type { DexQuoteParams } from './dexAdapter.interface';
 import { getTokenAddress } from './dexIdentity.types';
 import { calculateConstantProductOutput } from '../dexMath';
 import { isNativeToken } from '../dexMath';
-import { EconomicSafetyBreachError, SlippagePolicyViolationError } from '@zenith/contracts';
+import { EconomicSafetyBreachError, SlippagePolicyViolationError } from '@elis/contracts';
 const UNISWAP_V2_PAIR_ABI = [
     'function token0() external view returns (address)',
     'function token1() external view returns (address)',

@@ -1,9 +1,9 @@
 import { JsonRpcProvider, Wallet, Contract, Interface, formatEther, formatUnits, AbiCoder } from 'ethers';
-import { defaultChainRegistry } from '@zenith/chains';
-import { getAcrossSpokePool, ACROSS_SPOKE_POOL_ABI, validateEvmAddress, validateExecutionTarget, validateTokenAddress, validateRecipientAddress, UNISWAP_V3_SWAP_ROUTERS, UNISWAP_V3_SWAP_ROUTER_ABI, BlockedOperatorConfirmationError, ProductionChainProhibitedError, ZERO_ADDRESS } from '@zenith/contracts';
-import { defaultAcrossProvider, validateCrossChainQuoteExecutability } from '@zenith/routing';
-import { ExecutionPlanBuilder, ExecutionPlanValidator, SQLiteCrossChainStateRepository, CrossChainRecoveryEngine, defaultEVMAdapter, extractActualSourceSwapOutput } from '@zenith/execution';
-import { QuoteRequest, ExecutionPlan, ZenithExecutionMode, OperatorAuditRecord } from '@zenith/types';
+import { defaultChainRegistry } from '@elis/chains';
+import { getAcrossSpokePool, ACROSS_SPOKE_POOL_ABI, validateEvmAddress, validateExecutionTarget, validateTokenAddress, validateRecipientAddress, UNISWAP_V3_SWAP_ROUTERS, UNISWAP_V3_SWAP_ROUTER_ABI, BlockedOperatorConfirmationError, ProductionChainProhibitedError, ZERO_ADDRESS } from '@elis/contracts';
+import { defaultAcrossProvider, validateCrossChainQuoteExecutability } from '@elis/routing';
+import { ExecutionPlanBuilder, ExecutionPlanValidator, SQLiteCrossChainStateRepository, CrossChainRecoveryEngine, defaultEVMAdapter, extractActualSourceSwapOutput } from '@elis/execution';
+import { QuoteRequest, ExecutionPlan, ElisExecutionMode, OperatorAuditRecord } from '@elis/types';
 const spokePoolInterface = new Interface(ACROSS_SPOKE_POOL_ABI);
 const swapRouterInterface = new Interface(UNISWAP_V3_SWAP_ROUTER_ABI);
 const ERC20_ABI = [
@@ -22,7 +22,7 @@ export const OPERATOR_CONFIRM_BRIDGE_TOKEN = 'CONFIRM_BRIDGE_TESTNET';
 export type EvidenceCategory = 'LIVE_ONCHAIN' | 'READ_ONLY_LIVE' | 'AUTOMATED_TEST';
 export interface CompositeEnvironmentDiagnostics {
     e2eTestnetFlag: 'ENABLED' | 'DISABLED';
-    executionMode: ZenithExecutionMode;
+    executionMode: ElisExecutionMode;
     signerStatus: 'CONFIGURED' | 'MISSING';
     signerAddress?: string;
     sepoliaEthBalance?: string;
@@ -35,7 +35,7 @@ export interface CompositeEnvironmentDiagnostics {
 }
 export interface ControlledCompositeExecutionResult {
     status: 'LIVE_E2E_SUCCESS' | 'READY_FOR_CONTROLLED_BRIDGE_BROADCAST' | 'BLOCKED_NO_FUNDED_KEY' | 'BLOCKED_INSUFFICIENT_NATIVE_BALANCE' | 'BLOCKED_INSUFFICIENT_TOKEN_BALANCE' | 'BLOCKED_INSUFFICIENT_FUNDS' | 'BLOCKED_LIVE_COMPOSITE_ROUTE_UNAVAILABLE' | 'BLOCKED_LIVE_SOURCE_QUOTE' | 'BLOCKED_LIVE_BRIDGE_QUOTE' | 'BLOCKED_SOURCE_PREFLIGHT' | 'BLOCKED_ACTUAL_OUTPUT_UNVERIFIED' | 'BLOCKED_POST_SWAP_BRIDGE_QUOTE' | 'BLOCKED_BRIDGE_PREFLIGHT' | 'BLOCKED_OPERATOR_CONFIRMATION' | 'BLOCKED_PRE_BROADCAST_VALIDATION' | 'BROADCAST_UNCERTAIN' | 'SOURCE_TRANSACTION_REVERT' | 'BRIDGE_TRANSACTION_REVERT' | 'BRIDGE_TRACKING_UNAVAILABLE' | 'DESTINATION_RECEIPT_REVERT' | 'STATUS_CONFLICT' | 'SETTLED' | 'FAILED';
-    executionMode?: ZenithExecutionMode;
+    executionMode?: ElisExecutionMode;
     blockReason?: string;
     sourceTxHash?: string | null;
     sourceBlockNumber?: number;
@@ -74,7 +74,7 @@ export function assertSanitizedAuditRecord(record: OperatorAuditRecord): void {
     }
 }
 export function formatSourcePreExecutionSummary(params: {
-    mode: ZenithExecutionMode;
+    mode: ElisExecutionMode;
     sourceChain: string;
     destChain: string;
     sourceToken: string;
@@ -93,7 +93,7 @@ export function formatSourcePreExecutionSummary(params: {
 }): string {
     return [
         '============================================================',
-        'ZENITH COMPOSITE EXECUTION — PRE-BROADCAST OPERATOR SUMMARY',
+        'ELIS COMPOSITE EXECUTION — PRE-BROADCAST OPERATOR SUMMARY',
         '============================================================',
         `MODE:                     ${params.mode}`,
         `SOURCE CHAIN:             ${params.sourceChain}`,
@@ -133,7 +133,7 @@ export function formatBridgePreExecutionSummary(params: {
 }): string {
     return [
         '============================================================',
-        'ZENITH BRIDGE DEPOSIT — OPERATOR CONFIRMATION SUMMARY',
+        'ELIS BRIDGE DEPOSIT — OPERATOR CONFIRMATION SUMMARY',
         '============================================================',
         `SOURCE TX HASH:           ${params.sourceTxHash}`,
         `SOURCE BLOCK NUMBER:      ${params.sourceBlock}`,
@@ -153,18 +153,18 @@ export function formatBridgePreExecutionSummary(params: {
         '============================================================'
     ].join('\n');
 }
-export async function getCompositeEnvironmentDiagnostics(explicitMode?: ZenithExecutionMode): Promise<CompositeEnvironmentDiagnostics> {
+export async function getCompositeEnvironmentDiagnostics(explicitMode?: ElisExecutionMode): Promise<CompositeEnvironmentDiagnostics> {
     const isE2eEnabled = process.env.E2E_TESTNET === '1';
     const rawKey = process.env.TESTNET_PRIVATE_KEY;
     const hasKey = !!(rawKey && rawKey.trim() !== '');
-    let mode: ZenithExecutionMode = 'READ_ONLY';
+    let mode: ElisExecutionMode = 'READ_ONLY';
     if (explicitMode) {
         mode = explicitMode;
     }
-    else if (process.env.ZENITH_EXECUTION_MODE) {
-        mode = process.env.ZENITH_EXECUTION_MODE as ZenithExecutionMode;
+    else if (process.env.ELIS_EXECUTION_MODE || process.env.ELIS_EXECUTION_MODE) {
+        mode = ((process.env.ELIS_EXECUTION_MODE || process.env.ELIS_EXECUTION_MODE) as any);
     }
-    else if (isE2eEnabled && process.env.ZENITH_LIVE_CONFIRM === OPERATOR_CONFIRM_SOURCE_TOKEN) {
+    else if (isE2eEnabled && (process.env.ELIS_LIVE_CONFIRM === OPERATOR_CONFIRM_SOURCE_TOKEN || process.env.ELIS_LIVE_CONFIRM === OPERATOR_CONFIRM_SOURCE_TOKEN)) {
         mode = 'LIVE_TESTNET';
     }
     else if (isE2eEnabled) {
@@ -211,7 +211,7 @@ export async function runControlledCompositeTestnetExecution(options?: {
     targetRoute?: 'SEPOLIA_TO_ARB_SEPOLIA' | 'POLYGON_AMOY_TO_SEPOLIA' | 'MAINNET_ETH_TO_ARB';
     testAmountEthRaw?: string;
     forceMockReceipt?: boolean;
-    executionMode?: ZenithExecutionMode;
+    executionMode?: ElisExecutionMode;
     operatorConfirmSource?: string;
     operatorConfirmBridge?: string;
     sourceChainId?: number;
@@ -240,10 +240,10 @@ export async function runControlledCompositeTestnetExecution(options?: {
         auditLogs.push(fullRecord);
     };
     const diagnostics = await getCompositeEnvironmentDiagnostics(options?.executionMode);
-    const executionMode: ZenithExecutionMode = options?.executionMode || diagnostics.executionMode || 'READ_ONLY';
+    const executionMode: ElisExecutionMode = options?.executionMode || diagnostics.executionMode || 'READ_ONLY';
     if (!options?.suppressLogs) {
         console.log('======================================================================');
-        console.log(`ZENITH — PHASE 0 / TASK 11: CONTROLLED COMPOSITE TESTNET (${executionMode})`);
+        console.log(`ELIS — PHASE 0 / TASK 11: CONTROLLED COMPOSITE TESTNET (${executionMode})`);
         console.log('======================================================================\n');
     }
     gates['EXECUTION_MODE'] = executionMode;
@@ -852,7 +852,7 @@ export async function runControlledCompositeTestnetExecution(options?: {
     if (!options?.suppressLogs) {
         console.log(`\n${sourcePreSummary}\n`);
     }
-    const sourceConfirmToken = options?.operatorConfirmSource || process.env.ZENITH_LIVE_CONFIRM;
+    const sourceConfirmToken = options?.operatorConfirmSource || process.env.ELIS_LIVE_CONFIRM;
     if (sourceConfirmToken !== OPERATOR_CONFIRM_SOURCE_TOKEN) {
         gates['OPERATOR_SOURCE_CONFIRMATION'] = `BLOCKED: Missing or invalid confirmation token (Expected: "${OPERATOR_CONFIRM_SOURCE_TOKEN}", Provided: "${sourceConfirmToken || 'UNDEFINED'}")`;
         logAudit({
@@ -870,7 +870,7 @@ export async function runControlledCompositeTestnetExecution(options?: {
         return {
             status: 'BLOCKED_OPERATOR_CONFIRMATION',
             executionMode,
-            blockReason: `Missing explicit operator confirmation for source swap. Set ZENITH_LIVE_CONFIRM=${OPERATOR_CONFIRM_SOURCE_TOKEN} to authorize testnet broadcast.`,
+            blockReason: `Missing explicit operator confirmation for source swap. Set ELIS_LIVE_CONFIRM=${OPERATOR_CONFIRM_SOURCE_TOKEN} to authorize testnet broadcast.`,
             planId: plan.planId,
             plan,
             sourceQuote: sourceSwapQuote,
@@ -1082,7 +1082,7 @@ export async function runControlledCompositeTestnetExecution(options?: {
     if (!options?.suppressLogs) {
         console.log(`\n${bridgePreSummary}\n`);
     }
-    const bridgeConfirmToken = options?.operatorConfirmBridge || process.env.ZENITH_BRIDGE_CONFIRM;
+    const bridgeConfirmToken = options?.operatorConfirmBridge || process.env.ELIS_BRIDGE_CONFIRM;
     if (bridgeConfirmToken !== OPERATOR_CONFIRM_BRIDGE_TOKEN) {
         gates['OPERATOR_BRIDGE_CONFIRMATION'] = `BLOCKED: Missing or invalid confirmation token (Expected: "${OPERATOR_CONFIRM_BRIDGE_TOKEN}", Provided: "${bridgeConfirmToken || 'UNDEFINED'}")`;
         logAudit({
@@ -1100,7 +1100,7 @@ export async function runControlledCompositeTestnetExecution(options?: {
         return {
             status: 'BLOCKED_OPERATOR_CONFIRMATION',
             executionMode,
-            blockReason: `Missing explicit operator confirmation for bridge deposit. Set ZENITH_BRIDGE_CONFIRM=${OPERATOR_CONFIRM_BRIDGE_TOKEN} to authorize bridge broadcast.`,
+            blockReason: `Missing explicit operator confirmation for bridge deposit. Set ELIS_BRIDGE_CONFIRM=${OPERATOR_CONFIRM_BRIDGE_TOKEN} to authorize bridge broadcast.`,
             sourceTxHash,
             sourceBlockNumber,
             actualSwapOutput: actualSwapOutputBig.toString(),

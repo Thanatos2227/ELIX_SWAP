@@ -115,7 +115,7 @@ export function runAudit(): AuditViolation[] {
     return violations;
 }
 if (typeof require !== 'undefined' && require.main === module) {
-    console.log('🔍 Running ZENITH Anti-Mock & Zero-Address Audit across all workspaces...');
+    console.log('🔍 Running ElixSwap Anti-Mock & Zero-Address Audit across all workspaces...');
     const violations = runAudit();
     if (violations.length === 0) {
         console.log('✅ Anti-Mock Audit PASSED: Zero prohibited mock patterns detected across production codebases.');

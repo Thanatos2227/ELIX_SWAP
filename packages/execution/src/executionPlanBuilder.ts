@@ -1,8 +1,8 @@
 import { sha256, toUtf8Bytes } from 'ethers';
-import { ExecutionPlan, ExecutionPlanStep, ExecutionPlanDiagnostic, SwapRoute, QuoteRequest, ExecutionStepType, NormalizedRoute } from '@zenith/types';
-import { defaultChainRegistry, defaultNetworkCapabilityRegistry } from '@zenith/chains';
-import { isNativeToken } from '@zenith/routing';
-import { ZERO_ADDRESS, validateTokenAddress, validateEvmAddress, validateRecipientAddress, ExecutionPlanValidationError, DuplicateStepIdError, PlanMissingDependencyError, PlanDependencyCycleError, InvalidExecutionTargetError, InvalidCalldataError, AmountMismatchError, TokenMismatchError, ChainMismatchError, CompositePlanValidationError, PlanIntegrityBreachError, ExecutionPlanMutationError } from '@zenith/contracts';
+import { ExecutionPlan, ExecutionPlanStep, ExecutionPlanDiagnostic, SwapRoute, QuoteRequest, ExecutionStepType, NormalizedRoute } from '@elis/types';
+import { defaultChainRegistry, defaultNetworkCapabilityRegistry } from '@elis/chains';
+import { isNativeToken } from '@elis/routing';
+import { ZERO_ADDRESS, validateTokenAddress, validateEvmAddress, validateRecipientAddress, ExecutionPlanValidationError, DuplicateStepIdError, PlanMissingDependencyError, PlanDependencyCycleError, InvalidExecutionTargetError, InvalidCalldataError, AmountMismatchError, TokenMismatchError, ChainMismatchError, CompositePlanValidationError, PlanIntegrityBreachError, ExecutionPlanMutationError } from '@elis/contracts';
 export { PlanIntegrityBreachError, ExecutionPlanMutationError };
 export interface PlanBuilderOptions {
     userAddress?: string;
@@ -528,7 +528,7 @@ export class ExecutionPlanBuilder {
             prevStepId = approvalStepId;
         }
         if (!isCrossChain) {
-            const dexProtocol = route.dexQuote?.provider || route.hops[0]?.dexProtocol || 'ZENITH_V3';
+            const dexProtocol = route.dexQuote?.provider || route.hops[0]?.dexProtocol || 'ELIS_V3';
             const swapStepId = `source-swap:${dexProtocol.toLowerCase()}`;
             stepIds.push(swapStepId);
             const executionTo = route.execution?.to || route.dexQuote?.executionTarget;
@@ -867,7 +867,7 @@ export class ExecutionPlanBuilder {
             routeType: isCrossChain ? 'CROSS_CHAIN' : 'DIRECT',
             hops: [
                 {
-                    dexProtocol: (normalizedRoute.sourceDex || normalizedRoute.bridgeProvider || 'ZENITH') as any,
+                    dexProtocol: (normalizedRoute.sourceDex || normalizedRoute.bridgeProvider || 'ELIS') as any,
                     poolAddress: normalizedRoute.executionTarget || '',
                     tokenIn: normalizedRoute.sourceToken,
                     tokenOut: normalizedRoute.destinationToken,
@@ -984,7 +984,7 @@ export class ExecutionPlanBuilder {
     }
     private static logPlanSummary(plan: ExecutionPlan, stepIds: string[]): void {
         try {
-            console.log('[ZENITH ExecutionPlanBuilder] Generated ExecutionPlan:', {
+            console.log('[Elis ExecutionPlanBuilder] Generated ExecutionPlan:', {
                 planId: plan.planId,
                 routeId: plan.routeId,
                 routeType: plan.routeType,

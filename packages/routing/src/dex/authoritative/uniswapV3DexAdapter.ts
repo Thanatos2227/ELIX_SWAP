@@ -1,10 +1,10 @@
 import { Contract, Interface, Provider, ZeroAddress, getCreate2Address, keccak256, solidityPacked } from 'ethers';
-import type { DexIdentity, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexPoolState, DexLiquidityState, TokenIdentity, Token } from '@zenith/types';
+import type { DexIdentity, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexPoolState, DexLiquidityState, TokenIdentity, Token } from '@elis/types';
 import { EvmDexAdapter } from './evmDexAdapter.base';
 import type { DexQuoteParams } from './dexAdapter.interface';
 import { getTokenAddress, toLegacyToken } from './dexIdentity.types';
 import { calculateV3ConcentratedOutput } from '../dexMath';
-import { EconomicSafetyBreachError, SlippagePolicyViolationError } from '@zenith/contracts';
+import { EconomicSafetyBreachError, SlippagePolicyViolationError } from '@elis/contracts';
 const UNISWAP_V3_POOL_ABI = [
     'function token0() external view returns (address)',
     'function token1() external view returns (address)',

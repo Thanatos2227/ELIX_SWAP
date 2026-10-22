@@ -1,4 +1,4 @@
-import { Token, TokenSecurityProfile } from '@zenith/types';
+import { Token, TokenSecurityProfile } from '@elis/types';
 export interface RiskEvaluation {
     overallRiskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     riskScore: number;

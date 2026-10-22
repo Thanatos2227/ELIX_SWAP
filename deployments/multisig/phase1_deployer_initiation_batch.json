@@ -3,7 +3,7 @@
   "chainId": "1",
   "createdAt": 1789555048637,
   "meta": {
-    "name": "ZENITH — Phase 1: Deployer Governance Handover Initiation",
+    "name": "ELIS — Phase 1: Deployer Governance Handover Initiation",
     "description": "Batch transactions executed by the deployer to transfer protocol roles to the 4-of-7 Safe Multisig.",
     "txBuilderVersion": "1.16.5",
     "createdAt": 1789555048637,

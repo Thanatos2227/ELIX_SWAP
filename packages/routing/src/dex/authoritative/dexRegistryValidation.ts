@@ -1,7 +1,7 @@
-import type { DexIdentity, DexValidationResult } from '@zenith/types';
-import { defaultAuthoritativeNetworkRegistry, AuthoritativeNetworkRegistry } from '@zenith/chains';
-import { DexNetworkMismatchError, DexEnvironmentMismatchError, DexFamilyMismatchError, ZERO_ADDRESS } from '@zenith/contracts';
-import { isFungibleStandard, isStandardSupportedForFamily } from '@zenith/tokens';
+import type { DexIdentity, DexValidationResult } from '@elis/types';
+import { defaultAuthoritativeNetworkRegistry, AuthoritativeNetworkRegistry } from '@elis/chains';
+import { DexNetworkMismatchError, DexEnvironmentMismatchError, DexFamilyMismatchError, ZERO_ADDRESS } from '@elis/contracts';
+import { isFungibleStandard, isStandardSupportedForFamily } from '@elis/tokens';
 export class DexRegistryValidation {
     public static validateSingle(dex: DexIdentity, networkRegistry: AuthoritativeNetworkRegistry = defaultAuthoritativeNetworkRegistry): DexValidationResult {
         const errors: string[] = [];

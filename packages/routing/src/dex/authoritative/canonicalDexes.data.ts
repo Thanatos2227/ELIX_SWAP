@@ -1,4 +1,4 @@
-import type { DexIdentity } from '@zenith/types';
+import type { DexIdentity } from '@elis/types';
 import { buildDexIdentityKey } from './dexIdentity.types';
 const RAW_CANONICAL_DEXES: readonly DexIdentity[] = [
     {
@@ -341,9 +341,9 @@ const RAW_CANONICAL_DEXES: readonly DexIdentity[] = [
         quoteTtlMs: 15000
     },
     {
-        dexId: 'anvil:zenith-v3',
-        canonicalName: 'ZENITH V3',
-        displayName: 'ZENITH V3 Concentrated AMM (Anvil)',
+        dexId: 'anvil:elis-v3',
+        canonicalName: 'ELIS V3',
+        displayName: 'ELIS V3 Concentrated AMM (Anvil)',
         networkId: 'anvil',
         networkIdentityKey: 'EVM:eip155:31337',
         family: 'EVM',
@@ -364,9 +364,9 @@ const RAW_CANONICAL_DEXES: readonly DexIdentity[] = [
         quoteTtlMs: 60000
     },
     {
-        dexId: 'anvil:zenith-v2',
-        canonicalName: 'ZENITH V2',
-        displayName: 'ZENITH V2 AMM (Anvil)',
+        dexId: 'anvil:elis-v2',
+        canonicalName: 'ELIS V2',
+        displayName: 'ELIS V2 AMM (Anvil)',
         networkId: 'anvil',
         networkIdentityKey: 'EVM:eip155:31337',
         family: 'EVM',
@@ -385,9 +385,9 @@ const RAW_CANONICAL_DEXES: readonly DexIdentity[] = [
         quoteTtlMs: 60000
     },
     {
-        dexId: 'anvil:zenith-v1',
-        canonicalName: 'ZENITH V1',
-        displayName: 'ZENITH V1 AMM (Anvil)',
+        dexId: 'anvil:elis-v1',
+        canonicalName: 'ELIS V1',
+        displayName: 'ELIS V1 AMM (Anvil)',
         networkId: 'anvil',
         networkIdentityKey: 'EVM:eip155:31337',
         family: 'EVM',

@@ -1,4 +1,4 @@
-import { MetricType } from '@zenith/types';
+import { MetricType } from '@elis/types';
 
 export interface MetricDefinition {
     name: string;
@@ -228,10 +228,10 @@ export class PrometheusRegistry {
                 } else {
                     for (const [labelKey, val] of entry.values.entries()) {
                         // Extract existing label pairs if any
-                        const baseLabels = labelKey.startsWith('{') && labelKey.endsWith('}') 
-                            ? labelKey.slice(1, -1) 
+                        const baseLabels = labelKey.startsWith('{') && labelKey.endsWith('}')
+                            ? labelKey.slice(1, -1)
                             : '';
-                        
+
                         for (const b of buckets) {
                             const count = val.bucketCounts.get(b) || 0;
                             const leLabel = baseLabels ? `${baseLabels},le="${b}"` : `le="${b}"`;

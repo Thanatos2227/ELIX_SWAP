@@ -1,4 +1,4 @@
-import type { CapabilityLevel, DexVerificationStatus } from '@zenith/types';
+import type { CapabilityLevel, DexVerificationStatus } from '@elis/types';
 export const DEX_CAPABILITY_RANK: Record<CapabilityLevel, number> = {
     UNSUPPORTED: 0,
     UNIT_TESTED: 1,

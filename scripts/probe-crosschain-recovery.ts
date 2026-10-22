@@ -1,5 +1,5 @@
 import { JsonRpcProvider, Contract, formatEther, formatUnits, parseUnits } from 'ethers';
-import { defaultAcrossProvider } from '@zenith/routing';
+import { defaultAcrossProvider } from '@elis/routing';
 async function queryNewWallet() {
     const newAddress = '0xd2206dB611d5677c8552A9DCBaDf3077aDB4Af88';
     const polygonRpc = 'https://polygon-bor-rpc.publicnode.com';

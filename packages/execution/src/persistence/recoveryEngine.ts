@@ -1,5 +1,5 @@
-import { defaultChainRegistry } from '@zenith/chains';
-import { defaultCrossChainAggregator, CrossChainAggregator } from '@zenith/routing';
+import { defaultChainRegistry } from '@elis/chains';
+import { defaultCrossChainAggregator, CrossChainAggregator } from '@elis/routing';
 import { CrossChainStateRepository } from './repository';
 import { defaultEVMAdapter, EVMExecutionAdapter } from '../adapters/evmAdapter';
 import { MultiProviderRpcClient, defaultMultiProviderRpcClient } from '../providers/multiProviderRpcClient';

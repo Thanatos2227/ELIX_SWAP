@@ -17,7 +17,7 @@ export class ErrorBoundary extends Component<Props, State> {
         return { hasError: true, error };
     }
     public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-        console.error('[ZENITH] Uncaught runtime error caught by ErrorBoundary:', error, errorInfo);
+        console.error('[ElixSwap] Uncaught runtime error caught by ErrorBoundary:', error, errorInfo);
     }
     private handleReload = (): void => {
         window.location.reload();
@@ -42,7 +42,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 <AlertTriangle className="w-5 h-5 text-amber-400"/>
               </div>
               <div>
-                <h1 className="text-xl font-bold tracking-tight text-white">ZENITH</h1>
+                <h1 className="text-xl font-bold tracking-tight text-white">ElixSwap</h1>
                 <p className="text-xs text-amber-400 font-medium">Application Runtime Notice</p>
               </div>
             </div>

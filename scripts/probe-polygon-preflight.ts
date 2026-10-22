@@ -1,10 +1,10 @@
 import { JsonRpcProvider, Contract, formatEther, formatUnits, parseUnits, parseEther } from 'ethers';
 import { POLYGON_CROSSCHAIN_CONFIG, EXPECTED_OPERATOR_ADDRESS, computeExecutionPlanHash, formatPolygonSourcePreExecutionSummary } from './execute-controlled-polygon-crosschain';
-import { defaultAcrossProvider } from '@zenith/routing';
-import { ExecutionPlan } from '@zenith/types';
+import { defaultAcrossProvider } from '@elis/routing';
+import { ExecutionPlan } from '@elis/types';
 export async function runPhaseAPreflightProbe() {
     console.log('================================================================');
-    console.log('ZENITH — PHASE 1 TASK 21: LIVE PRE-FLIGHT VALIDATION (PHASE A)');
+    console.log('ELIS — PHASE 1 TASK 21: LIVE PRE-FLIGHT VALIDATION (PHASE A)');
     console.log('================================================================\n');
     const polygonRpc = process.env.POLYGON_MAINNET_RPC_URL || 'https://polygon-bor-rpc.publicnode.com';
     const arbitrumRpc = process.env.ARBITRUM_MAINNET_RPC_URL || 'https://arb1.arbitrum.io/rpc';
@@ -105,7 +105,7 @@ export async function runPhaseAPreflightProbe() {
         recipient: expectedRecipient,
         steps: [
             { id: 'step-1-validate', type: 'VALIDATE_CONDITIONS', chainId: 137, status: 'COMPLETED' },
-            { id: 'step-2-source-swap', type: 'SOURCE_DEX_SWAP', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.zenithV3Router, status: 'PENDING' },
+            { id: 'step-2-source-swap', type: 'SOURCE_DEX_SWAP', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.elisV3Router, status: 'PENDING' },
             { id: 'step-3-bridge-requote', type: 'BRIDGE_QUOTE_REFRESH', chainId: 137, status: 'PENDING' },
             { id: 'step-4-bridge-approval', type: 'SOURCE_APPROVE', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.polygonUsdcAddress, status: 'PENDING' },
             { id: 'step-5-bridge-deposit', type: 'BRIDGE_DEPOSIT', chainId: 137, target: POLYGON_CROSSCHAIN_CONFIG.acrossPolygonSpokePool, status: 'PENDING' },
@@ -127,7 +127,7 @@ export async function runPhaseAPreflightProbe() {
         minUsdc: formatUnits(minSourceUsdcRaw, 6),
         acrossMinDeposit: formatUnits(acrossMinDeposit, 6),
         expectedBridgeOutput: formatUnits(expectedBridgeOutput, 6),
-        routerAddress: POLYGON_CROSSCHAIN_CONFIG.zenithV3Router,
+        routerAddress: POLYGON_CROSSCHAIN_CONFIG.elisV3Router,
         recipientAddress: expectedRecipient,
         estimatedGasPol: formatEther(maxGasOutflowWei),
         totalCostPol: formatEther(totalRequiredPolWei),

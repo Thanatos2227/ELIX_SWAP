@@ -1,0 +1,159 @@
+pragma solidity 0.8.24;
+
+import "./ElisV3Pool.sol";
+import "./ElisV3Factory.sol";
+import "../interfaces/IERC20.sol";
+import "../interfaces/IWETH9.sol";
+
+contract ElisV3Router is IElisV3SwapCallback {
+    error V3TooLittleReceived();
+
+    address public immutable factory;
+    address public immutable WETH9;
+
+    struct ExactInputSingleParams {
+        address tokenIn;
+        address tokenOut;
+        uint24 fee;
+        address recipient;
+        uint256 deadline;
+        uint256 amountIn;
+        uint256 amountOutMinimum;
+        uint160 sqrtPriceLimitX96;
+    }
+
+    struct ExactOutputSingleParams {
+        address tokenIn;
+        address tokenOut;
+        uint24 fee;
+        address recipient;
+        uint256 deadline;
+        uint256 amountOut;
+        uint256 amountInMaximum;
+        uint160 sqrtPriceLimitX96;
+    }
+
+    modifier ensure(uint256 deadline) {
+        require(deadline >= block.timestamp, "ElisV3Router: EXPIRED");
+        _;
+    }
+
+    constructor(address _factory, address _weth9) {
+        require(_factory != address(0), "ElisV3Router: Zero factory");
+        require(_weth9 != address(0), "ElisV3Router: Zero WETH");
+        factory = _factory;
+        WETH9 = _weth9;
+    }
+
+    receive() external payable {
+        require(msg.sender == WETH9, "ElisV3Router: NOT_WETH9");
+    }
+
+    function elisV3SwapCallback(
+        int256 amount0Delta,
+        int256 amount1Delta,
+        bytes calldata data
+    ) external override {
+        require(amount0Delta > 0 || amount1Delta > 0, "ElisV3Router: CALLBACK_INVALID");
+        _payCallback(amount0Delta > 0 ? uint256(amount0Delta) : uint256(amount1Delta), data);
+    }
+
+    function _payCallback(uint256 amountToPay, bytes calldata data) private {
+        (address tokenIn, address tokenOut, uint24 fee, address payer) = abi.decode(data, (address, address, uint24, address));
+        require(msg.sender == ElisV3Factory(factory).getPool(tokenIn, tokenOut, fee), "ElisV3Router: UNAUTHORIZED_CALLBACK");
+
+        if (payer == address(this)) {
+            _safeTransfer(tokenIn, msg.sender, amountToPay);
+        } else {
+            _safeTransferFrom(tokenIn, payer, msg.sender, amountToPay);
+        }
+    }
+
+    function exactInputSingle(ExactInputSingleParams calldata params)
+        external
+        payable
+        ensure(params.deadline)
+        returns (uint256 amountOut)
+    {
+        if (msg.value > 0) {
+            require(params.tokenIn == WETH9, "ElisV3Router: NOT_WETH9");
+            require(msg.value == params.amountIn, "ElisV3Router: VALUE_MISMATCH");
+            IWETH9(WETH9).deposit{value: msg.value}();
+        }
+
+        address payer = msg.value > 0 ? address(this) : msg.sender;
+        bool zeroForOne = params.tokenIn < params.tokenOut;
+
+        (int256 amount0, int256 amount1) = _executeSwap(params, zeroForOne, payer);
+
+        amountOut = uint256(-(zeroForOne ? amount1 : amount0));
+        if (amountOut < params.amountOutMinimum) {
+            revert V3TooLittleReceived();
+        }
+    }
+
+    function _executeSwap(
+        ExactInputSingleParams calldata params,
+        bool zeroForOne,
+        address payer
+    ) private returns (int256 amount0, int256 amount1) {
+        address pool = ElisV3Factory(factory).getPool(params.tokenIn, params.tokenOut, params.fee);
+        require(pool != address(0), "ElisV3Router: POOL_NOT_FOUND");
+
+        uint160 sqrtPriceLimitX96 = params.sqrtPriceLimitX96 == 0
+            ? (zeroForOne ? TickMath.MIN_SQRT_RATIO + 1 : TickMath.MAX_SQRT_RATIO - 1)
+            : params.sqrtPriceLimitX96;
+
+        return ElisV3Pool(pool).swap(
+            params.recipient,
+            zeroForOne,
+            int256(params.amountIn),
+            sqrtPriceLimitX96,
+            abi.encode(params.tokenIn, params.tokenOut, params.fee, payer)
+        );
+    }
+
+    function multicall(bytes[] calldata data) external payable returns (bytes[] memory results) {
+        results = new bytes[](data.length);
+        for (uint256 i = 0; i < data.length; i++) {
+            (bool success, bytes memory result) = address(this).delegatecall(data[i]);
+            require(success, "ElisV3Router: MULTICALL_FAILED");
+            results[i] = result;
+        }
+    }
+
+    function unwrapWETH9(uint256 amountMinimum, address recipient) external payable {
+        uint256 balanceWETH9 = IWETH9(WETH9).balanceOf(address(this));
+        require(balanceWETH9 >= amountMinimum, "ElisV3Router: INSUFFICIENT_WETH9");
+
+        if (balanceWETH9 > 0) {
+            IWETH9(WETH9).withdraw(balanceWETH9);
+            _safeTransferETH(recipient, balanceWETH9);
+        }
+    }
+
+    function refundETH() external payable {
+        if (address(this).balance > 0) {
+            _safeTransferETH(msg.sender, address(this).balance);
+        }
+    }
+
+    function _safeTransfer(address token, address to, uint256 value) private {
+        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(IERC20.transfer.selector, to, value));
+        require(success && (data.length == 0 || abi.decode(data, (bool))), "ElisV3Router: TF_FAILED");
+    }
+
+    function _safeTransferFrom(address token, address from, address to, uint256 value) private {
+        (bool success, bytes memory data) = token.call(abi.encodeWithSelector(IERC20.transferFrom.selector, from, to, value));
+        require(success && (data.length == 0 || abi.decode(data, (bool))), "ElisV3Router: TFROM_FAILED");
+    }
+
+    function _safeTransferETH(address to, uint256 value) private {
+        (bool success, ) = to.call{value: value}("");
+        require(success, "ElisV3Router: ETH_TF_FAILED");
+    }
+}
+
+
+
+}

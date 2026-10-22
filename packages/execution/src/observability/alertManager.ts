@@ -1,4 +1,4 @@
-import { AlertEvent, AlertSeverity, AlertCategory } from '@zenith/types';
+import { AlertEvent, AlertSeverity, AlertCategory } from '@elis/types';
 import { ISecureAlertDispatcher, NoopAlertDispatcher } from './alertDispatcher';
 
 export interface AlertManagerConfig {

@@ -1,5 +1,5 @@
 import { Interface } from 'ethers';
-import { validateEvmAddress, validateTokenAddress, SourceSwapFailedError, AmountMismatchError, StatusConflictError } from '@zenith/contracts';
+import { validateEvmAddress, validateTokenAddress, SourceSwapFailedError, AmountMismatchError, StatusConflictError } from '@elis/contracts';
 const ERC20_TRANSFER_EVENT_ABI = [
     'event Transfer(address indexed from, address indexed to, uint256 value)'
 ];

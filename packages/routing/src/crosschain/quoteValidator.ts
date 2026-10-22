@@ -1,6 +1,6 @@
 import { ZeroAddress } from 'ethers';
-import { CrossChainQuote, QuoteRequest, ExecutionPlanDiagnostic, ProviderErrorCategory, UniversalValidationGate, UniversalValidationResult, ProviderCapabilityLevel } from '@zenith/types';
-import { defaultChainRegistry } from '@zenith/chains';
+import { CrossChainQuote, QuoteRequest, ExecutionPlanDiagnostic, ProviderErrorCategory, UniversalValidationGate, UniversalValidationResult, ProviderCapabilityLevel } from '@elis/types';
+import { defaultChainRegistry } from '@elis/chains';
 import { CrossChainProviderCapabilityMatrix } from './crossChainProviderCapabilityMatrix';
 export interface QuoteExecutabilityResult {
     isExecutable: boolean;

@@ -1,4 +1,4 @@
-export const ZENITH_TOKENS = {
+export const ELIS_TOKENS = {
     colors: {
         brand: {
             primary: '#00F2FE',
@@ -65,3 +65,5 @@ export const ZENITH_TOKENS = {
         transitionSlow: '400ms cubic-bezier(0.4, 0, 0.2, 1)'
     }
 };
+
+export const ELIXSWAP_TOKENS = ELIS_TOKENS;

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
-import { defaultChainRegistry } from '@zenith/chains';
-import { ChainConfig } from '@zenith/types';
+import { useElisStore } from '../../stores/useElisStore';
+import { defaultChainRegistry } from '@elis/chains';
+import { ChainConfig } from '@elis/types';
 import { X, Search, Zap, Check, Shield, ArrowRightLeft } from 'lucide-react';
 export const ChainPickerModal: React.FC = () => {
-    const { isChainPickerOpen, closeChainPicker, chainPickerTarget, sourceChain, destChain, setSourceChain, setDestChain } = useZenithStore();
+    const { isChainPickerOpen, closeChainPicker, chainPickerTarget, sourceChain, destChain, setSourceChain, setDestChain } = useElisStore();
     const [searchQuery, setSearchQuery] = useState('');
     const [networkFilter, setNetworkFilter] = useState<string>('ALL');
     if (!isChainPickerOpen)

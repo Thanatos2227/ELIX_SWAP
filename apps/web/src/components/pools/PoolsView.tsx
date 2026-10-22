@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
-import { defaultMarketDataService, DEFAULT_TOKENS } from '@zenith/tokens';
-import { defaultChainRegistry } from '@zenith/chains';
-import { ZenithPool, Token } from '@zenith/types';
+import { useElisStore } from '../../stores/useElisStore';
+import { defaultMarketDataService, DEFAULT_TOKENS } from '@elis/tokens';
+import { defaultChainRegistry } from '@elis/chains';
+import { ElisPool, Token } from '@elis/types';
 import { TokenLogo } from '../common/TokenLogo';
 import { Layers, TrendingUp, TrendingDown, Sparkles, ShieldCheck, ChevronRight, DollarSign, ArrowUpDown, ArrowRight, RefreshCw, Zap, Search, Filter, ExternalLink, Activity, BarChart3, Database, CheckCircle2 } from 'lucide-react';
 export const PoolsView: React.FC = () => {
-    const { theme, marketData, fetchMarketData, isMarketsLoading, lastMarketUpdate, marketDataStatus, setTokenIn, setTokenOut, setSourceChain, setDestChain, setActiveTab } = useZenithStore();
+    const { theme, marketData, fetchMarketData, isMarketsLoading, lastMarketUpdate, marketDataStatus, setTokenIn, setTokenOut, setSourceChain, setDestChain, setActiveTab } = useElisStore();
     const isDark = theme === 'dark';
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [selectedChain, setSelectedChain] = useState<string>('ALL');
@@ -31,7 +31,7 @@ export const PoolsView: React.FC = () => {
         }, 1000);
         return () => clearInterval(timer);
     }, [lastMarketUpdate]);
-    const basePools: ZenithPool[] = useMemo(() => {
+    const basePools: ElisPool[] = useMemo(() => {
         return defaultMarketDataService.getPools();
     }, []);
     const livePools = useMemo(() => {
@@ -109,7 +109,7 @@ export const PoolsView: React.FC = () => {
         const sum = livePools.reduce((acc, p) => acc + p.aprPercent, 0);
         return (sum / livePools.length).toFixed(1);
     }, [livePools]);
-    const handleTradePool = (pool: ZenithPool) => {
+    const handleTradePool = (pool: ElisPool) => {
         const chain = defaultChainRegistry.getChain(pool.chainId);
         if (chain) {
             setSourceChain(chain);
@@ -149,7 +149,7 @@ export const PoolsView: React.FC = () => {
         { id: 'avalanche', label: 'Avalanche' }
     ];
     return (<div className="w-full max-w-7xl mx-auto space-y-6 pb-12">
-      
+
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
         <div>
           <div className="flex flex-wrap items-center gap-2.5">
@@ -172,7 +172,7 @@ export const PoolsView: React.FC = () => {
           </p>
         </div>
 
-        
+
         <div className="flex items-center gap-3 bg-slate-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-800 shrink-0 self-start lg:self-auto">
           <div className="flex items-center gap-2">
             <span className="relative flex h-2.5 w-2.5">
@@ -197,7 +197,7 @@ export const PoolsView: React.FC = () => {
         </div>
       </div>
 
-      
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="glass-panel p-5 rounded-2xl border border-slate-800 relative overflow-hidden group hover:border-cyan-500/40 transition-all">
           <div className="absolute top-0 right-0 w-24 h-24 bg-cyan-500/5 rounded-full blur-2xl group-hover:bg-cyan-500/10 transition-all pointer-events-none"/>
@@ -267,16 +267,16 @@ export const PoolsView: React.FC = () => {
         </div>
       </div>
 
-      
+
       <div className="glass-panel p-4 rounded-2xl border border-slate-800 space-y-4">
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-          
+
           <div className="relative flex-1">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"/>
             <input type="text" placeholder="Search by token, pool pair, or network..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/90 border border-slate-800 focus:border-cyan-500 focus:outline-none text-sm text-white placeholder-slate-500 font-mono transition-all"/>
           </div>
 
-          
+
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 shrink-0">
             <span className="text-xs font-mono text-slate-400 mr-1 hidden sm:inline">Fee Tier:</span>
             {[
@@ -292,7 +292,7 @@ export const PoolsView: React.FC = () => {
               </button>))}
           </div>
 
-          
+
           <div className="flex items-center gap-1.5 shrink-0">
             <select value={selectedHook} onChange={(e) => setSelectedHook(e.target.value)} className="px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300 focus:border-cyan-500 focus:outline-none transition-all cursor-pointer">
               <option value="ALL">All Hooks & Standard</option>
@@ -304,7 +304,7 @@ export const PoolsView: React.FC = () => {
           </div>
         </div>
 
-        
+
         <div className="flex items-center gap-2 overflow-x-auto pt-1 no-scrollbar">
           {chainOptions.map((c) => (<button key={c.id} onClick={() => setSelectedChain(c.id)} className={`px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 ${selectedChain === c.id
                 ? 'bg-slate-800 text-cyan-300 border border-cyan-500/40 shadow-glow-cyan/20 font-semibold'
@@ -314,7 +314,7 @@ export const PoolsView: React.FC = () => {
         </div>
       </div>
 
-      
+
       <div className="glass-panel rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
         <div className="p-4 border-b border-slate-800/80 flex items-center justify-between bg-slate-900/40">
           <div className="flex items-center gap-2">
@@ -378,7 +378,7 @@ export const PoolsView: React.FC = () => {
             const chain = defaultChainRegistry.getChain(p.chainId);
             const isPositiveChange = (p.change24h || 0) >= 0;
             return (<tr key={p.id} className="hover:bg-slate-800/30 transition-colors group cursor-pointer" onClick={() => handleTradePool(p)}>
-                      
+
                       <td className="py-4 px-4 sm:px-6 font-medium text-white">
                         <div className="flex items-center gap-3">
                           <div className="flex -space-x-2 shrink-0">
@@ -402,7 +402,7 @@ export const PoolsView: React.FC = () => {
                         </div>
                       </td>
 
-                      
+
                       <td className="py-4 px-4 font-mono">
                         <div className="text-xs font-semibold text-slate-200">
                           1 {p.token1.symbol} = {p.exchangeRate >= 1000 ? p.exchangeRate.toLocaleString(undefined, { maximumFractionDigits: 2 }) : p.exchangeRate.toFixed(4)} {p.token0.symbol}
@@ -413,7 +413,7 @@ export const PoolsView: React.FC = () => {
                         </div>
                       </td>
 
-                      
+
                       <td className="py-4 px-4">
                         <span className={`px-2.5 py-1 rounded-lg text-xs font-mono font-semibold border ${p.isDynamicFee
                     ? 'bg-indigo-500/10 text-indigo-300 border-indigo-500/30'
@@ -423,22 +423,22 @@ export const PoolsView: React.FC = () => {
                         </span>
                       </td>
 
-                      
+
                       <td className="py-4 px-4 font-mono font-semibold text-white">
                         {formatUSD(p.tvlUSD)}
                       </td>
 
-                      
+
                       <td className="py-4 px-4 font-mono font-medium text-cyan-400">
                         {formatUSD(p.volume24hUSD)}
                       </td>
 
-                      
+
                       <td className="py-4 px-4 font-mono font-medium text-emerald-400 hidden md:table-cell">
                         ${p.fees24hUSD.toLocaleString()}
                       </td>
 
-                      
+
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-1.5">
                           <span className="font-mono font-black text-emerald-400 text-sm sm:text-base">
@@ -450,7 +450,7 @@ export const PoolsView: React.FC = () => {
                         </div>
                       </td>
 
-                      
+
                       <td className="py-4 px-4 hidden lg:table-cell">
                         {p.hookName ? (<span className="px-2.5 py-1 rounded-full text-[11px] font-mono font-medium bg-gradient-to-r from-indigo-500/15 to-purple-500/15 text-indigo-300 border border-indigo-500/30 flex items-center gap-1 w-fit">
                             <Zap className="w-3 h-3 text-indigo-400"/>
@@ -458,7 +458,7 @@ export const PoolsView: React.FC = () => {
                           </span>) : (<span className="text-slate-500 text-xs font-mono">Standard AMM</span>)}
                       </td>
 
-                      
+
                       <td className="py-4 px-4 sm:px-6 text-right">
                         <button onClick={(e) => {
                     e.stopPropagation();
@@ -475,7 +475,7 @@ export const PoolsView: React.FC = () => {
         </div>
       </div>
 
-      
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
         <div className="glass-panel p-5 rounded-2xl border border-slate-800 space-y-2">
           <div className="flex items-center gap-2 text-cyan-400 font-bold text-sm">

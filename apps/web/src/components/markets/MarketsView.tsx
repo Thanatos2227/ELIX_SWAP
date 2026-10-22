@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
-import { MARKET_TOKENS, defaultTokenService, defaultMarketDataService, VERIFIED_CIRCULATING_SUPPLY } from '@zenith/tokens';
-import { defaultChainRegistry } from '@zenith/chains';
-import { Token } from '@zenith/types';
+import { useElisStore } from '../../stores/useElisStore';
+import { MARKET_TOKENS, defaultTokenService, defaultMarketDataService, VERIFIED_CIRCULATING_SUPPLY } from '@elis/tokens';
+import { defaultChainRegistry } from '@elis/chains';
+import { Token } from '@elis/types';
 import { TokenLogo } from '../common/TokenLogo';
 import { TrendingUp, TrendingDown, Search, ArrowRight, RefreshCw, AlertCircle } from 'lucide-react';
 export const MarketsView: React.FC = () => {
-    const { setTokenIn, setTokenOut, setSourceChain, setDestChain, setActiveTab, marketData, isMarketsLoading, marketsError, lastMarketUpdate, marketDataStatus, fetchMarketData } = useZenithStore();
+    const { setTokenIn, setTokenOut, setSourceChain, setDestChain, setActiveTab, marketData, isMarketsLoading, marketsError, lastMarketUpdate, marketDataStatus, fetchMarketData } = useElisStore();
     const [searchQuery, setSearchQuery] = useState('');
     const [networkTypeFilter, setNetworkTypeFilter] = useState('ALL');
     const [chainFilter, setChainFilter] = useState('ALL');

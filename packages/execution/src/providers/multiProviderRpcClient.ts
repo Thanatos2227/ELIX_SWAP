@@ -1,6 +1,6 @@
-import { RequestCategory, ErrorCategory } from '@zenith/types';
-import { MultiProviderRpcManager, defaultMultiProviderRpcManager } from '@zenith/chains';
-import { AllProvidersUnavailableError, RpcTimeoutError, RpcRateLimitError, BroadcastUncertainError, ChainIdMismatchError } from '@zenith/contracts';
+import { RequestCategory, ErrorCategory } from '@elis/types';
+import { MultiProviderRpcManager, defaultMultiProviderRpcManager } from '@elis/chains';
+import { AllProvidersUnavailableError, RpcTimeoutError, RpcRateLimitError, BroadcastUncertainError, ChainIdMismatchError } from '@elis/contracts';
 export interface RpcClientOptions {
     manager?: MultiProviderRpcManager;
     defaultTimeoutMs?: number;
@@ -139,7 +139,7 @@ export class MultiProviderRpcClient {
             });
             if (category === 'RETRYABLE') {
                 try {
-                    const { defaultAuthoritativeRpcProviderRegistry } = require('@zenith/chains');
+                    const { defaultAuthoritativeRpcProviderRegistry } = require('@elis/chains');
                     defaultAuthoritativeRpcProviderRegistry.recordFailover('BROADCAST_UNCERTAIN', selectedProvider.id);
                 }
                 catch {
@@ -213,7 +213,7 @@ export class MultiProviderRpcClient {
                 }
                 failoverCount++;
                 try {
-                    const { defaultAuthoritativeRpcProviderRegistry } = require('@zenith/chains');
+                    const { defaultAuthoritativeRpcProviderRegistry } = require('@elis/chains');
                     defaultAuthoritativeRpcProviderRegistry.recordFailover(category === 'READ_ONLY' ? 'READ' : 'PREFLIGHT', endpoint.id);
                 }
                 catch {

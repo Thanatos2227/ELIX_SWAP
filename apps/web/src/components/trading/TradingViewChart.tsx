@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo, memo } from 'react';
-import { Token } from '@zenith/types';
+import { Token } from '@elis/types';
 import { defaultMarketDataService } from '../../services/marketDataService';
 import { ExternalLink, Activity } from 'lucide-react';
 interface TradingViewChartProps {
@@ -128,7 +128,7 @@ const TradingViewChartComponent: React.FC<TradingViewChartProps> = ({ tokenIn, t
         return `https://s.tradingview.com/widgetembed/?frameElementId=tradingview_widget&symbol=${encodeURIComponent(tvSymbol)}&interval=15&hidesidetoolbar=0&symboledit=1&saveimage=1&toolbarbg=080B11&theme=dark&style=1&timezone=Etc%2FUTC&locale=en`;
     }, [tvSymbol]);
     return (<div className="w-full h-[460px] sm:h-[500px] rounded-xl overflow-hidden border border-slate-800 bg-[#080B11] relative flex flex-col">
-      
+
       <div className="flex items-center justify-between px-3 py-1.5 bg-slate-900/90 border-b border-slate-800/80 text-xs font-mono">
         <div className="flex items-center gap-2">
           <Activity className="w-3.5 h-3.5 text-indigo-400"/>
@@ -144,12 +144,12 @@ const TradingViewChartComponent: React.FC<TradingViewChartProps> = ({ tokenIn, t
         </div>
       </div>
 
-      
+
       <div className="relative flex-1 w-full h-full min-h-[400px]">
-        
+
         <div ref={containerRef} className={`w-full h-full ${loadError ? 'hidden' : 'block'}`}/>
 
-        
+
         {loadError && (<iframe src={iframeSrc} title={`TradingView Pro - ${displaySymbol}`} className="w-full h-full border-0" allow="fullscreen"/>)}
       </div>
     </div>);

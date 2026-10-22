@@ -1,8 +1,8 @@
 import { Contract, JsonRpcSigner, BrowserProvider, formatUnits } from 'ethers';
-import { QuoteResponse, TransactionStatus, DEXExecution, CrossChainExecution } from '@zenith/types';
-import { defaultChainRegistry } from '@zenith/chains';
-import { SignerRequiredError, CANONICAL_NATIVE_ADDRESS, validateEvmAddress, validateExecutionTarget, validateTokenAddress, InvalidCalldataError, ZenithSimulationFailedError, ZenithRouteExecutionMismatchError, ZenithApprovalTargetMismatchError, InvalidExecutionTargetError, InsufficientBalanceError, GasEstimationFailedError, FeeDataUnavailableError, ReceiptRevertedError, ConfirmationTimeoutError, GasLimitOverflowError, TransactionRejectedError, BroadcastUncertainError, getAcrossSpokePool, getStargateRouter, getDeBridgeSourceContract } from '@zenith/contracts';
-import { defaultDEXAggregator, defaultCrossChainAggregator, isNativeToken } from '@zenith/routing';
+import { QuoteResponse, TransactionStatus, DEXExecution, CrossChainExecution } from '@elis/types';
+import { defaultChainRegistry } from '@elis/chains';
+import { SignerRequiredError, CANONICAL_NATIVE_ADDRESS, validateEvmAddress, validateExecutionTarget, validateTokenAddress, InvalidCalldataError, ElisSimulationFailedError, ElisRouteExecutionMismatchError, ElisApprovalTargetMismatchError, InvalidExecutionTargetError, InsufficientBalanceError, GasEstimationFailedError, FeeDataUnavailableError, ReceiptRevertedError, ConfirmationTimeoutError, GasLimitOverflowError, TransactionRejectedError, BroadcastUncertainError, getAcrossSpokePool, getStargateRouter, getDeBridgeSourceContract } from '@elis/contracts';
+import { defaultDEXAggregator, defaultCrossChainAggregator, isNativeToken } from '@elis/routing';
 import { defaultMultiProviderRpcClient } from '../providers/multiProviderRpcClient';
 export interface EVMExecutionParams {
     quote: QuoteResponse;
@@ -95,7 +95,7 @@ export class EVMExecutionAdapter {
             }
         }
         catch (err: any) {
-            console.warn(`[ZENITH EVMAdapter] Fee resolution note on chain ${chainId}:`, err?.message || err);
+            console.warn(`[ELIS EVMAdapter] Fee resolution note on chain ${chainId}:`, err?.message || err);
         }
         try {
             const multiFee = await defaultMultiProviderRpcClient.getFeeData(chainId);
@@ -133,7 +133,7 @@ export class EVMExecutionAdapter {
                 return await tokenContract.allowance(params.ownerAddress, params.spenderAddress);
             }
             catch (err) {
-                console.warn('[ZENITH EVMAdapter] checkAllowance error:', err);
+                console.warn('[ELIS EVMAdapter] checkAllowance error:', err);
             }
         }
         return 0n;
@@ -169,7 +169,7 @@ export class EVMExecutionAdapter {
                 }
             }
             catch (rpcErr: any) {
-                console.warn(`[ZENITH EVMAdapter] Receipt fetch error for ${txHash}:`, rpcErr?.message || rpcErr);
+                console.warn(`[ELIS EVMAdapter] Receipt fetch error for ${txHash}:`, rpcErr?.message || rpcErr);
             }
             if (receipt) {
                 if (receipt.status === 0) {
@@ -289,7 +289,7 @@ export class EVMExecutionAdapter {
             requiredAllowance = BigInt(dexExecution.approvalAmount || dexExecution.requiredAllowanceRaw || quote.amountInRaw);
         }
         if (quote.executionTarget && executionTo.toLowerCase() !== quote.executionTarget.toLowerCase()) {
-            throw new ZenithRouteExecutionMismatchError(quote.executionTarget, executionTo);
+            throw new ElisRouteExecutionMismatchError(quote.executionTarget, executionTo);
         }
         if (isNativeIn) {
             try {
@@ -304,12 +304,12 @@ export class EVMExecutionAdapter {
             catch (nativeErr: any) {
                 if (nativeErr instanceof InsufficientBalanceError || nativeErr.message?.includes('Insufficient balance'))
                     throw nativeErr;
-                console.warn('[ZENITH EVMAdapter] Native balance verification note:', nativeErr);
+                console.warn('[ELIS EVMAdapter] Native balance verification note:', nativeErr);
             }
         }
         if (!isNativeIn && approvalTarget !== CANONICAL_NATIVE_ADDRESS) {
             if (!isCrossChain && approvalTarget.toLowerCase() !== executionTo.toLowerCase()) {
-                throw new ZenithApprovalTargetMismatchError(approvalTarget, executionTo);
+                throw new ElisApprovalTargetMismatchError(approvalTarget, executionTo);
             }
             const validatedTokenIn = validateTokenAddress(tokenIn.address, quote.request.sourceChainId, tokenIn.isNative);
             const tokenContract = new Contract(validatedTokenIn, ERC20_ABI, signer);
@@ -325,7 +325,7 @@ export class EVMExecutionAdapter {
             catch (balErr: any) {
                 if (balErr instanceof InsufficientBalanceError || balErr.message?.includes('Insufficient balance'))
                     throw balErr;
-                console.warn('[ZENITH EVMAdapter] Pre-flight balance check warning:', balErr);
+                console.warn('[ELIS EVMAdapter] Pre-flight balance check warning:', balErr);
             }
             const currentAllowance = await this.checkAllowance({
                 tokenAddress: validatedTokenIn,
@@ -335,12 +335,12 @@ export class EVMExecutionAdapter {
                 provider
             });
             if (currentAllowance < requiredAllowance) {
-                console.log(`[ZENITH EVMAdapter] Insufficient allowance (${currentAllowance.toString()} < ${requiredAllowance.toString()}). Requesting wallet approval...`);
+                console.log(`[ELIS EVMAdapter] Insufficient allowance (${currentAllowance.toString()} < ${requiredAllowance.toString()}). Requesting wallet approval...`);
                 params.onStatusChange?.('APPROVING');
                 const approveTx = await tokenContract.approve(approvalTarget, requiredAllowance, {
                     gasLimit: 100000n
                 });
-                console.log('[ZENITH EVMAdapter] Approval transaction broadcasted:', approveTx.hash);
+                console.log('[ELIS EVMAdapter] Approval transaction broadcasted:', approveTx.hash);
                 if (typeof approveTx?.wait === 'function') {
                     const approveReceipt = await approveTx.wait(1);
                     if (!approveReceipt || approveReceipt.status === 0) {
@@ -357,7 +357,7 @@ export class EVMExecutionAdapter {
                 if (verifiedAllowance < requiredAllowance) {
                     throw new Error(`Token approval confirmation did not update allowance sufficiently (${verifiedAllowance.toString()} < ${requiredAllowance.toString()}).`);
                 }
-                console.log('[ZENITH EVMAdapter] Token allowance successfully verified on-chain:', verifiedAllowance.toString());
+                console.log('[ELIS EVMAdapter] Token allowance successfully verified on-chain:', verifiedAllowance.toString());
                 params.onStatusChange?.('APPROVED');
             }
         }
@@ -394,11 +394,11 @@ export class EVMExecutionAdapter {
             catch (callErr: any) {
                 const rawReason = callErr?.data || callErr?.reason || callErr?.message || String(callErr);
                 const revertReason = decodeRevertReason(rawReason);
-                console.error('[ZENITH EVMAdapter] Pre-flight eth_call reverted:', {
+                console.error('[ELIS EVMAdapter] Pre-flight eth_call reverted:', {
                     ...diagTrace,
                     revertReason
                 });
-                throw new ZenithSimulationFailedError(`On-chain simulation (eth_call) reverted. Target rejected execution. (${revertReason})`, revertReason);
+                throw new ElisSimulationFailedError(`On-chain simulation (eth_call) reverted. Target rejected execution. (${revertReason})`, revertReason);
             }
         }
         let estimatedGas: bigint;
@@ -426,11 +426,11 @@ export class EVMExecutionAdapter {
         catch (gasErr: any) {
             const rawReason = gasErr?.data || gasErr?.reason || gasErr?.message || String(gasErr);
             const revertReason = decodeRevertReason(rawReason);
-            console.error('[ZENITH EVMAdapter] Pre-flight estimateGas failed:', {
+            console.error('[ELIS EVMAdapter] Pre-flight estimateGas failed:', {
                 ...diagTrace,
                 revertReason
             });
-            throw new ZenithSimulationFailedError(`Gas estimation (eth_estimateGas) failed. Transaction is predicted to revert on-chain. (${revertReason})`, revertReason);
+            throw new ElisSimulationFailedError(`Gas estimation (eth_estimateGas) failed. Transaction is predicted to revert on-chain. (${revertReason})`, revertReason);
         }
         const finalGasLimit = this.calculateSafeGasLimit(estimatedGas, quote.request.sourceChainId, params.maxGasCeiling);
         let feeOverrides: Record<string, bigint> = {};
@@ -458,7 +458,7 @@ export class EVMExecutionAdapter {
             submissionTx.value !== authoritativeTx.value) {
             throw new Error('Transaction inconsistency detected between simulation payload and submission payload');
         }
-        console.log('[ZENITH EVMAdapter] Preparing transaction dispatch:', {
+        console.log('[ELIS EVMAdapter] Preparing transaction dispatch:', {
             to: executionTo,
             value: executionValue.toString(),
             gasLimit: finalGasLimit.toString(),
@@ -470,12 +470,12 @@ export class EVMExecutionAdapter {
         params.onStatusChange?.('SIGNING');
         let tx;
         try {
-            console.log('[ZENITH EVMAdapter] Calling signer.sendTransaction()... Waiting for wallet popup/approval...');
+            console.log('[ELIS EVMAdapter] Calling signer.sendTransaction()... Waiting for wallet popup/approval...');
             tx = await signer.sendTransaction(submissionTx);
-            console.log('[ZENITH EVMAdapter] Transaction broadcasted successfully! TxHash:', tx.hash);
+            console.log('[ELIS EVMAdapter] Transaction broadcasted successfully! TxHash:', tx.hash);
         }
         catch (sendErr: any) {
-            console.error('[ZENITH EVMAdapter] signer.sendTransaction error:', sendErr);
+            console.error('[ELIS EVMAdapter] signer.sendTransaction error:', sendErr);
             const rawMsg = sendErr?.reason || sendErr?.message || String(sendErr);
             if (sendErr?.code === 'ACTION_REJECTED' || sendErr?.code === 4001 || rawMsg.includes('user rejected') || rawMsg.includes('User rejected')) {
                 throw new TransactionRejectedError('Transaction rejected by user in connected wallet.');
@@ -625,7 +625,7 @@ export class EVMExecutionAdapter {
             catch (callErr: any) {
                 const rawReason = callErr?.data || callErr?.reason || callErr?.message || String(callErr);
                 const revertReason = decodeRevertReason(rawReason);
-                throw new ZenithSimulationFailedError(`Pre-flight simulation (eth_call) reverted on ${chainId}. (${revertReason})`, revertReason);
+                throw new ElisSimulationFailedError(`Pre-flight simulation (eth_call) reverted on ${chainId}. (${revertReason})`, revertReason);
             }
         }
         let estimatedGas: bigint;
@@ -643,7 +643,7 @@ export class EVMExecutionAdapter {
         catch (gasErr: any) {
             const rawReason = gasErr?.data || gasErr?.reason || gasErr?.message || String(gasErr);
             const revertReason = decodeRevertReason(rawReason);
-            throw new ZenithSimulationFailedError(`Gas estimation (eth_estimateGas) failed on ${chainId}. (${revertReason})`, revertReason);
+            throw new ElisSimulationFailedError(`Gas estimation (eth_estimateGas) failed on ${chainId}. (${revertReason})`, revertReason);
         }
         const finalGasLimit = this.calculateSafeGasLimit(estimatedGas, chainId, maxGasCeiling);
         let feeOverrides: Record<string, bigint> = {};
@@ -770,7 +770,7 @@ export class EVMExecutionAdapter {
             }
         }
         catch (err) {
-            console.warn('[ZENITH EVMAdapter] discoverTransactionByNonce note:', err);
+            console.warn('[ELIS EVMAdapter] discoverTransactionByNonce note:', err);
         }
         return { found: false };
     }

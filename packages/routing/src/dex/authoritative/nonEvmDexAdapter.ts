@@ -1,6 +1,6 @@
-import type { DexIdentity, DexCapabilities, DexPairValidationResult, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexSwapTransaction, DexSimulationResult, DexPoolState, DexDeploymentVerificationResult, DexLiquidityState, TokenIdentity, Token } from '@zenith/types';
+import type { DexIdentity, DexCapabilities, DexPairValidationResult, DexPoolDiscoveryResult, AuthoritativeDexQuote, DexSwapTransaction, DexSimulationResult, DexPoolState, DexDeploymentVerificationResult, DexLiquidityState, TokenIdentity, Token } from '@elis/types';
 import type { IDexAdapter, DexQuoteParams } from './dexAdapter.interface';
-import { UnsupportedDexOperationError } from '@zenith/contracts';
+import { UnsupportedDexOperationError } from '@elis/contracts';
 export class NonEvmDexAdapter implements IDexAdapter {
     public readonly dexId: string;
     private readonly identity: DexIdentity;

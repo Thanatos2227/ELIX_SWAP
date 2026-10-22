@@ -117,7 +117,7 @@ export function runSecurityAudit(): SecurityViolation[] {
     return violations;
 }
 if (typeof require !== 'undefined' && require.main === module) {
-    console.log('🔒 Running ZENITH Adversarial Security & Production Integrity Audit...');
+    console.log('🔒 Running ElixSwap Adversarial Security & Production Integrity Audit...');
     const violations = runSecurityAudit();
     if (violations.length === 0) {
         console.log('✅ Security Audit PASSED: Zero critical security vulnerabilities, secret leaks, or forbidden execution patterns detected.');

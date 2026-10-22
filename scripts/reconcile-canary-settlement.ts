@@ -21,7 +21,7 @@ const ROUTER_ABI = [
 ];
 async function runReconciliation() {
     console.log('================================================================');
-    console.log('ZENITH — POST-CANARY RECONCILIATION & SETTLEMENT ENGINE');
+    console.log('ELIS — POST-CANARY RECONCILIATION & SETTLEMENT ENGINE');
     console.log('================================================================\n');
     const provider = new JsonRpcProvider(POLYGON_RPCS[0], 137, { staticNetwork: true });
     console.log('[SECTION 1] Retrieving Authoritative On-Chain Evidence...');

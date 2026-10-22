@@ -1,4 +1,4 @@
-import type { NetworkFamily } from '@zenith/types';
+import type { NetworkFamily } from '@elis/types';
 export class InvalidTokenAddressError extends Error {
     public readonly code = 'INVALID_TOKEN_ADDRESS';
     public readonly family: NetworkFamily;

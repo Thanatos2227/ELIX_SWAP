@@ -1,8 +1,8 @@
 /**
  * @file authoritativeNetworkRegistry.ts
- * @package @zenith/chains
+ * @package @elis/chains
  *
- * Authoritative Canonical Network Registry for ZENITH.
+ * Authoritative Canonical Network Registry for ELIS.
  * Serves as the single authoritative source of truth for network identities,
  * chain namespaces, environments, gas models, finality, and explorer metadata.
  * Guarantees collision-free lookup and deep-cloned immutability.
@@ -23,7 +23,7 @@ import {
   NetworkOnboardingState,
   NetworkCapabilityProfile
 } from '../capabilities/networkCapabilityTypes';
-import { ZENITH_AUTHORITATIVE_NETWORKS } from './networkRegistry.data';
+import { ELIS_AUTHORITATIVE_NETWORKS } from './networkRegistry.data';
 import { NetworkRegistryValidationEngine } from './networkRegistryValidation';
 
 function cloneNativeAsset(asset: AuthoritativeNativeAsset): AuthoritativeNativeAsset {
@@ -77,7 +77,7 @@ export class AuthoritativeNetworkRegistry {
   private networkFamilies: Map<string, NetworkFamily> = new Map();
 
   constructor(customNetworks?: Record<string, AuthoritativeNetworkIdentity>, skipValidation = false) {
-    const initial = customNetworks || ZENITH_AUTHORITATIVE_NETWORKS;
+    const initial = customNetworks || ELIS_AUTHORITATIVE_NETWORKS;
 
     if (!skipValidation) {
       NetworkRegistryValidationEngine.validateRegistry(initial);

@@ -1,20 +1,20 @@
 pragma solidity 0.8.24;
 
 import {Script, console} from "forge-std/Script.sol";
-import {ZenithTreasury} from "../src/treasury/ZenithTreasury.sol";
-import {ZenithFeeController} from "../src/treasury/ZenithFeeController.sol";
-import {ZenithV1Factory} from "../src/v1/ZenithV1Factory.sol";
-import {ZenithV1Router} from "../src/v1/ZenithV1Router.sol";
-import {ZenithV2Factory} from "../src/v2/ZenithV2Factory.sol";
-import {ZenithV2Router} from "../src/v2/ZenithV2Router.sol";
-import {ZenithV3Factory} from "../src/v3/ZenithV3Factory.sol";
-import {ZenithV3Router} from "../src/v3/ZenithV3Router.sol";
-import {ZenithV3PositionManager} from "../src/v3/ZenithV3PositionManager.sol";
-import {ZenithRouter} from "../src/router/ZenithRouter.sol";
-import {ZenithCrossChainRouter} from "../src/ZenithCrossChainRouter.sol";
-import {ZenithCircuitBreaker} from "../src/ZenithCircuitBreaker.sol";
+import {ElisTreasury} from "../src/treasury/ElisTreasury.sol";
+import {ElisFeeController} from "../src/treasury/ElisFeeController.sol";
+import {ElisV1Factory} from "../src/v1/ElisV1Factory.sol";
+import {ElisV1Router} from "../src/v1/ElisV1Router.sol";
+import {ElisV2Factory} from "../src/v2/ElisV2Factory.sol";
+import {ElisV2Router} from "../src/v2/ElisV2Router.sol";
+import {ElisV3Factory} from "../src/v3/ElisV3Factory.sol";
+import {ElisV3Router} from "../src/v3/ElisV3Router.sol";
+import {ElisV3PositionManager} from "../src/v3/ElisV3PositionManager.sol";
+import {ElisRouter} from "../src/router/ElisRouter.sol";
+import {ElisCrossChainRouter} from "../src/ElisCrossChainRouter.sol";
+import {ElisCircuitBreaker} from "../src/ElisCircuitBreaker.sol";
 
-contract DeployZenith is Script {
+contract DeployElis is Script {
     struct DeploymentConfig {
         uint256 deployerPrivateKey;
         address governance;
@@ -88,26 +88,26 @@ contract DeployZenith is Script {
     }
 
     function _loadConfig() internal view returns (DeploymentConfig memory cfg) {
-        require(block.chainid != 0, "DeployZenith: Invalid chainId");
+        require(block.chainid != 0, "DeployElis: Invalid chainId");
 
         cfg.deployerPrivateKey = vm.envUint("DEPLOYER_PRIVATE_KEY");
-        require(cfg.deployerPrivateKey != 0, "DeployZenith: DEPLOYER_PRIVATE_KEY required");
+        require(cfg.deployerPrivateKey != 0, "DeployElis: DEPLOYER_PRIVATE_KEY required");
 
         cfg.governance = vm.envAddress("GOVERNANCE_MULTISIG");
-        require(cfg.governance != address(0), "DeployZenith: GOVERNANCE_MULTISIG cannot be zero address");
+        require(cfg.governance != address(0), "DeployElis: GOVERNANCE_MULTISIG cannot be zero address");
 
         cfg.emergencyGuardian = vm.envAddress("EMERGENCY_GUARDIAN");
-        require(cfg.emergencyGuardian != address(0), "DeployZenith: EMERGENCY_GUARDIAN cannot be zero address");
+        require(cfg.emergencyGuardian != address(0), "DeployElis: EMERGENCY_GUARDIAN cannot be zero address");
 
         cfg.wethAddress = vm.envAddress("WETH_ADDRESS");
-        require(cfg.wethAddress != address(0), "DeployZenith: WETH_ADDRESS cannot be zero address");
+        require(cfg.wethAddress != address(0), "DeployElis: WETH_ADDRESS cannot be zero address");
 
         cfg.permit2Address = vm.envOr("PERMIT2_ADDRESS", address(0x000000000022D473030F116dDEE9F6B43aC78BA3));
-        require(cfg.permit2Address != address(0), "DeployZenith: PERMIT2_ADDRESS cannot be zero address");
+        require(cfg.permit2Address != address(0), "DeployElis: PERMIT2_ADDRESS cannot be zero address");
     }
 
     function _logDeploymentStart(DeploymentConfig memory cfg) internal view {
-        console.log("=== Deploying ZENITH SWAP Canonical Protocol Suite ===");
+        console.log("=== Deploying ELIS SWAP Canonical Protocol Suite ===");
         console.log("Chain ID:           ", block.chainid);
         console.log("Governance:         ", cfg.governance);
         console.log("Emergency Guardian: ", cfg.emergencyGuardian);
@@ -116,42 +116,42 @@ contract DeployZenith is Script {
     }
 
     function _deployCore(DeploymentConfig memory cfg, DeployedContracts memory d) internal {
-        d.treasuryAddr = address(new ZenithTreasury(cfg.governance));
-        console.log("1. ZenithTreasury:          ", d.treasuryAddr);
+        d.treasuryAddr = address(new ElisTreasury(cfg.governance));
+        console.log("1. ElisTreasury:                    ", d.treasuryAddr);
 
-        d.circuitBreakerAddr = address(new ZenithCircuitBreaker(cfg.governance, cfg.emergencyGuardian));
-        console.log("2. ZenithCircuitBreaker:     ", d.circuitBreakerAddr);
+        d.circuitBreakerAddr = address(new ElisCircuitBreaker(cfg.governance, cfg.emergencyGuardian));
+        console.log("2. ElisCircuitBreaker:          ", d.circuitBreakerAddr);
 
-        d.feeControllerAddr = address(new ZenithFeeController(cfg.governance, d.treasuryAddr));
-        console.log("3. ZenithFeeController:      ", d.feeControllerAddr);
+        d.feeControllerAddr = address(new ElisFeeController(cfg.governance, d.treasuryAddr));
+        console.log("3. ElisFeeController:            ", d.feeControllerAddr);
     }
 
     function _deployV1(DeploymentConfig memory cfg, DeployedContracts memory d) internal {
-        d.v1FactoryAddr = address(new ZenithV1Factory(cfg.governance, d.treasuryAddr));
-        d.v1RouterAddr = address(new ZenithV1Router(d.v1FactoryAddr, cfg.wethAddress));
-        console.log("4. ZenithV1Factory:          ", d.v1FactoryAddr);
-        console.log("5. ZenithV1Router:           ", d.v1RouterAddr);
+        d.v1FactoryAddr = address(new ElisV1Factory(cfg.governance, d.treasuryAddr));
+        d.v1RouterAddr = address(new ElisV1Router(d.v1FactoryAddr, cfg.wethAddress));
+        console.log("4. ElisV1Factory:                    ", d.v1FactoryAddr);
+        console.log("5. ElisV1Router:                      ", d.v1RouterAddr);
     }
 
     function _deployV2(DeploymentConfig memory cfg, DeployedContracts memory d) internal {
-        d.v2FactoryAddr = address(new ZenithV2Factory(cfg.governance, d.feeControllerAddr, d.treasuryAddr));
-        d.v2RouterAddr = address(new ZenithV2Router(d.v2FactoryAddr, cfg.wethAddress));
-        console.log("6. ZenithV2Factory:          ", d.v2FactoryAddr);
-        console.log("7. ZenithV2Router:           ", d.v2RouterAddr);
+        d.v2FactoryAddr = address(new ElisV2Factory(cfg.governance, d.feeControllerAddr, d.treasuryAddr));
+        d.v2RouterAddr = address(new ElisV2Router(d.v2FactoryAddr, cfg.wethAddress));
+        console.log("6. ElisV2Factory:                    ", d.v2FactoryAddr);
+        console.log("7. ElisV2Router:                      ", d.v2RouterAddr);
     }
 
     function _deployV3(DeploymentConfig memory cfg, DeployedContracts memory d) internal {
-        d.v3FactoryAddr = address(new ZenithV3Factory(cfg.governance));
-        d.v3RouterAddr = address(new ZenithV3Router(d.v3FactoryAddr, cfg.wethAddress));
-        d.v3PositionManagerAddr = address(new ZenithV3PositionManager(d.v3FactoryAddr, cfg.wethAddress));
-        console.log("8. ZenithV3Factory:          ", d.v3FactoryAddr);
-        console.log("9. ZenithV3Router:           ", d.v3RouterAddr);
-        console.log("10. ZenithV3PositionManager: ", d.v3PositionManagerAddr);
+        d.v3FactoryAddr = address(new ElisV3Factory(cfg.governance));
+        d.v3RouterAddr = address(new ElisV3Router(d.v3FactoryAddr, cfg.wethAddress));
+        d.v3PositionManagerAddr = address(new ElisV3PositionManager(d.v3FactoryAddr, cfg.wethAddress));
+        console.log("8. ElisV3Factory:                    ", d.v3FactoryAddr);
+        console.log("9. ElisV3Router:                      ", d.v3RouterAddr);
+        console.log("10. ElisV3PositionManager:  ", d.v3PositionManagerAddr);
     }
 
     function _deployRouters(DeploymentConfig memory cfg, DeployedContracts memory d) internal {
         d.unifiedRouterAddr = address(
-            new ZenithRouter(
+            new ElisRouter(
                 cfg.governance,
                 cfg.wethAddress,
                 d.treasuryAddr,
@@ -161,10 +161,10 @@ contract DeployZenith is Script {
                 d.v3RouterAddr
             )
         );
-        console.log("11. ZenithUnifiedRouter:    ", d.unifiedRouterAddr);
+        console.log("11. ElisUnifiedRouter:       ", d.unifiedRouterAddr);
 
         d.crossChainRouterAddr = address(
-            new ZenithCrossChainRouter(
+            new ElisCrossChainRouter(
                 cfg.governance,
                 d.treasuryAddr,
                 d.feeControllerAddr,
@@ -172,14 +172,14 @@ contract DeployZenith is Script {
                 cfg.permit2Address
             )
         );
-        console.log("12. ZenithCrossChainRouter: ", d.crossChainRouterAddr);
+        console.log("12. ElisCrossChainRouter: ", d.crossChainRouterAddr);
     }
 
     function _wireAuthorizations(DeployedContracts memory d) internal {
-        ZenithTreasury(payable(d.treasuryAddr)).setFeeCollector(d.unifiedRouterAddr, true);
-        ZenithTreasury(payable(d.treasuryAddr)).setFeeCollector(d.crossChainRouterAddr, true);
-        ZenithFeeController(d.feeControllerAddr).setFeeCollector(d.unifiedRouterAddr, true);
-        ZenithFeeController(d.feeControllerAddr).setFeeCollector(d.crossChainRouterAddr, true);
+        ElisTreasury(payable(d.treasuryAddr)).setFeeCollector(d.unifiedRouterAddr, true);
+        ElisTreasury(payable(d.treasuryAddr)).setFeeCollector(d.crossChainRouterAddr, true);
+        ElisFeeController(d.feeControllerAddr).setFeeCollector(d.unifiedRouterAddr, true);
+        ElisFeeController(d.feeControllerAddr).setFeeCollector(d.crossChainRouterAddr, true);
         console.log("13. Post-Deployment Authorizations Wired Successfully");
     }
 }

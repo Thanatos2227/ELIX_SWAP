@@ -55,11 +55,16 @@ Thumbs.db
 *.swo
 *.sqlite
 *.sqlite-journal
+*.db
+temp_test_dbs/
 scratch/
 
 # Excluded documentation (per repository rules)
 *.md
 !/README.md
+!/ELIXSWAP_REBRAND_REPORT.md
+!/ELIS_COMPLETE_MIGRATION_REPORT.md
+!/ELIXSWAP_TASK_66_ZERO_LEGACY_AUDIT.md
 docs/
 *.doc
 *.docx

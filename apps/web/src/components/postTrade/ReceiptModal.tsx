@@ -1,8 +1,8 @@
 import React from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
+import { useElisStore } from '../../stores/useElisStore';
 import { CheckCircle2, ExternalLink, X, ArrowRight, ShieldCheck, Clock } from 'lucide-react';
 export const ReceiptModal: React.FC = () => {
-    const { isReceiptOpen, closeReceipt, lastReceipt } = useZenithStore();
+    const { isReceiptOpen, closeReceipt, lastReceipt } = useElisStore();
     if (!isReceiptOpen || !lastReceipt)
         return null;
     const destChain = lastReceipt.destChain || lastReceipt.destinationChain || lastReceipt.sourceChain;

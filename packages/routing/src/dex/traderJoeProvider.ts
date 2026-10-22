@@ -1,6 +1,6 @@
-import { DEXProtocol, Token } from '@zenith/types';
+import { DEXProtocol, Token } from '@elis/types';
 import { Interface } from 'ethers';
-import { TRADER_JOE_LB_ROUTERS, TRADER_JOE_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getTraderJoeRouter } from '@zenith/contracts';
+import { TRADER_JOE_LB_ROUTERS, TRADER_JOE_ROUTER_ABI, CANONICAL_NATIVE_ADDRESS, getTraderJoeRouter } from '@elis/contracts';
 import { DEXProvider, DEXQuote, DEXExecution, DEXQuoteParams } from './types';
 import { calculateDEXLiquidityOutput, isNativeToken, resolvePoolTokenAddress } from './dexMath';
 export class TraderJoeProvider implements DEXProvider {

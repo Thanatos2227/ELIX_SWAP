@@ -1,16 +1,16 @@
 import { BigInt, BigDecimal, Address } from "@graphprotocol/graph-ts";
-import { PairCreated as V1PairCreated } from "../../generated/ZenithV1Factory/ZenithV1Factory";
-import { PoolCreated as V2PoolCreated } from "../../generated/ZenithV2Factory/ZenithV2Factory";
-import { PoolCreated as V3PoolCreated } from "../../generated/ZenithV3Factory/ZenithV3Factory";
-import { ZenithV1Pair as V1PairTemplate, ZenithV3Pool as V3PoolTemplate } from "../../generated/templates";
-import { Pool, Token, ZenithProtocol } from "../../generated/schema";
-const PROTOCOL_ID = "zenith-v4-canonical";
+import { PairCreated as V1PairCreated } from "../../generated/ElisV1Factory/ElisV1Factory";
+import { PoolCreated as V2PoolCreated } from "../../generated/ElisV2Factory/ElisV2Factory";
+import { PoolCreated as V3PoolCreated } from "../../generated/ElisV3Factory/ElisV3Factory";
+import { ElisV1Pair as V1PairTemplate, ElisV3Pool as V3PoolTemplate } from "../../generated/templates";
+import { Pool, Token, ElisProtocol } from "../../generated/schema";
+const PROTOCOL_ID = "elis-v4-canonical";
 const ZERO_BD = BigDecimal.fromString("0");
 const ZERO_BI = BigInt.fromI32(0);
-export function getOrCreateProtocol(): ZenithProtocol {
-    let protocol = ZenithProtocol.load(PROTOCOL_ID);
+export function getOrCreateProtocol(): ElisProtocol {
+    let protocol = ElisProtocol.load(PROTOCOL_ID);
     if (protocol === null) {
-        protocol = new ZenithProtocol(PROTOCOL_ID);
+        protocol = new ElisProtocol(PROTOCOL_ID);
         protocol.totalValueLockedUSD = ZERO_BD;
         protocol.totalVolumeUSD = ZERO_BD;
         protocol.untrackedVolumeUSD = ZERO_BD;

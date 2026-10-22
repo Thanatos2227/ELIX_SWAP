@@ -7,8 +7,8 @@ import {
   ExecutionPlanDiagnostic,
   QuoteRequest,
   Token
-} from '@zenith/types';
-import { defaultChainRegistry } from '@zenith/chains';
+} from '@elis/types';
+import { defaultChainRegistry } from '@elis/chains';
 import {
   getAcrossSpokePool,
   isAcrossSupported,
@@ -16,7 +16,7 @@ import {
   validateExecutionTarget,
   ProviderUnavailableError,
   ExecutionUnavailableError
-} from '@zenith/contracts';
+} from '@elis/contracts';
 import { isNativeToken } from '../../dex/dexMath';
 import { validateCrossChainQuoteExecutability } from '../quoteValidator';
 import { defaultQuoteDiagnosticLogger } from '../quoteDiagnostics';
@@ -24,6 +24,46 @@ import { defaultQuoteDiagnosticLogger } from '../quoteDiagnostics';
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 const EVM_ADDRESS_REGEX = /^0x[0-9a-fA-F]{40}$/;
 const ACROSS_INTEGRATOR_ID_REGEX = /^0x[0-9a-fA-F]{4}$/;
+const EXACT_INTEGER_REGEX = /^(0|[1-9][0-9]*)$/;
+const UINT256_MAX = (1n << 256n) - 1n;
+
+interface SafeAmountParseResult {
+  success: boolean;
+  amount?: bigint;
+  errorReason?: string;
+}
+
+function parseSafeAmountField(val: unknown, fieldName: string): SafeAmountParseResult {
+  if (val === undefined || val === null) {
+    return { success: false, errorReason: `${fieldName} is missing` };
+  }
+  const str = typeof val === 'number'
+    ? (Number.isSafeInteger(val) && val >= 0 ? String(val) : '')
+    : (typeof val === 'string' ? val.trim() : '');
+
+  if (!str) {
+    return { success: false, errorReason: `${fieldName} is empty or not a valid string` };
+  }
+  if (str.includes('.') || str.includes('e') || str.includes('E') || str.includes('-') || str.includes('+')) {
+    return { success: false, errorReason: `${fieldName} contains invalid format (decimals, signs, or scientific notation)` };
+  }
+  if (!EXACT_INTEGER_REGEX.test(str)) {
+    return { success: false, errorReason: `${fieldName} must be a non-negative integer string without leading zeros` };
+  }
+  let big: bigint;
+  try {
+    big = BigInt(str);
+  } catch {
+    return { success: false, errorReason: `${fieldName} failed BigInt conversion` };
+  }
+  if (big < 0n) {
+    return { success: false, errorReason: `${fieldName} cannot be negative` };
+  }
+  if (big > UINT256_MAX) {
+    return { success: false, errorReason: `${fieldName} exceeds UINT256_MAX` };
+  }
+  return { success: true, amount: big };
+}
 
 export interface AcrossProviderOptions {
   apiKey?: string;
@@ -57,12 +97,12 @@ export class AcrossProvider implements CrossChainProvider {
     const apiKey =
       this.apiKey ||
       (typeof process !== 'undefined'
-        ? process.env.ACROSS_API_KEY || process.env.ZENITH_ACROSS_API_KEY
+        ? process.env.ACROSS_API_KEY || process.env.ELIS_ACROSS_API_KEY
         : undefined);
     const integratorId =
       this.integratorId ||
       (typeof process !== 'undefined'
-        ? process.env.ACROSS_INTEGRATOR_ID || process.env.ZENITH_ACROSS_INTEGRATOR_ID
+        ? process.env.ACROSS_INTEGRATOR_ID || process.env.ELIS_ACROSS_INTEGRATOR_ID
         : undefined);
     return {
       apiKey: apiKey?.trim(),
@@ -548,34 +588,180 @@ export class AcrossProvider implements CrossChainProvider {
           // Parse checks
           checks = data.checks;
 
-          // Parse expected output
-          const rawOut = data.outputAmount || data.destinationAmount || (data.totalRelayFee && data.totalRelayFee.total ? (amountInBig > BigInt(data.totalRelayFee.total) ? (amountInBig - BigInt(data.totalRelayFee.total)).toString() : '0') : undefined);
-          if (rawOut) {
-            destinationAmountBig = BigInt(rawOut);
+          // 1. Parse and validate expected output amount according to documented precedence
+          // Precedence:
+          // 1. data.expectedOutputAmount (Across V3 primary standard)
+          // 2. data.outputAmount (Across V2 / legacy API)
+          // 3. data.destinationAmount (alternative generic bridge field)
+          // 4. data.totalRelayFee.total deduction (fallback fee deduction)
+          if (data.expectedOutputAmount !== undefined && data.expectedOutputAmount !== null) {
+            const res = parseSafeAmountField(data.expectedOutputAmount, 'expectedOutputAmount');
+            if (res.success && res.amount !== undefined) {
+              destinationAmountBig = res.amount;
+            } else {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: `Across Swap API returned malformed expectedOutputAmount: ${res.errorReason}`,
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
+          } else if (data.outputAmount !== undefined && data.outputAmount !== null) {
+            const res = parseSafeAmountField(data.outputAmount, 'outputAmount');
+            if (res.success && res.amount !== undefined) {
+              destinationAmountBig = res.amount;
+            } else {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: `Across Swap API returned malformed outputAmount: ${res.errorReason}`,
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
+          } else if (data.destinationAmount !== undefined && data.destinationAmount !== null) {
+            const res = parseSafeAmountField(data.destinationAmount, 'destinationAmount');
+            if (res.success && res.amount !== undefined) {
+              destinationAmountBig = res.amount;
+            } else {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: `Across Swap API returned malformed destinationAmount: ${res.errorReason}`,
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
+          } else if (data.totalRelayFee && data.totalRelayFee.total !== undefined && data.totalRelayFee.total !== null) {
+            const feeRes = parseSafeAmountField(data.totalRelayFee.total, 'totalRelayFee.total');
+            if (feeRes.success && feeRes.amount !== undefined) {
+              if (amountInBig > feeRes.amount) {
+                destinationAmountBig = amountInBig - feeRes.amount;
+              } else {
+                destinationAmountBig = 0n;
+                quoteDiagnostic = {
+                  code: 'INVALID_AMOUNT',
+                  message: 'Across Swap API totalRelayFee exceeds or equals source input amount.',
+                  severity: 'ERROR',
+                  providerId: 'ACROSS',
+                  timestamp: Date.now()
+                };
+              }
+            } else {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: `Across Swap API returned malformed totalRelayFee.total: ${feeRes.errorReason}`,
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
+          } else {
+            destinationAmountBig = 0n;
           }
 
-          // Parse minimum output
-          const rawMinOut = data.minOutputAmount || data.minimumOutputAmount || data.minDestinationAmount;
-          if (rawMinOut) {
-            minDestinationAmountBig = BigInt(rawMinOut);
-          } else if (destinationAmountBig > 0n) {
-            const slippagePct = request.slippageTolerancePercent !== undefined && !isNaN(request.slippageTolerancePercent) ? request.slippageTolerancePercent : 0.5;
-            const slippageBps = BigInt(Math.floor(slippagePct * 100));
-            const slippageMultiplier = 10000n - slippageBps;
-            minDestinationAmountBig = (destinationAmountBig * slippageMultiplier) / 10000n;
+          // 2. Parse and validate provider minimum output (Across guarantee / constraint)
+          // Precedence:
+          // 1. data.minOutputAmount
+          // 2. data.minimumOutputAmount
+          // 3. data.minDestinationAmount
+          let providerMinBig: bigint | undefined = undefined;
+          const rawMinField =
+            data.minOutputAmount !== undefined && data.minOutputAmount !== null
+              ? { val: data.minOutputAmount, name: 'minOutputAmount' }
+              : data.minimumOutputAmount !== undefined && data.minimumOutputAmount !== null
+              ? { val: data.minimumOutputAmount, name: 'minimumOutputAmount' }
+              : data.minDestinationAmount !== undefined && data.minDestinationAmount !== null
+              ? { val: data.minDestinationAmount, name: 'minDestinationAmount' }
+              : undefined;
+
+          if (rawMinField) {
+            const minRes = parseSafeAmountField(rawMinField.val, rawMinField.name);
+            if (minRes.success && minRes.amount !== undefined) {
+              providerMinBig = minRes.amount;
+              if (destinationAmountBig > 0n && providerMinBig > destinationAmountBig) {
+                if (!quoteDiagnostic) {
+                  quoteDiagnostic = {
+                    code: 'INVALID_AMOUNT',
+                    message: `Across Swap API returned minimum output amount (${providerMinBig.toString()}) exceeding expected output amount (${destinationAmountBig.toString()}).`,
+                    severity: 'ERROR',
+                    providerId: 'ACROSS',
+                    timestamp: Date.now()
+                  };
+                }
+              }
+            } else if (!quoteDiagnostic) {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: `Across Swap API returned malformed minimum output amount: ${minRes.errorReason}`,
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
+          }
+
+          // 3. Validate user slippage tolerance and compute conservative minimum destination amount
+          let userMinDestinationAmountBig = 0n;
+          let slippagePct = 0.5; // default 0.5%
+          if (request.slippageTolerancePercent !== undefined && request.slippageTolerancePercent !== null) {
+            const reqSlippage = request.slippageTolerancePercent;
+            if (
+              typeof reqSlippage !== 'number' ||
+              isNaN(reqSlippage) ||
+              !isFinite(reqSlippage) ||
+              reqSlippage < 0 ||
+              reqSlippage > 50
+            ) {
+              if (!quoteDiagnostic) {
+                quoteDiagnostic = {
+                  code: 'INVALID_AMOUNT',
+                  message: `Invalid slippageTolerancePercent: ${reqSlippage}. Must be a finite number between 0 and 50.`,
+                  severity: 'ERROR',
+                  providerId: 'ACROSS',
+                  timestamp: Date.now()
+                };
+              }
+            } else {
+              slippagePct = reqSlippage;
+            }
+          }
+
+          if (destinationAmountBig > 0n) {
+            if (slippagePct === 0) {
+              userMinDestinationAmountBig = destinationAmountBig;
+            } else {
+              const slippageFactor = BigInt(Math.round(slippagePct * 10000));
+              userMinDestinationAmountBig = (destinationAmountBig * (1000000n - slippageFactor)) / 10000n / 100n;
+            }
+
+            // Conservative bound: never less protective than protocol guarantee or user constraint
+            if (providerMinBig !== undefined) {
+              minDestinationAmountBig = userMinDestinationAmountBig > providerMinBig
+                ? userMinDestinationAmountBig
+                : providerMinBig;
+            } else {
+              minDestinationAmountBig = userMinDestinationAmountBig;
+            }
+          } else {
+            minDestinationAmountBig = 0n;
           }
 
           // Parse fees
-          if (data.totalRelayFee && data.totalRelayFee.total) {
-            const totalFeeRaw = BigInt(data.totalRelayFee.total);
-            const inDecimals = request.tokenIn.decimals !== undefined ? request.tokenIn.decimals : 18;
-            const feeNum = Number(totalFeeRaw) / (10 ** inDecimals);
-            bridgeFeeUSD = request.tokenIn.priceUSD ? Number((feeNum * request.tokenIn.priceUSD).toFixed(4)) : 0.05;
+          if (data.totalRelayFee && data.totalRelayFee.total !== undefined && data.totalRelayFee.total !== null) {
+            const feeParsed = parseSafeAmountField(data.totalRelayFee.total, 'totalRelayFee.total');
+            if (feeParsed.success && feeParsed.amount !== undefined) {
+              const totalFeeRaw = feeParsed.amount;
+              const inDecimals = request.tokenIn.decimals !== undefined ? request.tokenIn.decimals : 18;
+              const feeNum = Number(totalFeeRaw) / (10 ** inDecimals);
+              bridgeFeeUSD = request.tokenIn.priceUSD ? Number((feeNum * request.tokenIn.priceUSD).toFixed(4)) : 0.05;
 
-            const rawPct = Number(data.totalRelayFee.pct);
-            relayerFeePctStr = data.totalRelayFee.pct
-              ? (rawPct > 100 ? `${(rawPct / 1e16).toFixed(4)}%` : `${(rawPct * 100).toFixed(2)}%`)
-              : '0.05%';
+              const rawPct = Number(data.totalRelayFee.pct);
+              relayerFeePctStr = data.totalRelayFee.pct
+                ? (rawPct > 100 ? `${(rawPct / 1e16).toFixed(4)}%` : `${(rawPct * 100).toFixed(2)}%`)
+                : '0.05%';
+            }
           }
 
           // Parse expiration
@@ -594,32 +780,34 @@ export class AcrossProvider implements CrossChainProvider {
             estTransferTimeSec = Number(data.estimatedFillTimeSec);
           }
 
-          if (!quoteDiagnostic && swapTx && destinationAmountBig > 0n && quoteExpiryMs > Date.now()) {
-            isLiveQuote = true;
-          } else if (quoteExpiryMs <= Date.now()) {
-            quoteDiagnostic = {
-              code: 'QUOTE_EXPIRED',
-              message: 'Across API returned an expired quote timestamp.',
-              severity: 'ERROR',
-              providerId: 'ACROSS',
-              timestamp: Date.now()
-            };
-          } else if (!swapTx) {
-            quoteDiagnostic = {
-              code: 'EXECUTION_DATA_UNAVAILABLE',
-              message: 'Across Swap API response is missing valid executable swapTx object.',
-              severity: 'ERROR',
-              providerId: 'ACROSS',
-              timestamp: Date.now()
-            };
-          } else if (destinationAmountBig <= 0n) {
-            quoteDiagnostic = {
-              code: 'INVALID_AMOUNT',
-              message: 'Across Swap API returned zero or negative net output amount after fees.',
-              severity: 'WARNING',
-              providerId: 'ACROSS',
-              timestamp: Date.now()
-            };
+          if (!quoteDiagnostic) {
+            if (swapTx && destinationAmountBig > 0n && quoteExpiryMs > Date.now()) {
+              isLiveQuote = true;
+            } else if (quoteExpiryMs <= Date.now()) {
+              quoteDiagnostic = {
+                code: 'QUOTE_EXPIRED',
+                message: 'Across API returned an expired quote timestamp.',
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            } else if (!swapTx) {
+              quoteDiagnostic = {
+                code: 'EXECUTION_DATA_UNAVAILABLE',
+                message: 'Across Swap API response is missing valid executable swapTx object.',
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            } else if (destinationAmountBig <= 0n) {
+              quoteDiagnostic = {
+                code: 'INVALID_AMOUNT',
+                message: 'Across Swap API returned zero or negative net output amount after fees.',
+                severity: 'ERROR',
+                providerId: 'ACROSS',
+                timestamp: Date.now()
+              };
+            }
           }
         } else {
           quoteDiagnostic = {

@@ -27,10 +27,10 @@ export interface SubgraphPoolItem {
 }
 export class SubgraphService {
     private endpointMap: Record<number, string> = {
-        1: 'https://api.goldsky.com/api/public/project_clzenith/subgraphs/zenith-ethereum/1.0.0/gn',
-        42161: 'https://api.goldsky.com/api/public/project_clzenith/subgraphs/zenith-arbitrum/1.0.0/gn',
-        8453: 'https://api.goldsky.com/api/public/project_clzenith/subgraphs/zenith-base/1.0.0/gn',
-        137: 'https://api.goldsky.com/api/public/project_clzenith/subgraphs/zenith-polygon/1.0.0/gn'
+        1: 'https://api.goldsky.com/api/public/project_clelis/subgraphs/elis-ethereum/1.0.0/gn',
+        42161: 'https://api.goldsky.com/api/public/project_clelis/subgraphs/elis-arbitrum/1.0.0/gn',
+        8453: 'https://api.goldsky.com/api/public/project_clelis/subgraphs/elis-base/1.0.0/gn',
+        137: 'https://api.goldsky.com/api/public/project_clelis/subgraphs/elis-polygon/1.0.0/gn'
     };
     public getEndpoint(chainId: number = 1): string {
         return this.endpointMap[chainId] || this.endpointMap[1];
@@ -55,7 +55,7 @@ export class SubgraphService {
     public async getProtocolStats(chainId: number = 1): Promise<SubgraphProtocolStats> {
         const query = `
       query GetProtocolStats {
-        zenithProtocol(id: "zenith-v4-canonical") {
+        elisProtocol(id: "elis-v4-canonical") {
           totalValueLockedUSD
           totalVolumeUSD
           totalFeesUSD
@@ -67,22 +67,22 @@ export class SubgraphService {
       }
     `;
         const data = await this.fetchQuery<{
-            zenithProtocol: any;
+            elisProtocol: any;
         }>(query, {}, chainId);
-        if (data && data.zenithProtocol) {
+        if (data && data.elisProtocol) {
             return {
-                id: "zenith-v4-canonical",
-                totalValueLockedUSD: parseFloat(data.zenithProtocol.totalValueLockedUSD || "0"),
-                totalVolumeUSD: parseFloat(data.zenithProtocol.totalVolumeUSD || "0"),
-                totalFeesUSD: parseFloat(data.zenithProtocol.totalFeesUSD || "0"),
-                totalTreasuryFeesUSD: parseFloat(data.zenithProtocol.totalTreasuryFeesUSD || "0"),
-                txCount: parseInt(data.zenithProtocol.txCount || "0", 10),
-                poolCount: parseInt(data.zenithProtocol.poolCount || "0", 10),
-                tokenCount: parseInt(data.zenithProtocol.tokenCount || "0", 10)
+                id: "elis-v4-canonical",
+                totalValueLockedUSD: parseFloat(data.elisProtocol.totalValueLockedUSD || "0"),
+                totalVolumeUSD: parseFloat(data.elisProtocol.totalVolumeUSD || "0"),
+                totalFeesUSD: parseFloat(data.elisProtocol.totalFeesUSD || "0"),
+                totalTreasuryFeesUSD: parseFloat(data.elisProtocol.totalTreasuryFeesUSD || "0"),
+                txCount: parseInt(data.elisProtocol.txCount || "0", 10),
+                poolCount: parseInt(data.elisProtocol.poolCount || "0", 10),
+                tokenCount: parseInt(data.elisProtocol.tokenCount || "0", 10)
             };
         }
         return {
-            id: "zenith-v4-canonical",
+            id: "elis-v4-canonical",
             totalValueLockedUSD: 142580400,
             totalVolumeUSD: 894520300,
             totalFeesUSD: 2683560,
@@ -95,7 +95,7 @@ export class SubgraphService {
     public async getHistoricalProtocolData(days: number = 30, chainId: number = 1): Promise<SubgraphPoolDayData[]> {
         const query = `
       query GetHistoricalData($first: Int!) {
-        zenithDayDatas(first: $first, orderBy: date, orderDirection: desc) {
+        elisDayDatas(first: $first, orderBy: date, orderDirection: desc) {
           date
           tvlUSD
           volumeUSD
@@ -105,10 +105,10 @@ export class SubgraphService {
       }
     `;
         const data = await this.fetchQuery<{
-            zenithDayDatas: any[];
+            elisDayDatas: any[];
         }>(query, { first: days }, chainId);
-        if (data && data.zenithDayDatas && data.zenithDayDatas.length > 0) {
-            return data.zenithDayDatas.map(item => ({
+        if (data && data.elisDayDatas && data.elisDayDatas.length > 0) {
+            return data.elisDayDatas.map(item => ({
                 date: item.date,
                 tvlUSD: parseFloat(item.tvlUSD),
                 volumeUSD: parseFloat(item.volumeUSD),

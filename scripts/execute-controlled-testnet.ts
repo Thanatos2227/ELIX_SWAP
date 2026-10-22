@@ -1,9 +1,9 @@
 import { JsonRpcProvider, Wallet, Contract, Interface, formatEther, formatUnits } from 'ethers';
-import { defaultChainRegistry } from '@zenith/chains';
-import { getAcrossSpokePool, ACROSS_SPOKE_POOL_ABI, validateEvmAddress, validateExecutionTarget, validateTokenAddress, validateRecipientAddress } from '@zenith/contracts';
-import { defaultAcrossProvider } from '@zenith/routing';
-import { ExecutionPlanBuilder, SQLiteCrossChainStateRepository, CrossChainRecoveryEngine, defaultEVMAdapter } from '@zenith/execution';
-import { QuoteRequest } from '@zenith/types';
+import { defaultChainRegistry } from '@elis/chains';
+import { getAcrossSpokePool, ACROSS_SPOKE_POOL_ABI, validateEvmAddress, validateExecutionTarget, validateTokenAddress, validateRecipientAddress } from '@elis/contracts';
+import { defaultAcrossProvider } from '@elis/routing';
+import { ExecutionPlanBuilder, SQLiteCrossChainStateRepository, CrossChainRecoveryEngine, defaultEVMAdapter } from '@elis/execution';
+import { QuoteRequest } from '@elis/types';
 const spokePoolInterface = new Interface(ACROSS_SPOKE_POOL_ABI);
 const ERC20_ABI = [
     'function balanceOf(address account) view returns (uint256)',
@@ -86,7 +86,7 @@ export async function getExecutionEnvironmentDiagnostics(): Promise<EnvironmentD
 }
 export async function runControlledTestnetExecution(): Promise<ControlledExecutionResult> {
     console.log('======================================================================');
-    console.log('ZENITH — PHASE 0 / TASK 7: CONTROLLED TESTNET DIRECT CROSS-CHAIN EXECUTION');
+    console.log('ELIS — PHASE 0 / TASK 7: CONTROLLED TESTNET DIRECT CROSS-CHAIN EXECUTION');
     console.log('======================================================================\n');
     const gates: Record<string, boolean | string> = {};
     const readOnlyEvidence: Record<string, string | boolean> = {};
@@ -424,7 +424,7 @@ export async function runControlledTestnetExecution(): Promise<ControlledExecuti
         };
     }
     console.log('\n============================================================');
-    console.log('ZENITH FIRST FUNDED TESTNET EXECUTION');
+    console.log('ELIS FIRST FUNDED TESTNET EXECUTION');
     console.log('============================================================\n');
     console.log(`Signer:            ${signerAddress}`);
     console.log(`Source:            Ethereum Sepolia (11155111)`);

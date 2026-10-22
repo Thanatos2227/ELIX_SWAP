@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
+import { useElisStore } from '../../stores/useElisStore';
 import { detectInstalledWallets, formatAddress } from '../../utils/walletDetector';
-import { WalletOption } from '@zenith/types';
+import { WalletOption } from '@elis/types';
 import { X, ShieldCheck, Zap, ExternalLink, ChevronRight, CheckCircle2, Loader2, AlertTriangle } from 'lucide-react';
 export const WalletModal: React.FC = () => {
-    const { isWalletModalOpen, closeWalletModal, connectWalletWithType, isWalletConnecting, isWalletConnected, walletAddress, connectedWalletName, isWrongNetwork, chainId, sourceChain, walletError, disconnectWallet } = useZenithStore();
+    const { isWalletModalOpen, closeWalletModal, connectWalletWithType, isWalletConnecting, isWalletConnected, walletAddress, connectedWalletName, isWrongNetwork, chainId, sourceChain, walletError, disconnectWallet } = useElisStore();
     const [wallets, setWallets] = useState<WalletOption[]>([]);
     const [activeFilter, setActiveFilter] = useState<'ALL' | 'EVM' | 'SOLANA'>('ALL');
     useEffect(() => {

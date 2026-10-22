@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * ZENITH Protocol — Testnet Execution & Funding Diagnostic
+ * ELIS Protocol — Testnet Execution & Funding Diagnostic
  *
  * Authoritative diagnostic verifying real on-chain testnet prerequisites:
  * - Sepolia RPC & Chain ID (11155111)
@@ -104,7 +104,7 @@ export async function runTestnetDiagnostic(): Promise<TestnetDiagnosticReport> {
   const destinationRpcHealthy = dstProvider !== null;
 
   // 3. Signer Verification (Safe derivation, no key exposure)
-  const testnetKey = process.env.TESTNET_PRIVATE_KEY || process.env.ZENITH_TESTNET_PRIVATE_KEY;
+  const testnetKey = process.env.TESTNET_PRIVATE_KEY ;
   let signerAddress: string | null = null;
   let nativeBalance = '0';
   let nativeBalanceSufficient = false;
@@ -188,7 +188,7 @@ export async function runTestnetDiagnostic(): Promise<TestnetDiagnosticReport> {
   } else if (!tokenBalanceSufficient) {
     blockerReason = `BLOCKED_INSUFFICIENT_TOKEN_BALANCE: Balance ${tokenBalance} USDC < required 10.0 USDC`;
   } else if (routerDeploymentStatus !== 'DEPLOYED_VERIFIED') {
-    blockerReason = 'BLOCKED_ROUTER_NOT_DEPLOYED: ZenithCrossChainRouter pending testnet deployment ceremony';
+    blockerReason = 'BLOCKED_ROUTER_NOT_DEPLOYED: ElisCrossChainRouter pending testnet deployment ceremony';
   } else {
     preflightStatus = 'READY_FOR_REAL_TESTNET_EXECUTION';
     blockerReason = undefined;
@@ -227,7 +227,7 @@ export async function runTestnetDiagnostic(): Promise<TestnetDiagnosticReport> {
 if (process.argv[1]?.includes('diagnose-testnet')) {
   (async () => {
     console.log('============================================================');
-    console.log('   ZENITH PROTOCOL — REAL TESTNET READINESS & PREFLIGHT     ');
+    console.log('   ELIS PROTOCOL — REAL TESTNET READINESS & PREFLIGHT     ');
     console.log('============================================================');
 
     const diag = await runTestnetDiagnostic();

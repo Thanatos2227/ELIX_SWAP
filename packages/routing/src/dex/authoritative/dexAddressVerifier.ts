@@ -1,5 +1,5 @@
 import { Contract, Provider } from 'ethers';
-import type { DexVerificationStatus, DexAddressRole } from '@zenith/types';
+import type { DexVerificationStatus, DexAddressRole } from '@elis/types';
 export interface AddressVerificationDetail {
     address: string;
     role: DexAddressRole;

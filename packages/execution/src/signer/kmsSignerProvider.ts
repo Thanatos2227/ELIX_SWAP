@@ -1,18 +1,18 @@
-import { 
-    ISecureSignerProvider, 
-    SignerEnvironment, 
-    KmsProviderType, 
-    SignerPolicy, 
-    KmsSigningRequest, 
-    KmsSignedTransaction 
+import {
+    ISecureSignerProvider,
+    SignerEnvironment,
+    KmsProviderType,
+    SignerPolicy,
+    KmsSigningRequest,
+    KmsSignedTransaction
 } from './signerInterface';
-import { 
-    validateEvmAddress, 
-    ZERO_ADDRESS, 
-    AuthorizationBoundaryBreachError, 
+import {
+    validateEvmAddress,
+    ZERO_ADDRESS,
+    AuthorizationBoundaryBreachError,
     SecurityPolicyViolationError,
-    ChainIdMismatchError 
-} from '@zenith/contracts';
+    ChainIdMismatchError
+} from '@elis/contracts';
 import { sha256, toUtf8Bytes, getBytes } from 'ethers';
 
 export interface KmsSignerConfig {
@@ -101,7 +101,7 @@ export class KmsSignerProvider implements ISecureSignerProvider {
     }
 
     public async signTransaction(
-        request: KmsSigningRequest, 
+        request: KmsSigningRequest,
         operatorConfirmationToken?: string
     ): Promise<KmsSignedTransaction> {
         this.validatePolicy(request);
@@ -148,4 +148,3 @@ export class KmsSignerProvider implements ISecureSignerProvider {
         return `0x${sig.r}${sig.s}${sig.v.toString(16).padStart(2, '0')}`;
     }
 }
-

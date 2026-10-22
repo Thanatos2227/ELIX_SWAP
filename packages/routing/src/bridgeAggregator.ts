@@ -1,4 +1,4 @@
-import { GasPreset, SwapRoute, Token } from '@zenith/types';
+import { GasPreset, SwapRoute, Token } from '@elis/types';
 import { defaultCrossChainAggregator, CrossChainAggregator } from './crosschain/crossChainAggregator';
 export class BridgeAggregator {
     private crossChainAggregator: CrossChainAggregator;

@@ -1,9 +1,9 @@
 import React from 'react';
-import { useZenithStore } from '../../stores/useZenithStore';
-import { defaultChainRegistry } from '@zenith/chains';
+import { useElisStore } from '../../stores/useElisStore';
+import { defaultChainRegistry } from '@elis/chains';
 import { X, Bell, CheckCircle2, AlertCircle, Info, CheckCheck } from 'lucide-react';
 export const NotificationCenter: React.FC = () => {
-    const { isNotificationDrawerOpen, toggleNotificationDrawer, notifications, markNotificationsAsRead } = useZenithStore();
+    const { isNotificationDrawerOpen, toggleNotificationDrawer, notifications, markNotificationsAsRead } = useElisStore();
     if (!isNotificationDrawerOpen)
         return null;
     return (<div className="fixed inset-0 z-50 flex justify-end bg-slate-950/60 backdrop-blur-sm animate-in fade-in duration-200">

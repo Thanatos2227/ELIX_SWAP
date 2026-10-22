@@ -1,1 +1,1 @@
-export type { DEXProvider, DEXQuote, DEXExecution, DEXQuoteParams } from '@zenith/types';
+export type { DEXProvider, DEXQuote, DEXExecution, DEXQuoteParams } from '@elis/types';

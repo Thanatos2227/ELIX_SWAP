@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
-import { Token } from '@zenith/types';
+import { Token } from '@elis/types';
 import { TrendingUp, TrendingDown, Activity, RefreshCw, WifiOff, Wifi, AlertTriangle } from 'lucide-react';
 import { defaultMarketDataService, MarketCandle, MarketStats24h } from '../../services/marketDataService';
-import { useZenithStore } from '../../stores/useZenithStore';
+import { useElisStore } from '../../stores/useElisStore';
 interface LivePriceChartProps {
     tokenIn: Token;
     tokenOut: Token;
 }
 export const LivePriceChart: React.FC<LivePriceChartProps> = ({ tokenIn, tokenOut }) => {
-    const { theme, marketData } = useZenithStore();
+    const { theme, marketData } = useElisStore();
     const isDark = theme === 'dark';
     const tokenKey = `${tokenIn.chainId.toLowerCase()}:${tokenIn.address.toLowerCase()}`;
     const storePrice = marketData[tokenKey]?.priceUSD ||
@@ -339,7 +339,7 @@ export const LivePriceChart: React.FC<LivePriceChartProps> = ({ tokenIn, tokenOu
             ? 'bg-rose-500/10 border-rose-500/30 text-rose-300'
             : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-300'}`}>
             <Activity className={`w-3.5 h-3.5 ${!isOnline ? 'text-rose-400' : 'text-cyan-400'}`}/>
-            <span className="font-mono">{!isOnline ? 'Feed Paused (Offline)' : 'Zenith Swap Live • 1m'}</span>
+            <span className="font-mono">{!isOnline ? 'Feed Paused (Offline)' : 'ElixSwap Live • 1m'}</span>
           </div>
 
           <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-xs">

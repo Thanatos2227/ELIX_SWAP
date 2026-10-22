@@ -1,5 +1,5 @@
 {
-  "name": "@zenith/tokens",
+  "name": "@elis/tokens",
   "version": "4.0.0",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
@@ -7,8 +7,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@zenith/types": "*",
-    "@zenith/chains": "*"
+    "@elis/types": "*",
+    "@elis/chains": "*"
   },
   "devDependencies": {
     "typescript": "^5.4.5"

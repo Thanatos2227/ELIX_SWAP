@@ -1,4 +1,4 @@
-import { Token } from '@zenith/types';
+import { Token } from '@elis/types';
 import { simulateV3Swap, TickMath } from '../math/v3ExactMath';
 export function isNativeToken(address: string | undefined | null): boolean {
     if (!address)

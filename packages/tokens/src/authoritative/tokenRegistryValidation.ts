@@ -1,6 +1,6 @@
-import type { TokenIdentity } from '@zenith/types';
-import { defaultAuthoritativeNetworkRegistry } from '@zenith/chains';
-import { defaultNetworkCapabilityRegistry } from '@zenith/chains';
+import type { TokenIdentity } from '@elis/types';
+import { defaultAuthoritativeNetworkRegistry } from '@elis/chains';
+import { defaultNetworkCapabilityRegistry } from '@elis/chains';
 import { isStandardSupportedForFamily } from './tokenStandard.taxonomy';
 import { normalizeTokenAddress } from './addressNormalizer';
 export interface TokenValidationViolation {

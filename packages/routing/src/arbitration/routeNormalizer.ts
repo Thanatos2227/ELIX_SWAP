@@ -1,4 +1,4 @@
-import { NormalizedRoute, NormalizedRouteType, SwapRoute, QuoteRequest, ProviderCapabilityLevel, CrossChainQuote } from '@zenith/types';
+import { NormalizedRoute, NormalizedRouteType, SwapRoute, QuoteRequest, ProviderCapabilityLevel, CrossChainQuote } from '@elis/types';
 import { CrossChainProviderCapabilityMatrix } from '../crosschain/crossChainProviderCapabilityMatrix';
 import { defaultAuthoritativeDexRegistry } from '../dex/authoritative/authoritativeDexRegistry';
 export class RouteNormalizer {

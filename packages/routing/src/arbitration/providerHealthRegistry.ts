@@ -1,4 +1,4 @@
-import { ProviderHealthStatus } from '@zenith/types';
+import { ProviderHealthStatus } from '@elis/types';
 export interface ProviderHealthRecord {
     providerId: string;
     status: ProviderHealthStatus;

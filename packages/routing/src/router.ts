@@ -1,11 +1,11 @@
-import { QuoteRequest, QuoteResponse, SwapRoute, TradeType, CrossChainIntent, SwapFee, QuoteValidationResult, ExecutableTransaction, Token, DEXQuote } from '@zenith/types';
-import { defaultChainRegistry } from '@zenith/chains';
+import { QuoteRequest, QuoteResponse, SwapRoute, TradeType, CrossChainIntent, SwapFee, QuoteValidationResult, ExecutableTransaction, Token, DEXQuote } from '@elis/types';
+import { defaultChainRegistry } from '@elis/chains';
 import { defaultDEXAggregator, DEXAggregator } from './dex';
 import { defaultCrossChainAggregator, CrossChainAggregator } from './crosschain/crossChainAggregator';
 import { defaultScoringService, ScoringService } from './scoring';
-import { defaultSimulationEngine, SimulationEngine } from '@zenith/security';
+import { defaultSimulationEngine, SimulationEngine } from '@elis/security';
 import { MAX_SWAP_AMOUNT_NUM } from './amountValidation';
-import { ConfigurationError, AggregateCrossChainQuoteError, ExecutionUnavailableError } from '@zenith/contracts';
+import { ConfigurationError, AggregateCrossChainQuoteError, ExecutionUnavailableError } from '@elis/contracts';
 import { parseTokenUnits, formatTokenUnits } from './tokenDecimals';
 import { defaultQuoteDiagnosticLogger } from './crosschain/quoteDiagnostics';
 import { RouteArbitrator, RouteNormalizer } from './arbitration';
@@ -14,7 +14,7 @@ export type PlanBuilderFn = (params: {
     request: QuoteRequest;
     options?: any;
 }) => any;
-export class ZenithRouter {
+export class ElisRouter {
     private dexAggregator: DEXAggregator;
     private crossChainAggregator: CrossChainAggregator;
     private scoringService: ScoringService;
@@ -351,7 +351,7 @@ export class ZenithRouter {
                 }
             }
             if (dexQuotes.length === 0 && routes.length === 0) {
-                throw new ConfigurationError(`[ZenithRouter] No DEX liquidity or route available on ${sourceChain.canonicalName} for ${request.tokenIn.symbol}/${request.tokenOut.symbol}`, 'NO_DEX_QUOTE_AVAILABLE');
+                throw new ConfigurationError(`[ElisRouter] No DEX liquidity or route available on ${sourceChain.canonicalName} for ${request.tokenIn.symbol}/${request.tokenOut.symbol}`, 'NO_DEX_QUOTE_AVAILABLE');
             }
             try {
                 const normalized = routes.map((r) => RouteNormalizer.normalize(r, request));
@@ -476,7 +476,7 @@ export class ZenithRouter {
                 }
             }
             catch (execErr) {
-                console.warn('[ZenithRouter] Fallback buildExecution note:', execErr);
+                console.warn('[ElisRouter] Fallback buildExecution note:', execErr);
             }
         }
         else if (callerAddress && bestRoute.crossChainQuote && sourceChain.chainId) {
@@ -497,7 +497,7 @@ export class ZenithRouter {
                 }
             }
             catch (execErr) {
-                console.warn('[ZenithRouter] Fallback cross-chain buildExecution note:', execErr);
+                console.warn('[ElisRouter] Fallback cross-chain buildExecution note:', execErr);
             }
         }
         const isExecutable = Boolean(callerAddress &&
@@ -611,4 +611,4 @@ export class ZenithRouter {
         } as any;
     }
 }
-export const defaultZenithRouter = new ZenithRouter();
+export const defaultElisRouter = new ElisRouter();
